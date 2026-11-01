@@ -3,7 +3,8 @@
 Rubric version: <x.y.z>. Date: <YYYY-MM-DD>.
 
 CLI judged: <name> at commit <sha or release version>. Run type: <repo and binary | binary only>.
-Not checked (repo-only practices unreadable): <n>% of points. N/A in total: <n>% of points.
+Not checked (N/A or capped because not exercised or repo or docs unreadable): <n>% of points.
+N/A in total (all N/A points, including N/A by nature): <n>% of points.
 Sample: <the commands used, one per line or comma separated>.
 
 ## Categories
@@ -37,6 +38,14 @@ Gap between the two passes above a quarter of the maximum. A person settles each
 
 Ungated destructive writes: list every sampled write that deletes, overwrites or merges and has no
 approval gate (informational, not scored).
+
+## Needs a fixture
+
+Practices that need real writes or failure injection and could not run against a shared service.
+One line each: the fixture that would let a later round score it (a throwaway target or a fake
+service mode).
+
+- <slug>: <fixture>
 
 ## Five highest point gains
 

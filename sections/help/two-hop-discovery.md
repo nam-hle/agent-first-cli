@@ -97,13 +97,14 @@ Maximum: 5 points. An undiscoverable feature does not exist for an agent, and th
 whole tool, so it weighs as much as the other whole-surface practices.
 
 Counted probes: one per each of the first 10 commands by sorted path of the sample (all, when
-fewer), plus the two probes below, so there are always at least two. A command probe uses the last
-word of its path as the word (for `pr merge`, `merge`) and has two hops: hop 1 is
-`acme search <word>`, hop 2 is `acme explore <name>` or `acme <path> --help` for the name hop 1
-returned. The command probe violates when hop 1 exits non-zero, hop 1 lists no result naming the
-command's path, or hop 2 exits non-zero or prints no line starting with `acme <path>`. The extra
-probes: `acme search zzz-no-such` violates when its output names neither `acme explore` nor a topic
-list; `acme explore` with no topic violates when it exits non-zero or lists no topic.
+fewer), plus the two probes below, so there are always at least two. A command probe uses the full
+command path (noun plus verb, for example `pr merge`) as the query and has two hops: hop 1 is
+`acme search <path>`, hop 2 is `acme explore <name>` or `acme <path> --help` for the name hop 1
+returned. A command is found when its path appears in the first page of hits (up to 10). The
+command probe violates when hop 1 exits non-zero, the command is not found in those hits, or hop 2
+exits non-zero or prints no line starting with `acme <path>`. The extra probes: `acme search
+zzz-no-such` violates when its output names neither `acme explore` nor a topic list; `acme explore`
+with no topic violates when it exits non-zero or lists no topic.
 
 - **0:** At least 25% of the counted probes violate (for 12 probes, 3 or more). This includes a CLI
   with no `search` or `explore` command, where every probe violates.

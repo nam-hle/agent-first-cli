@@ -93,5 +93,5 @@ instead of its owner and type (`<pr>`, `<comment-id>`), or long text taken as a 
 - **Maximum (2):** No sampled command is a violation. Every positional is named for what it
   accepts, in kebab-case, and every other input is a named flag.
 - **Not applicable when:** no sampled command declares a positional.
-- **Evidence:** For the first 30 commands by sorted path from `acme --help` walking, plus every
+- **Evidence:** For the first 30 leaf commands by sorted path from `acme --help` walking, plus every
   write command, run `acme <command> --help` and read the usage line for `<...>` placeholders.

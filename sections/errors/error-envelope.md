@@ -125,7 +125,10 @@ A counted error violates when any of these holds:
   or the output is empty).
 - **Not one object:** stderr is not exactly one JSON object (plain text, a library help page, a
   stack trace, empty stderr).
-- **Missing key:** the object lacks any of `status`, `code`, `message`, `context`, `hint`.
+- **Missing key:** the object lacks `status`, `code`, `message` or `hint`, or its context has no
+  key that carries the failing input's name and observed value (any such key counts when the
+  tool's own docs or help state it, as in [3.3](context-names-input.md)). Only the context keys
+  are relaxed; the other four keep their names.
 - **Open code:** `code` does not match `^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$`.
 - **Leak:** stderr carries any stack trace or panic output.
 
@@ -136,5 +139,6 @@ A counted error violates when any of these holds:
 - **Not applicable when:** never; the root unknown-command provocation always runs.
 - **Evidence:** run each provocation under `timeout 10` (or `gtimeout 10`) with stdin from
   `/dev/null`, stderr redirected to a file in the sandbox. Parse that file with a JSON parser
-  (`jq -e .` or `node -e`): it must be one object with the five keys. Check stdout separately only
+  (`jq -e .` or `node -e`): it must be one object with `status`, `code`, `message`, `hint` and a
+  context carrying the documented input-name key. Check stdout separately only
   to note it; it does not affect this score.

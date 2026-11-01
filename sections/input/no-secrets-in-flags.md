@@ -95,9 +95,12 @@ test("no secret-named environment variable is read", () => {
 Maximum: 8 points. A leaked credential is readable by the caller and any injected instruction.
 
 - **0:** Any command accepts a secret in a flag (`--token abc`, `acme config set token <value>`).
-- **About half (4):** No flag takes a secret, but a secret can be given through an environment
+- **About half (4):** No flag takes a secret, but a secret is accepted through an environment
   variable such as `ACME_TOKEN`, or the credential store is readable by the calling user.
-- **Maximum (8):** Neither a flag nor an environment variable takes a secret. A setup command
+  "Accepted" means a path that works in the tool's normal configuration; a variable the tool
+  refuses or gates there (for example while a credential helper is installed) is not accepted.
+- **Maximum (8):** Neither a flag nor an accepted environment variable takes a secret, and the
+  store is unreadable by the caller. A setup command
   run once by a person fills a store the caller cannot read, and `acme pr list` then works.
 - **Not applicable when:** the CLI needs no credential.
 - **Evidence:** Search every `acme <command> --help` for token, password, secret or key flags

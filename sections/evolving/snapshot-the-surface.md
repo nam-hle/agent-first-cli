@@ -94,7 +94,7 @@ keys per command, (3) the list of write commands, (4) error codes with exit clas
 (5) environment variables, (6) the full `--help` of each command. Committed artifacts are files
 from `git ls-files` (under `tests/`, `snapshots/`, `docs/` or similar; any name).
 
-Sampled live entries: the first 30 commands by sorted path of the sample, plus every write
+Sampled live entries: the first 30 leaf commands by sorted path of the sample, plus every write
 command. Part 1: every flag in their help. Part 2: the key set of the `--json` output of each
 sampled read command. Part 3: each sampled command, as write or read. Part 4: each error code the
 live CLI lists (`acme explore` or the error output), first 10 by sorted code. Part 5: each
@@ -105,7 +105,9 @@ Let E be the number of exercised parts and P how many of them have at least one 
 committed artifact. A sampled entry is missing when no committed artifact has an entry for it, and
 stale when its committed entry differs from the live output (flag set or help line, key set,
 write or read, code, class or hint, description, or the text of `acme <path> --help` after
-trimming trailing whitespace). V is (missing + stale) over all sampled entries of exercised parts.
+whitespace normalisation: runs of whitespace and line breaks collapse to one space, so a
+difference in words, flags or ordering is stale and a difference only in wrapping is not). V is
+(missing + stale) over all sampled entries of exercised parts.
 
 - **0:** P is 0 (no artifact for any exercised part), or V is at least 25%.
 - **About half (4):** P is at least 1, V is under 25%, and either P is under E or V is above 0.
@@ -114,5 +116,6 @@ trimming trailing whitespace). V is (missing + stale) over all sampled entries o
   (no part can be exercised).
 - **Evidence:** read `git -C <repo> ls-files` and open the candidate files to decide which parts
   are present. For the sample, run the live comparison with `timeout 10` and stdin from
-  `/dev/null`, using reads and `--help` only, never a write. Record per part: file path, entries
+  `/dev/null`, using reads and `--help` only, never a write. Compare help after whitespace
+  normalisation, not byte for byte. Record per part: file path, entries
   sampled, missing, stale, or "not exercised" with the reason; the totals give E, P and V.

@@ -109,11 +109,12 @@ test("--input - reads a batch from stdin", () => {
 Maximum: 3 points. Shell-mangled text posts a truncated body with exit 0; it touches the few
 commands that take prose or batches.
 
-Sample the first 30 commands by sorted path plus every write. Text commands take free text such as
-`--body` or `--description`. Batch commands take many items. Four kinds of violation:
+Sample the first 30 leaf commands by sorted path plus every write. Text commands take free text
+such as `--body` or `--description`. Batch commands take many items. A file form is any documented
+way to read the text or the items from a file or from stdin (`--x-file <path>`, `@path`, `-`, or
+an `--input` form); judge the behaviour, not the spelling. Four kinds of violation:
 
-- **No file form:** a text command has no `--<name>-file <path>` (and `-` for stdin), or a batch
-  command has no `--input <path>` (and `-`).
+- **No file form:** a text command or a batch command has no file form.
 - **Altered bytes:** the file form changes the text (trimmed, re-encoded, escapes interpreted).
 - **Silent pick:** the inline and file forms given together are not a usage error naming both.
 - **Silent failure:** a missing file does not fail with an error naming the path.
@@ -121,12 +122,12 @@ Sample the first 30 commands by sorted path plus every write. Text commands take
 - **0:** Fewer than 25% of the text and batch commands have a file or stdin form, or on any
   command that has the form it alters the bytes (quotes, backticks, newlines).
 - **About half (2):** At least 25% of the text and batch commands have the form and none alters
-  bytes, but not Maximum (for example some commands lack it, or both flags together silently
-  prefer `--body`, or a missing file does not name the path).
-- **Maximum (3):** Every text and batch command has the file and stdin form, it keeps the bytes,
-  both forms together are a usage error naming both, and a missing file names the path.
+  bytes, but not Maximum (for example some commands lack it, or the inline and file forms given
+  together silently prefer the inline one, or a missing file does not name the path).
+- **Maximum (3):** Every text and batch command has a file form that also reads stdin, it keeps
+  the bytes, both forms together are a usage error naming both, and a missing file names the path.
 - **Not applicable when:** no sampled command takes free text or many items.
 - **Evidence:** Write a body with backticks, quotes, `$HOME`, a tab and a newline to a file, run
-  `acme <text-command> --body-file <file> --json`, and compare the stored body byte for byte.
-  Also pass both `--body x` and `--body-file <file>`, and a nonexistent path; for a batch command
-  run `--input <file> --dry-run` and `--input - --dry-run < <file>`.
+  `acme <text-command> --body-file <file> --json` (or its documented file form), and compare the
+  stored body byte for byte. Also pass both `--body x` and `--body-file <file>`, and a nonexistent
+  path; for a batch command run `--input <file> --dry-run` and `--input - --dry-run < <file>`.

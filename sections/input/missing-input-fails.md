@@ -95,7 +95,7 @@ test.each(leaves)("%j fails fast without input", (...path) => {
 
 Maximum: 8 points. A hang stalls a whole agent run with no output, and any command can have it.
 
-Sample the first 30 commands by sorted path plus every write. Run each with no arguments, stdin
+Sample the first 30 leaf commands by sorted path plus every write. Run each with no arguments, stdin
 closed and `--no-input`. A command needs input when its help lists a required flag or positional.
 Commands with none are not counted. Count the rest. Two kinds of violation:
 
@@ -103,8 +103,9 @@ Commands with none are not counted. Count the rest. Two kinds of violation:
 - **Weak failure:** it exits 0 with the input omitted, or exits non-zero but not with 2, or
   prints no envelope that names the missing flag or positional.
 
-A good command exits 2 with an envelope whose `context` names the flag, positional or `missing`
-list.
+A good command exits 2 with an envelope whose context names the flag, positional or missing
+list under any key that the tool's own docs or help state (for example `field`, `fields`, `input`,
+`missingFields`); only that such a key exists is required, not its spelling.
 
 - **0:** At least 25% of the counted commands hang, or fewer than 25% of them are good.
 - **About half (4):** Not 0 and not Maximum: under 25% hang and at least 25% are good, but some

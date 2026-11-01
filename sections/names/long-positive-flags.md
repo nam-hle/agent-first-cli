@@ -100,6 +100,6 @@ that negates a behaviour that is not on by default (`--no-dry-run`; `--no-color`
 - **Maximum (3):** No violation: every flag has a long kebab-case spelling, none is a bare
   ambiguous name, booleans are positive, and `--no-` appears only on default-on behaviour.
 - **Not applicable when:** no sampled command declares a flag.
-- **Evidence:** Run `acme <command> --help` for the first 30 commands by sorted path from walking
-  `acme --help`, plus every write command, and list the flags. Run `acme pr list --help` and look
-  for `--user-id` against a bare `--user`.
+- **Evidence:** Run `acme <command> --help` for the first 30 leaf commands by sorted path from
+  walking `acme --help`, plus every write command, and list the flags. Run `acme pr list --help` and
+  look for `--user-id` against a bare `--user`.

@@ -95,9 +95,9 @@ test.each(leaves())("help of %s leads with an example", (...path) => {
 Maximum: 3 points. Help is the first page an agent reads for every command, but a gap there costs
 a retry, not a wrong write, so the weight is moderate.
 
-Sample: the leaf commands of the sample (first 30 by sorted path from walking `acme --help`, plus
-every write command). Help of a command is `acme <path> --help` stdout. A command violates when
-any of these holds:
+Sample: the leaf commands of the sample (first 30 leaf commands by sorted path from walking `acme
+--help`, plus every write command). Help of a command is `acme <path> --help` stdout. A command
+violates when any of these holds:
 
 - no example leads: no line starting with `acme <path>` or `$ acme <path>` appears before the
   first flag line (a line whose first word starts with `-`), or more than 3 non-blank lines

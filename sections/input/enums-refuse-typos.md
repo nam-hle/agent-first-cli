@@ -100,9 +100,9 @@ test.each(cases)("$path $flag refuses junk", ({ path, flag, choices }) => {
 Maximum: 5 points. A silently accepted typo reads as a true empty result; it touches every choice
 and numeric flag.
 
-Sample the first 30 commands by sorted path plus every write. Collect their flags that take a closed
-set of values (listed in help as choices) or a number. Pass each one a junk value (`zzz-junk`). Two
-kinds of violation:
+Sample the first 30 leaf commands by sorted path plus every write. Collect their flags that take a
+closed set of values (listed in help as choices) or a number. Pass each one a junk value
+(`zzz-junk`). Two kinds of violation:
 
 - **Silent accept:** exit 0, an empty result, or a coerced value (`--limit abc` becomes 0).
 - **Weak refusal:** non-zero, but not exit 2, or no envelope naming the flag, or for a choice flag

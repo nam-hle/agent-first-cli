@@ -91,7 +91,7 @@ describe.each(commands.items)("%s", (name: string) => {
 
 Maximum: 8 points. A polluted stdout breaks the parse of every call that hits it, in any command.
 
-Sample the first 30 commands by sorted path plus every write command. Run each with valid
+Sample the first 30 leaf commands by sorted path plus every write command. Run each with valid
 arguments (writes only against a sandbox service) and once more with `--no-such-flag` appended.
 Two kinds of violation:
 

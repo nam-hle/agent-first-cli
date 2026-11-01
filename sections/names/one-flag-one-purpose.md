@@ -109,6 +109,6 @@ as a date in `acme audit view` and as a source in `acme file copy`.
 - **Maximum (5):** No violation. Each concept has one flag name and each name has one purpose
   across all sampled commands.
 - **Not applicable when:** no sampled command declares a flag.
-- **Evidence:** Run `acme <command> --help` for the first 30 commands by sorted path from walking
-  `acme --help`, plus every write command. Group the flags by help text and compare names. Run
-  `acme audit view --help` and `acme pr stats view --help` to compare the window flags.
+- **Evidence:** Run `acme <command> --help` for the first 30 leaf commands by sorted path from
+  walking `acme --help`, plus every write command. Group the flags by help text and compare names.
+  Run `acme audit view --help` and `acme pr stats view --help` to compare the window flags.

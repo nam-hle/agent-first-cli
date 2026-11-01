@@ -42,8 +42,8 @@ untrusted caller.
 **TL;DR:** Commands are `acme <noun> <verb>`. The last segment is always a verb from a short list
 (`list`, `view`, `create`, `edit`, `delete`, `search`, plus domain verbs such as `merge`), and a verb
 means the same on every noun. No synonyms, no aliases, no abbreviations. A domain verb is allowed
-only when it composes several primitives or a core verb would mislead, and it still starts with a
-core verb (`add-column`, not `insert-column`). Where two verbs sound alike, define which has which
+only when it composes several primitives or a core verb would mislead, and a compound
+one still starts with a core verb (`add-column`, not `insert-column`). Where two verbs sound alike, define which has which
 side effect (`create` makes a new top-level thing, `add` attaches under an existing one).
 
 **Otherwise:** An agent that has seen `show` once guesses `show` everywhere, and `get`, `fetch` and

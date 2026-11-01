@@ -98,8 +98,8 @@ diff must come with a changed `schemaVersion`.
 
 Maximum: 3 points. A missing schema costs trial calls and a silent rename goes unnoticed.
 
-Count the commands among the sample (first 30 by sorted path plus every write command) whose
-`--help` lists `--json`. A counted command violates when any of these holds:
+Count the commands among the sample (first 30 leaf commands by sorted path plus every write command)
+whose `--help` lists `--json`. A counted command violates when any of these holds:
 
 - **No schema:** `acme schema <command>` fails, or does not print a JSON Schema with a
   `schemaVersion`.

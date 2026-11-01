@@ -14,9 +14,9 @@ Commands are `acme <noun> <verb>`. The last segment is always a verb from a shor
 the same on every noun. No synonyms, no aliases, no abbreviations. A person learns a vocabulary by
 reading help once; an agent learns it from the few commands it has seen and extrapolates. A closed
 set makes the extrapolation right: once `view` works on one noun, it works on all of them. A domain
-verb is allowed only when it composes several primitives or a core verb would mislead, and it still
-starts with a core verb: `add-column`, not `insert-column`. `create` makes a new top-level thing;
-`add` attaches something under an existing one.
+verb is allowed only when it composes several primitives or a core verb would mislead, and a
+compound one still starts with a core verb: `add-column`, not `insert-column`. `create` makes a new
+top-level thing; `add` attaches something under an existing one.
 
 ### Do
 
@@ -46,9 +46,9 @@ either breaks callers nobody can find.
 
 - "A domain verb is clearer than `edit`." Allowed: `merge`, `approve`, `transition`. Add it to the
   list in one reviewed edit, and keep it single-meaning on every noun that has it. It must
-  compose several primitives or replace a core verb that would mislead, and it must start with a
-  core verb (`add-column`, not `insert-column`). `create` is a new top-level thing (`acme table
-  create`); `add` attaches under an existing one (`acme table add-column`).
+  compose several primitives or replace a core verb that would mislead, and a compound one must
+  start with a core verb (`add-column`, not `insert-column`). `create` is a new top-level thing
+  (`acme table create`); `add` attaches under an existing one (`acme table add-column`).
 - "Aliases are harmless." They are not: they double the surface that help, snapshots and docs must
   cover, and they hide a typo that should fail. See [1.4](one-flag-one-purpose.md) for the same
   rule on flags and [evolving/rename-leaves-a-hint](../evolving/rename-leaves-a-hint.md) for how a
@@ -62,7 +62,8 @@ either breaks callers nobody can find.
 ### How to check it
 
 Walk the command tree in a test. Every leaf name must be in the verb list, none may be a banned
-synonym, no command may register an alias, and every domain verb starts with a core verb.
+synonym, no command may register an alias, and every compound domain verb starts with a core
+verb.
 
 ```ts
 import { expect, it } from "vitest";
@@ -93,10 +94,13 @@ Adding a verb means editing `VERBS`, which makes the change visible in review.
 
 Maximum: 5 points. A guessed verb that fails costs a turn on every noun; it touches every command.
 
-A violation is a sampled leaf that ends in a banned synonym (`show`, `get`, `ls`, `rm`, `remove`,
-`fetch`, `describe`), an abbreviation, or a verb-noun shape such as `acme add-comment`; or that
-has an alias (for example `acme pr show` also resolves to `view`); or whose domain verb does not
-start with a core verb (`insert-column` instead of `add-column`).
+A single-word domain verb (`merge`, `approve`) is allowed when it names a distinct action that
+no core verb fits. The prefix rule covers only compound (hyphenated) domain verbs.
+
+A violation is a sampled leaf that ends in a banned synonym of a core verb (`show`, `get`, `ls`,
+`rm`, `remove`, `fetch`, `describe`), an abbreviation, or a verb-noun shape such as
+`acme add-comment`; or that has an alias (for example `acme pr show` also resolves to `view`); or
+whose compound domain verb does not start with a core verb (`insert-column`, not `add-column`).
 
 When no sampled leaf has a noun (every command is `acme <verb>`), judge the verbs only against
 the closed set and the synonym rules; a missing `acme <noun> <verb>` shape is then not a violation.
@@ -106,6 +110,6 @@ the closed set and the synonym rules; a missing `acme <noun> <verb>` shape is th
 - **About half (3):** At least one violation, but below 25% of the sampled leaves.
 - **Maximum (5):** No sampled leaf is a violation.
 - **Not applicable when:** the CLI has no subcommands, only flags on a single command.
-- **Evidence:** Sample the first 30 commands by sorted path from walking `acme --help` down, plus
-  every write command. Read the last segment of each path. Run `acme pr show --help` and
+- **Evidence:** Sample the first 30 leaf commands by sorted path from walking `acme --help` down,
+  plus every write command. Read the last segment of each path. Run `acme pr show --help` and
   `acme pr ls --help` and check whether they resolve or fail as unknown.

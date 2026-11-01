@@ -89,10 +89,15 @@ A violation is a group with a singular or plural twin (`pod` beside `pods`), or 
 inside another group that has a singular name and offers `list`, or has a plural name and offers
 `view` without `list`, or has a singular name and offers no `view`.
 
+The sample is the one on the entry page's Sampling (the first 30 leaf commands by sorted path,
+plus every write and slow command). The groups counted are those that appear as ancestors of the
+sampled leaves; that is the denominator.
+
 - **0:** At least 25% of the groups in the sample are violations.
 - **About half (1):** At least one violation, but below 25% of the groups in the sample.
 - **Maximum (2):** No group in the sample is a violation.
-- **Not applicable when:** the CLI has no group that contains subcommands.
-- **Evidence:** Walk `acme --help` and each group's help for the first 30 commands by sorted path,
-  plus every write command, and list the group names. Run `acme pr comments --help` and
+- **Not applicable when:** the CLI has no group that contains subcommands, or it has groups but
+  no sampled leaf has an ancestor group (the denominator is zero).
+- **Evidence:** Walk `acme --help` and each group's help for the first 30 leaf commands by sorted
+  path, plus every write command, and list the group names. Run `acme pr comments --help` and
   `acme pr comment --help` and check that only one of them resolves.

@@ -88,7 +88,7 @@ done
 
 Maximum: 3 points. Stray escape bytes cost tokens and a pager is a hang, but both are easy to spot.
 
-Sample the first 30 commands by sorted path plus every write command (writes only against a
+Sample the first 30 leaf commands by sorted path plus every write command (writes only against a
 sandbox service). Run each, and its `--help`, with stdout and stderr sent to one capture (a pipe or
 a redirect to a file) and stdin closed, under a 5 second timeout (`timeout` or `gtimeout`,
 whichever exists). A command violates

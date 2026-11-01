@@ -96,14 +96,15 @@ it.each(["pr list", "pr view 1", "ticket view T-1"])("%s output shape", (cmd) =>
 
 Maximum: 5 points. A command without clean JSON forces per-command parsing code, and it can be any.
 
-Sample the first 30 commands by sorted path plus every write command. A command violates when any
-of these holds:
+Sample the first 30 leaf commands by sorted path plus every write command. A command violates when
+any of these holds:
 
 - **No `--json`:** its `--help` does not list `--json`.
 - **Not one object:** `--json` stdout is not a single JSON object (a bare array, several
-  documents, or text).
-- **Deep:** a record (the result, or an element of its list) nests objects more than one level, so
-  `author.name` is fine and `author.org.name` is not.
+  documents, or text). The one-object rule applies to the documented envelope as a whole.
+- **Deep:** a record (the result object or its documented envelope, or an element of its list)
+  nests objects more than one level, so `author.name` is fine and `author.org.name` is not. The
+  envelope's own data member does not count as a level.
 - **Inconsistent:** a key is not camelCase, a timestamp-looking value is not ISO 8601, or a key
   that most other sampled commands type one way (`id` as a number) is typed another way here.
 

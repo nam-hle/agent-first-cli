@@ -87,7 +87,7 @@ test("next is short, concrete and real", () => {
 Maximum: 3 points. `next` saves a lookup after most results, but an agent can still find the
 follow-up by itself, so the weight is modest; a wrong `next` costs more than none.
 
-Examined commands: among the sample (first 30 commands by sorted path), the commands that run
+Examined commands: among the sample (first 30 leaf commands by sorted path), the commands that run
 with no required input and print JSON (an object or an array) under `--json`; writes only through
 `--dry-run` and `--json` when `--dry-run` is listed in their help, otherwise excluded. A command
 violates when any of these holds:
@@ -97,10 +97,19 @@ violates when any of these holds:
 - **Does not resolve:** an entry's command path (the longest leading run of non-flag words, after
   `acme`, for which `acme <path> --help` exits 0, longest tried first) does not exist, or a
   `--flag` in the entry is missing from that help text.
-- **Silent:** the result is a top-level array (it cannot hold `next`), or it is an object with
-  no `next` key whose top level, an object nested one level deep (`{"task":{"id":"T-1"}}`), or
-  first element of any top-level list-valued key, has any of `id`, `key`, `number`, `slug`,
-  `uuid`, `name`. An empty `next: []` is not silent.
+- **Foreign entry:** an entry is not a command of the tool and is not marked as a human step, or
+  it is a privileged system command line (for example one using `sudo` or an administrator
+  binary) that is not marked as a human step. A marker is a documented field or prefix that
+  labels the entry as a step for a person (for example an actor field set to a person value, or a
+  `human:` prefix). An entry marked as a human step is exempt from the resolve check.
+- **Silent:** the JSON output is a bare top-level array (it cannot hold `next`), or it is an
+  object with no `next` key (beside or inside the result) whose top level, an
+  object nested one level deep (`{"task":{"id":"T-1"}}`), or first element of any top-level
+  list-valued key, has any of `id`, `key`, `number`, `slug`, `uuid`, `name`. An empty `next: []`
+  is not silent.
+
+When the tool documents an envelope, `next` may sit beside the result object or inside it, as the
+entry page's envelope rule says.
 
 - **0:** At least 25% of the examined commands violate.
 - **About half (2):** Under 25% violate and at least one does (for example `next` is concrete and

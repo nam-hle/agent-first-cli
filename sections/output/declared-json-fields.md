@@ -91,8 +91,8 @@ it("every declared field is populated in real output", () => {
 
 Maximum: 3 points. Undeclared fields cost trial calls and context, but a wrong guess is visible.
 
-Count the commands among the sample (first 30 by sorted path plus every write command) whose
-`--help` lists `--json`. A counted command violates when any of these holds:
+Count the commands among the sample (first 30 leaf commands by sorted path plus every write command)
+whose `--help` lists `--json`. A counted command violates when any of these holds:
 
 - **Undeclared:** `--help` does not list its JSON fields.
 - **Selection broken:** `--json=<first declared field>` does not return exactly that field, or

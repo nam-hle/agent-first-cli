@@ -103,7 +103,7 @@ it("order is stable", () => {
 
 Maximum: 5 points. A silent cut or an unbounded dump makes an agent decide on partial data.
 
-Count the list and search commands in the sample (first 30 commands by sorted path): those that
+Count the list and search commands in the sample (first 30 leaf commands by sorted path): those that
 return a collection of items. A set fixed by the tool itself (its verbs, workflow states) is small
 by nature and is not counted. A counted command violates when any of these holds:
 

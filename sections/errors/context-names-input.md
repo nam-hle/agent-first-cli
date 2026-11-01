@@ -109,18 +109,21 @@ Each provocation below is one counted error:
 - each read probe command that takes an id, given `nonexistent-0`.
 
 A counted error violates when it exits 0 (the CLI accepted the garbage), or its stderr is not one
-JSON object, or `context.field` is absent, or
-`context.field` is not the flag as typed or the positional name shown in `--help`, or (for the
-unknown flag and the nonexistent id) `context.observed` is absent or differs from the typed value.
-A missing-input error needs `field` only.
+JSON object, or the context has no key that carries the failing input's name, or that name is not
+the flag as typed or the positional name shown in `--help`, or (for the unknown flag and the
+nonexistent id) the context has no key that carries the observed value, or the value differs from
+the typed one. Any key counts (for example `field`, `fields`, `input`, `missingFields` for the
+name) when the tool's own docs or help state it; only that such a key exists is required, not its
+spelling. A missing-input error needs the name only.
 
 - **0:** At least 25% of the counted errors violate.
 - **About half (2):** Under 25% violate and at least one does (for example `field` is right on
-  every error but `observed` is missing on the nonexistent id).
+  every error but the observed value is missing on the nonexistent id).
 - **Maximum (3):** No counted error violates.
 - **Not applicable when:** the sample holds no command that takes any input (no flag and no
   positional), so no provocation command exists.
 - **Evidence:** run each provocation under `timeout 10` (or `gtimeout 10`) with stdin from
   `/dev/null`, stderr redirected to a file in the sandbox, and note the exit code. Read
-  `context.field` and `context.observed` from that file with a JSON parser (`jq .context` or
-  `node -e`). Compare them with the typed value and the usage line of `acme <command> --help`.
+  the context keys that carry the input name and the observed value from that file with a JSON
+  parser (`jq .context` or `node -e`), and check the keys are documented. Compare them with the
+  typed value and the usage line of `acme <command> --help`.

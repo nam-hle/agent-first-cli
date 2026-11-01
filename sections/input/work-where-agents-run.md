@@ -111,12 +111,18 @@ test("a refusal names an allowed place", () => {
 Maximum: 1 point. Without a known identity or a usable output path an agent guesses, but only in
 sandboxed runs.
 
+The allowed roots are the working directory and the system temporary directory. A tool that
+refuses a path outside them with a hint naming the allowed roots is fine. A tool with no
+output-path option is N/A for the output half and is judged on `whoami` alone.
+
 - **0:** When applicable, anything but Maximum: no `whoami` command (in a CLI with a remote
-  identity), any non-zero exit, a missing filterable user field, or, if the CLI has `--output`, a refusal of the scratch directory or a refusal that names
-  no allowed place in `context.allowed` or `hint`.
+  identity), any non-zero exit, a missing filterable user field, or, if the CLI has `--output`,
+  a refusal of a path under an allowed root or a refusal that names no allowed root in
+  `context.allowed` or `hint`.
 - **Maximum (1):** `acme whoami --json` exits 0 with an object holding the identifier that filters
-  take, and, if the CLI has `--output`, it accepts a path in the scratch directory and refuses a
-  path outside it naming an allowed place. A CLI with no `--output` is judged on `whoami` alone.
+  take, and, if the CLI has `--output`, it accepts a path under an allowed root and refuses a
+  path outside them naming the allowed roots. A CLI with no `--output` is judged on `whoami`
+  alone.
 - **Not applicable when:** there is no agent sandbox, so the agent runs with a normal home, a free
   filesystem and its own user; or the CLI has no remote identity (a purely local tool has nothing
   to look up by `whoami`).

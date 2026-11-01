@@ -94,7 +94,7 @@ small.
 Fixture: the sandbox must hold at least two rows for each list probed. A list that cannot be
 seeded to two rows is "not exercised" for the cut-list probe only.
 
-Exercised dead ends, from the sample (first 30 commands by sorted path):
+Exercised dead ends, from the sample (first 30 leaf commands by sorted path):
 
 - **Dry run:** each write that lists `--dry-run` in its help, run with `--dry-run` and inputs
   taken from read output of the sandbox; one that errors is not exercised.

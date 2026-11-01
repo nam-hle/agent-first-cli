@@ -100,13 +100,17 @@ Maximum: 5 points. A write that cannot be previewed forces blind retries; it tou
   arguments and exits 0. A violation is a write without a faithful `--dry-run`: no flag, no
   structured output, or a preview that skips a refusal the real run makes (for example
   `acme pr merge <conflicted> --dry-run` exits 0 while the real merge exits 6). The
-  [small-samples rule](../../benchmark/README.md#small-samples) applies.
+  [small-samples rule](../../benchmark/README.md#small-samples) applies. "Write command" is as
+  defined in the [entry page](../../benchmark/README.md#write-command). A local write counts as a
+  sampled write, and so can be a violation, only if the tool documents a dry-run form for it.
 - **About half (3):** At least one violation, but below 25% of the sampled writes.
 - **Maximum (5):** Every write accepts `--dry-run`. Against a known-bad state the preview refuses
   with the same code and exit class as the real run, and a good preview lists the same changes in
   the result shape, marked `dryRun: true`.
-- **Not applicable when:** the CLI has no write commands.
-- **Evidence:** Run `acme <write> --help` for each write and look for `--dry-run`. Only inside the
+- **Not applicable when:** the CLI has no write commands (local writes with no documented
+  dry-run form do not count as write commands here).
+- **Evidence:** Run `acme <write> --help` for each write command (as defined on the entry page;
+  local writes only when they document a dry-run form) and look for `--dry-run`. Only inside the
   entry page's "Probes and safety" sandbox, against a throwaway conflicted item, run
   `acme <write> <conflicted> --dry-run --json` and the same without the flag, then compare exit
   codes and `error.code`. Where no sandbox can be set up the probe is not exercised (see the

@@ -100,6 +100,6 @@ Maximum: 1 point. A vague placeholder or a greedy flag misleads one call at a ti
   names a type (`<path>`, `<count>`, `<name>`) and takes one value per use, and several values
   come from repeating a singular flag (`--label a --label b`).
 - **Not applicable when:** no sampled command has a flag that takes a value.
-- **Evidence:** Run `acme <command> --help` for the first 30 commands by sorted path from walking
-  `acme --help`, plus every write command, and read each option line. Run
+- **Evidence:** Run `acme <command> --help` for the first 30 leaf commands by sorted path from
+  walking `acme --help`, plus every write command, and read each option line. Run
   `acme pr list --label bug --label ui` and check that both labels apply.

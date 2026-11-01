@@ -88,9 +88,9 @@ Maximum: 2 points. A documented pipe cannot be run or approved as one step; it s
 every workflow the docs teach.
 
 Workflow lines are the lines containing `acme` in fenced shell blocks of the README, the docs folder
-and the examples in `acme <command> --help` for the first 30 commands by sorted path. Blocks marked
-as checks (`# check`) are skipped. A violation is a workflow line with a pipe, a redirect, `;`,
-`&&`, `||`, command substitution or a `cd ... &&` prefix.
+and the examples in `acme <command> --help` for the first 30 leaf commands by sorted path. Blocks
+marked as checks (`# check`) are skipped. A violation is a workflow line with a pipe, a redirect,
+`;`, `&&`, `||`, command substitution or a `cd ... &&` prefix.
 
 Counted lines: strip a leading `$ ` and anything after ` #` (a comment), then count only lines
 that start with the CLI name.
