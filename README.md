@@ -83,7 +83,7 @@ acme pr status list      # a singleton asked to list
 
 **Check:** the same tree walk; no group has a singular twin.
 
-[Return to top](#table-of-contents)
+[Read more](sections/names/group-names-plural.md) | [Return to top](#table-of-contents)
 
 ### 1.3 At most two positionals
 
@@ -107,7 +107,7 @@ acme comments get <id> <id> <number>
 
 **Check:** count and names asserted in a test; snapshot every command's positionals.
 
-[Return to top](#table-of-contents)
+[Read more](sections/names/two-positionals.md) | [Return to top](#table-of-contents)
 
 ### 1.4 One concept, one flag name; one name, one purpose #strategic
 
@@ -134,7 +134,7 @@ acme audit view --since 2026-01-01
 **Check:** snapshot every flag with its help and purpose; review the diff. Ban the synonyms in a
 test.
 
-[Return to top](#table-of-contents)
+[Read more](sections/names/one-flag-one-purpose.md) | [Return to top](#table-of-contents)
 
 ### 1.5 Long, unambiguous flags with positive booleans
 
@@ -159,7 +159,7 @@ acme pr list --user 42 --no-dry-run --skip-prompts
 
 **Check:** a lint test bans bare `--user`, `--name`, `--id`, `--key` and `--skip-*`.
 
-[Return to top](#table-of-contents)
+[Read more](sections/names/long-positive-flags.md) | [Return to top](#table-of-contents)
 
 ### 1.6 Placeholders name a type; multi-value flags repeat
 
@@ -183,7 +183,7 @@ positional that comes next.
 
 **Check:** a test fails on a `<value>` placeholder and on a variadic flag.
 
-[Return to top](#table-of-contents)
+[Read more](sections/names/typed-placeholders.md) | [Return to top](#table-of-contents)
 
 # 2. Output
 
@@ -238,7 +238,7 @@ parsing code.
 **Check:** a test asserts no command redefines `--json`, nesting stays one level, and every driven
 result holds ISO 8601 timestamps.
 
-[Return to top](#table-of-contents)
+[Read more](sections/output/json-everywhere.md) | [Return to top](#table-of-contents)
 
 ### 2.3 Declare the JSON fields and show them in help
 
@@ -266,7 +266,7 @@ declared field that is always null. The type check alone does not catch a stale 
 (`author.name` passes whenever `author` exists) or a presenter that reshapes data after the type was
 taken.
 
-[Return to top](#table-of-contents)
+[Read more](sections/output/declared-json-fields.md) | [Return to top](#table-of-contents)
 
 ### 2.4 No colour, spinner or pager off a terminal
 
@@ -290,7 +290,7 @@ acme pr list | cat             # no ESC bytes, no spinner, no pager
 
 **Check:** run piped, assert no ESC byte in stdout or help.
 
-[Return to top](#table-of-contents)
+[Read more](sections/output/no-tty-decoration.md) | [Return to top](#table-of-contents)
 
 ### 2.5 Bound every list and say when you cut
 
@@ -317,7 +317,7 @@ answer.
 **Check:** a test finds every list and search command and asserts it takes `--limit` or is small by
 nature; a full page offers a bigger `--limit`; two runs over the same data return the same order.
 
-[Return to top](#table-of-contents)
+[Read more](sections/output/bounded-lists.md) | [Return to top](#table-of-contents)
 
 ### 2.6 Sanitise text that came from another system #security
 
@@ -420,7 +420,7 @@ other mention and checks the command and its flags exist.
 
 **Check:** a test asserts `context` on every validation and not-found code.
 
-[Return to top](#table-of-contents)
+[Read more](sections/errors/context-names-input.md) | [Return to top](#table-of-contents)
 
 ### 3.4 The exit code is the class of failure
 
@@ -443,7 +443,7 @@ acme ticket view NOPE-1; echo $?     # 1, same as every other failure
 
 **Check:** each code must declare a class to compile; a test pins the table.
 
-[Return to top](#table-of-contents)
+[Read more](sections/errors/exit-code-classes.md) | [Return to top](#table-of-contents)
 
 ### 3.5 A failed write says whether anything changed
 
@@ -497,7 +497,7 @@ Usage: acme build [options] [command]        <- the library's help page, exit 0
 
 **Check:** run every group without its verb and every command with a bad option.
 
-[Return to top](#table-of-contents)
+[Read more](sections/errors/parse-failures.md) | [Return to top](#table-of-contents)
 
 # 4. Success and next steps
 
@@ -522,7 +522,7 @@ Done.
 
 **Check:** a test per write asserts its first line carries the new id or key.
 
-[Return to top](#table-of-contents)
+[Read more](sections/success/name-what-happened.md) | [Return to top](#table-of-contents)
 
 ### 4.2 Offer the next step as data
 
@@ -546,7 +546,7 @@ changed.
 
 **Check:** a test asserts at most three, no `<placeholder>`, and each command exists.
 
-[Return to top](#table-of-contents)
+[Read more](sections/success/next-as-data.md) | [Return to top](#table-of-contents)
 
 ### 4.3 Dry runs, empty results and cut-offs all point forward
 
@@ -572,7 +572,7 @@ Would merge PR 42.          (no next step)
 
 **Check:** snapshot the empty-list lines; a test asserts each offered command exists.
 
-[Return to top](#table-of-contents)
+[Read more](sections/success/dead-ends-point-forward.md) | [Return to top](#table-of-contents)
 
 ### 4.4 Check every command written inside a string
 
@@ -596,7 +596,7 @@ cmd('pr list').flag('state', 'open').build();    // a renamed flag fails tsc
 **Check:** a `command-strings` test: every `acme ...` written in source or docs resolves in the tree,
 flags included.
 
-[Return to top](#table-of-contents)
+[Read more](sections/success/check-command-strings.md) | [Return to top](#table-of-contents)
 
 ### 4.5 A slow command returns an id and a state
 
@@ -623,7 +623,7 @@ like a failed job, so it starts the work a second time.
 **Check:** a test starts a job, waits past the timeout, asserts exit 7 with `state: running`, and that
 a second `--wait` on the same id reaches a final state.
 
-[Return to top](#table-of-contents)
+[Read more](sections/success/slow-commands.md) | [Return to top](#table-of-contents)
 
 # 5. Input
 
@@ -650,7 +650,7 @@ Title: _                                            (waits with no TTY)
 
 **Check:** run every command with no input and no TTY; assert it exits and names a flag.
 
-[Return to top](#table-of-contents)
+[Read more](sections/input/missing-input-fails.md) | [Return to top](#table-of-contents)
 
 ### 5.2 No secret in a flag or an environment variable #security
 
@@ -674,7 +674,7 @@ ACME_TOKEN=abc123 acme pr list
 
 **Check:** a test bans `--token`, `--password` and secret-named variables.
 
-[Return to top](#table-of-contents)
+[Read more](sections/input/no-secrets-in-flags.md) | [Return to top](#table-of-contents)
 
 ### 5.3 Enum over string; refuse typos
 
@@ -700,7 +700,7 @@ No pull requests.
 
 **Check:** a test passes a wrong value to each choice flag and a non-number to each numeric flag.
 
-[Return to top](#table-of-contents)
+[Read more](sections/input/enums-refuse-typos.md) | [Return to top](#table-of-contents)
 
 ### 5.4 Long text comes from a file or stdin
 
@@ -726,7 +726,7 @@ and broke on the second line"
 **Check:** a test posts a body with quotes, backticks and newlines through the file form, and one
 structured input through `--input`.
 
-[Return to top](#table-of-contents)
+[Read more](sections/input/long-text-from-file.md) | [Return to top](#table-of-contents)
 
 ### 5.5 Work where agents run
 
@@ -753,7 +753,7 @@ Error: output path not allowed          <- and no word on which paths are
 **Check:** run the suite from inside a sandbox directory; a test asserts the output-path refusal names
 an allowed location.
 
-[Return to top](#table-of-contents)
+[Read more](sections/input/work-where-agents-run.md) | [Return to top](#table-of-contents)
 
 # 6. Writes
 
@@ -779,7 +779,7 @@ acme pr merge 42 --dry-run     # prints "would merge" without checking for confl
 
 **Check:** a test asserts every write declares it and the preview is not an empty stub.
 
-[Return to top](#table-of-contents)
+[Read more](sections/writes/dry-run.md) | [Return to top](#table-of-contents)
 
 ### 6.2 Every write has `--confirm`, and an agent never needs it
 
@@ -806,7 +806,7 @@ acme pr merge 42               # unattended, blocks on "Merge? [y/N]"
 
 **Check:** a test asserts every write declares `--confirm` and that a no-TTY run does not prompt.
 
-[Return to top](#table-of-contents)
+[Read more](sections/writes/confirm.md) | [Return to top](#table-of-contents)
 
 ### 6.3 A repeated write ends `unchanged`
 
@@ -830,7 +830,7 @@ acme ticket link ACME-1 ACME-2   # linked again, a duplicate link
 
 **Check:** one test per idempotent write calls it twice.
 
-[Return to top](#table-of-contents)
+[Read more](sections/writes/repeat-is-unchanged.md) | [Return to top](#table-of-contents)
 
 ### 6.4 No `--yes` or `--force` over a real gate #security
 
@@ -856,7 +856,7 @@ acme pr merge 42 --yes --force
 **Check:** a test bans `--yes` and `--force`; enforcement lives in a separate process with its own
 identity where possible.
 
-[Return to top](#table-of-contents)
+[Read more](sections/writes/no-yes-or-force.md) | [Return to top](#table-of-contents)
 
 ### 6.5 Plan for parallel writes #advanced
 
@@ -879,7 +879,7 @@ requests. Declining all but one is a defect they will hit.
 
 **Check:** an integration test issues N writes concurrently and asserts each gets a distinct outcome.
 
-[Return to top](#table-of-contents)
+[Read more](sections/writes/parallel-writes.md) | [Return to top](#table-of-contents)
 
 # 7. Help and discovery
 
@@ -908,7 +908,7 @@ Lists pull requests. Pull requests are... (three paragraphs before any syntax)
 
 **Check:** a test asserts a leaf command prints EXAMPLES first and marks required arguments.
 
-[Return to top](#table-of-contents)
+[Read more](sections/help/help-leads-with-example.md) | [Return to top](#table-of-contents)
 
 ### 7.2 Discoverable in two hops
 
@@ -932,7 +932,7 @@ acme explore exit-codes
 
 **Check:** a test finds every command through search and asserts every topic referenced exists.
 
-[Return to top](#table-of-contents)
+[Read more](sections/help/two-hop-discovery.md) | [Return to top](#table-of-contents)
 
 ### 7.3 No documented pipe, redirect or `cd ... &&`
 
@@ -958,7 +958,7 @@ acme pr list --json | jq '.[].title' > titles.txt
 **Check:** a docs test fails on a documented pipe or redirect in a workflow. The test commands in
 this guide (`2>/dev/null` in 2.1, `| cat` in 2.4) are checks, not workflows, and are exempt.
 
-[Return to top](#table-of-contents)
+[Read more](sections/help/no-documented-pipes.md) | [Return to top](#table-of-contents)
 
 ### 7.4 Generate the reference, do not write it
 
@@ -982,7 +982,7 @@ docs/reference.md      <- edited by hand next to the code
 **Check:** a generation step in the build; a test fails on a command without a description or
 example.
 
-[Return to top](#table-of-contents)
+[Read more](sections/help/generate-the-reference.md) | [Return to top](#table-of-contents)
 
 ### 7.5 The tool describes its own output, versioned
 
@@ -1008,7 +1008,7 @@ acme schema pr-list --json     # { "schemaVersion": "v1", "schema": { ... } }
 **Check:** a test validates every command's real `--json` output against its printed schema, and a
 snapshot (8.1) pins `schemaVersion`.
 
-[Return to top](#table-of-contents)
+[Read more](sections/help/self-describing-schema.md) | [Return to top](#table-of-contents)
 
 # 8. Evolving the surface
 
@@ -1083,7 +1083,7 @@ merge the rename, wait for the first agent failure, then search
 
 **Check:** a checklist item on the PR template; a script that greps known instruction locations.
 
-[Return to top](#table-of-contents)
+[Read more](sections/evolving/update-hidden-callers.md) | [Return to top](#table-of-contents)
 
 ### 8.4 Audit naming and record the decisions
 
@@ -1106,7 +1106,7 @@ a decision recorded only in a commit message
 
 **Check:** the flag-purpose table (1.4) shows drift as a diff; the audit lives in a dated document.
 
-[Return to top](#table-of-contents)
+[Read more](sections/evolving/audit-naming.md) | [Return to top](#table-of-contents)
 
 ## Sources and thanks
 
