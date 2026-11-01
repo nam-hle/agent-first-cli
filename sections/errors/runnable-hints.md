@@ -106,7 +106,9 @@ Each provocation below is one counted error:
 - each probe command with `--no-such-flag`;
 - each read probe command with a required input omitted, when it has one;
 - bare `acme` and every group on the path to a probe command, without a verb;
-- each read probe command that takes an id, given `nonexistent-0`.
+- each read probe command that takes an id, given `nonexistent-0` (the
+  [id probe rules](../../benchmark/README.md#id-probe)
+  say what takes an id).
 
 A hint is the `hint` string of the stderr JSON object. A command line in it starts with `acme`;
 it resolves when its command path (the longest leading run of non-flag words for which

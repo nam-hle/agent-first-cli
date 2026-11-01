@@ -87,6 +87,10 @@ test("no terminal, no prompt", () => {
 
 Maximum: 3 points. A prompt that hangs an unattended caller costs time, not safety.
 
+A confirm flag that only skips the CLI's own prompt is the flag this practice expects; it is not
+a skip over a gate. Only a flag that bypasses the [approval](../../benchmark/README.md#approval)
+makes `no-yes-or-force` fail.
+
 - **0:** `no-yes-or-force` fails, or at least 25% of the sampled writes are violations (a write
   that lacks `--confirm`, or waits on a prompt such as "Merge? [y/N]" without a terminal or under
   `--no-input`; the [small-samples rule](../../benchmark/README.md#small-samples) applies).
@@ -98,7 +102,7 @@ Maximum: 3 points. A prompt that hangs an unattended caller costs time, not safe
   every write returns at once, never prints prompt text and never reads stdin: it runs, or it
   exits 5 because approval is pending or denied. Exiting 5 earns full marks.
 - **Not applicable when:** the CLI has no write commands (local writes with no documented confirm
-  form do not count), or `no-yes-or-force` is N/A (no write has an approval gate of any kind).
+  form do not count), or `no-yes-or-force` is N/A (no destructive write has a gate of any kind).
 - **Evidence:** Only inside the entry page's "Probes and safety" sandbox, against throwaway
   items, for each write command as defined on the entry page, run `acme <write> <item> --no-input
   </dev/null` and `echo y | acme <write> <item>` for each write; check it never waits and stderr has

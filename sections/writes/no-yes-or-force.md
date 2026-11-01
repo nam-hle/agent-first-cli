@@ -93,21 +93,32 @@ test("a gated write without approval is denied", () => {
 
 Maximum: 8 points. A gate the caller can open protects nothing against injected instructions.
 
-- **0:** Any gated write has a flag or variable that skips the approval (`--yes`, `--force`,
-  `--no-verify`, `ACME_ASSUME_YES=1`), or the only gate is a prompt, including one answered
-  by piped input.
-- **About half (4):** No gated write has a skip flag or variable, but the approval decision lives
-  where the caller can change it (a config file or setting the calling user can edit), so the
-  gate is enforced inside the caller's reach.
-- **Maximum (8):** No gated write has a skip flag or variable, and approval is enforced by a
-  separate process or identity the caller cannot edit; denied exits 5 with an error envelope.
-- **Not applicable when:** no write has an approval gate of any kind. A gate that exists and
-  can be skipped is scored, not N/A.
+"Approval" is defined once on the [entry page](../../benchmark/README.md#approval): a gate
+enforced outside the CLI process. A confirm flag that only skips the CLI's own prompt and never
+bypasses the approval is not a skip flag here; a flag or variable that bypasses it is. A
+destructive write is one that deletes, overwrites, merges or otherwise changes state in a way that
+cannot be undone. The CLI's own prompt, or a `--confirm`-style flag with no external approval, is a
+gate of the CLI's own. Judge the practice on the gated destructive writes only (those with a
+prompt, a confirm flag or an approval); a non-destructive write is never a 0 case here.
+
+- **0:** Any gated destructive write has a flag or variable that bypasses the approval (`--yes`,
+  `--force`, `--no-verify`, `ACME_ASSUME_YES=1`), or the only gate on a destructive write is the
+  CLI's own (a prompt, or a confirm-style flag with no external approval), including a prompt
+  answered by piped input.
+- **About half (4):** No gated destructive write has a skip flag or variable, but the approval
+  decision lives where the caller can change it (a config file or setting the calling user can
+  edit), so the gate is enforced inside the caller's reach.
+- **Maximum (8):** No gated destructive write has a skip flag or variable, and approval is
+  enforced by a separate process or identity the caller cannot edit; denied exits 5 with an error
+  envelope.
+- **Not applicable when:** the tool has no destructive write, or none has a prompt, a confirm flag
+  or an approval at all. A gate of any kind on a destructive write, including one that can be
+  skipped, is scored, not N/A.
 - **Evidence:** Only inside the entry page's "Probes and safety" sandbox (a fresh working
   directory and a copied or dedicated data file), run a gated delete or merge on a throwaway item
-  with `--yes`, `--force`, `--no-verify` and with `ACME_ASSUME_YES=1`; check each stops and asks.
-  Where a real service is the only target, the probe is "not exercised" (defined on the entry
-  page, Probes and safety).
+  with `--yes`, `--force`, `--no-verify` and with `ACME_ASSUME_YES=1`; check each stops and asks, or
+  still waits for the approval. Where a real service is the only target, the probe is "not
+  exercised" (defined on the entry page, Probes and safety).
   Search `acme <command> --help` of every gated write for yes, force, skip and confirm flags.
   Find where the approval setting lives and run `ls -l` on it to see who can write it.
 - **Gate:** failing caps Safe writes at 40

@@ -96,8 +96,10 @@ test.each(leaves)("%j fails fast without input", (...path) => {
 Maximum: 8 points. A hang stalls a whole agent run with no output, and any command can have it.
 
 Sample the first 30 leaf commands by sorted path plus every write. Run each with no arguments, stdin
-closed and `--no-input`. A command needs input when its help lists a required flag or positional.
-Commands with none are not counted. Count the rest. Two kinds of violation:
+closed and `--no-input`. A command needs input when its help marks a required flag or positional, or
+when its argument-less probe in the sandbox hangs or fails with a usage error. A command that
+succeeds with no input and marks nothing required is not counted. Count the rest.
+Two kinds of violation:
 
 - **Hang:** the command prompts or blocks until the timeout.
 - **Weak failure:** it exits 0 with the input omitted, or exits non-zero but not with 2, or
@@ -111,7 +113,7 @@ list under any key that the tool's own docs or help state (for example `field`, 
 - **About half (4):** Not 0 and not Maximum: under 25% hang and at least 25% are good, but some
   hang or fail weakly (for example `acme ticket create --no-input` exits 1 with "missing title").
 - **Maximum (8):** No counted command hangs and every one is good.
-- **Not applicable when:** no sampled command's help lists a required flag or positional.
+- **Not applicable when:** no sampled command needs input (none is counted).
 - **Evidence:** In the empty temporary working directory of the entry page's "Probes and safety"
   section, with a dedicated or copied data file for the CLI, run `acme <command> --no-input
   < /dev/null` under `timeout 5` for each sampled command. Exit 124 is a hang; otherwise read the

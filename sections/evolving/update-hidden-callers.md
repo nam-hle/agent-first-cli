@@ -86,8 +86,10 @@ the few renames a tool makes, so the weight is moderate.
 Old forms: the removed or renamed flags and commands from the removed-names table, `CHANGELOG.md` or
 `docs/`, newest 10. Instruction locations: `hooks/`, `skills/`, `.claude/`, `docs/`, `scripts/`,
 `AGENTS.md`, `CLAUDE.md` and `.github/` or `.bitbucket/` templates in the repo, plus any location
-the repo's own list names. A stale hit is an old form found, as a whole token, in an instruction
-location outside the changelog, the removed-names table and text marked as history. Process
+the repo's own list names. A stale hit is an old form found, as a whole token, inside a line that
+invokes the tool under test (a line containing `acme` followed by the old form), in an instruction
+location outside the changelog, the removed-names table and text marked as history. Matches in
+lines for other tools are ignored. Process
 evidence is present when a committed script, checklist or PR template names the locations to search
 for an old form. An old form is stale when it has at least one stale hit.
 
@@ -98,6 +100,7 @@ for an old form. An old form is stale when it has at least one stale hit.
 - **Not applicable when:** the repo and docs are not readable (a closed or vendor CLI); or the
   changelog and docs show no removed or renamed name.
 - **Evidence:** read the changelog for the old forms, run `grep -rnF -- "<old form>"` over each
-  existing location (read-only; skip a location outside the repo unless the repo names it), and
+  existing location (read-only; skip a location outside the repo unless the repo names it), keep
+  only the matching lines that invoke `acme`, and
   look for the process in `scripts/`, the PR template and `CONTRIBUTING.md`. Capture each old
   form, the matching file and line, and the process file path.

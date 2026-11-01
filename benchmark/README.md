@@ -4,7 +4,7 @@ Scores how agent-first a command line tool is, one practice at a time, using the
 practices. Design:
 [the benchmark design](../docs/superpowers/specs/2026-11-01-cli-benchmark-design.md).
 
-Rubric version: 1.1.0 ([changelog](CHANGELOG.md))
+Rubric version: 1.2.0 ([changelog](CHANGELOG.md))
 
 An agent applies this rubric by hand: no scripts, no runner. Each practice page has a "How to
 score" section with its maximum (front matter `max`) and its anchors. Fill in
@@ -73,6 +73,20 @@ real run. Say in the report that these five used the narrower sample.
   4, a practice scores 0 only if every counted item violates, and half if some but not all do.
   This applies to every share-based anchor on every practice page. The boundary belongs to 0: "at
   least 25%" scores 0, below 25% with at least one violation scores half.
+- <a id="json-fields"></a>A command has a JSON switch when its own help lists it, or when a global
+  flag's documented scope covers it; say in the report which of the two decided. A command "lists
+  its fields" when its own help, or the tool's reference page for that command, lists them. A field
+  selector inherited from a global flag does not by itself count.
+- <a id="approval"></a>An "approval" is a gate enforced outside the CLI process (a separate
+  process, identity or device). A confirm flag that only skips the CLI's own prompt and never
+  bypasses the approval is not a skip over a gate; a flag that bypasses the approval is.
+- <a id="id-probe"></a>A command "takes an id" when it has a positional or a required flag that
+  names an existing resource. A not-found probe (`nonexistent-0`) against a service that answers
+  with the denied class instead of the not-found class (both are exit classes, defined on the
+  [exit-code classes page](../sections/errors/exit-code-classes.md)) is "not exercised" for that
+  probe, not a
+  violation. A read-only access-check query about an unknown subject is a valid query: it is not
+  provoked and not counted.
 - Scored twice: the same agent scores each practice twice, the second pass blind to the first. The
   lower score stands until a person settles a gap above a quarter of the maximum. The report flags
   every such gap.
@@ -104,9 +118,11 @@ sandbox) is N/A. Evidence that lives in the repo or docs and is absent while rea
 Evidence that is not readable (a closed or vendor CLI) is N/A. A state the sandbox cannot exercise
 is [not exercised](#not-exercised), never 0.
 
-[`confirm`](../sections/writes/confirm.md) (6.2), 6.4 and 6.5 are N/A when no write has an
-approval gate of any kind. The report lists ungated destructive writes (deletes, overwrites and
-merges with no approval gate) so the gap is visible even though it is not scored.
+[`confirm`](../sections/writes/confirm.md) (6.2) and 6.4 are N/A when no destructive write has a
+gate of any kind (no prompt, no confirm flag and no approval); 6.5 is N/A when no write has one.
+The report lists ungated destructive writes
+(deletes, overwrites and merges with no gate of any kind: no prompt, no confirm flag, no approval)
+so the gap is visible even though it is not scored.
 
 ## Probes and safety
 
@@ -127,6 +143,9 @@ merges with no approval gate) so the gap is visible even though it is not scored
   heading "Needs a fixture", each with one line naming the fixture that would let a later round
   score them (a throwaway target or a fake service mode). They stay under the "not exercised"
   rule: scored from the probes that did run, N/A if none ran, with the 3.5 and 2.6 cap exception.
+  4.5 has a fixture-free proxy (a starter is judged from its help and a dry-run result), so only
+  its waiter probe needs a fixture; 4.5 is N/A only when the tool has no starter, never merely
+  because no run happened.
 - Probes that run a command with no arguments (for example for missing-input behaviour) run in the
   empty temporary working directory so default files cannot be touched.
 - When a page's probe appends `--no-input` (or any optional flag), use it only if the command's
@@ -172,4 +191,4 @@ the [low-coverage rule](#scoring).
   differ from the previous version; see the [changelog](CHANGELOG.md).
 - A change that moves a category's share of total points by more than 5 percentage points gets a
   changelog line.
-- The version is the `Rubric version: 1.1.0` line near the top of this page.
+- The version is the `Rubric version: 1.2.0` line near the top of this page.

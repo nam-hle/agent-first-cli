@@ -99,7 +99,8 @@ Maximum: 5 points. A command without clean JSON forces per-command parsing code,
 Sample the first 30 leaf commands by sorted path plus every write command. A command violates when
 any of these holds:
 
-- **No `--json`:** its `--help` does not list `--json`.
+- **No `--json`:** it has no JSON switch, judged as the
+  [entry page](../../benchmark/README.md#json-fields) says.
 - **Not one object:** `--json` stdout is not a single JSON object (a bare array, several
   documents, or text). The one-object rule applies to the documented envelope as a whole.
 - **Deep:** a record (the result object or its documented envelope, or an element of its list)
@@ -109,7 +110,8 @@ any of these holds:
   that most other sampled commands type one way (`id` as a number) is typed another way here.
 
 Shape checks run only on commands that can be run safely (writes only against a sandbox service);
-`--help` is checked on all.
+the JSON switch is judged on all, from each command's own help or the global flag's
+documented scope.
 
 - **0:** At least 25% of the sampled commands violate.
 - **About half (3):** Under 25% violate and at least one does (for example every read returns an

@@ -97,24 +97,31 @@ Scope: service text, and also caller input the tool echoes (for example argv ech
 or an error), because an agent can relay hostile text. A run that feeds hostile bytes through any
 output path counts as a run; score from the paths run.
 
-- **0:** Human (text) output carries a raw ESC sequence or U+202E from the service text or from
-  echoed caller input.
-- **About half (4):** Human output carries no raw escape (or was not run), and either a path that
-  was run is not clean (for example `--json` values, the error envelope, stderr or streamed
-  output carry raw escapes or invisible characters) or a path was not run. A score of half
-  because a path was not run is marked "unverified".
-- **Maximum (8):** The human, `--json` and error paths were all run with hostile bytes and none,
-  nor any other path run (stderr, streaming), carries a raw escape: ESC sequences are stripped
-  and direction-changing or invisible characters appear visibly, such as `\u{202E}`.
+Output paths, per mode: (1) the default path, the output when stdout is captured; (2) the JSON
+mode, when it differs from the default; (3) the error path. A fourth path, the terminal path,
+exists only when the tool's documented output differs between a terminal and captured stdout. If
+it exists and needs a pseudo-terminal that is not available, it is "not run". Stderr and streamed
+output are checked on whichever path emits them.
+
+- **0:** The default path, run with hostile bytes, carries a raw ESC sequence or U+202E from the
+  service text or from echoed caller input.
+- **About half (4):** The default path is clean or was not run, and either a path that was run
+  is not clean (for example JSON values, the error envelope, stderr or streamed output carry raw
+  escapes or invisible characters) or a path that exists was not run (including a terminal path
+  that could not be run). A score of half because a path was not run is marked "unverified".
+- **Maximum (8):** Every path that exists was run with hostile bytes (the terminal path too, when
+  it exists; when it does not, only paths 1 to 3 are needed) and none carries a raw escape: ESC
+  sequences are stripped and direction-changing or invisible characters appear visibly, such as
+  `\u{202E}`.
 - **Not applicable when:** the CLI never prints content that originated outside its own fixed
   strings. Echoed caller input, and a file or data store the user or others can edit, count as
   outside content, so printing them means the practice applies.
 - **Evidence:** Only inside the entry page's "Probes and safety" sandbox, plant a title with
-  `\u001b[2J` and U+202E in the sandbox's own data, then run `acme ticket view <key>`, the same
-  with `--json`, and a failing command that echoes it. Check each output for raw bytes with
-  `cat -v`; also pass the hostile bytes as an argument where the tool echoes argv. The unverified
-  cap applies only when no output path was run with hostile bytes (no sandbox, or no way to plant
-  the text): the score is then capped at a quarter of the maximum and marked "unverified" (see
-  the entry page's Evidence rules). Any path run is scored. Human output clean with the JSON
-  and error paths not run scores half, marked "unverified".
+  `\u001b[2J` and U+202E in the sandbox's own data, then run `acme ticket view <key>` (captured
+  stdout), the same with `--json` when that differs, and a failing command that echoes it. Check
+  each output for raw bytes with `cat -v`; also pass the hostile bytes as an argument where the
+  tool echoes argv. The unverified cap applies only when no output path was run with hostile
+  bytes (no sandbox, or no way to plant the text): the score is then capped at a quarter of the
+  maximum and marked "unverified" (see the entry page's Evidence rules). Any path run is scored.
+  Default path clean with the JSON and error paths not run scores half, marked "unverified".
 - **Gate:** failing caps Safe writes at 60

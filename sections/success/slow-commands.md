@@ -88,8 +88,12 @@ test("a timeout is transient and the job continues", () => {
 
 Maximum: 5 points. A blocked call is killed and repeated, which duplicates the job.
 
-A slow command is a starter: one whose help says it starts a job or waits, or that takes more than
-10 seconds in the sandbox. Pairing: the waiter of a starter is the command that views or waits on
+A slow command is a starter: one that starts or waits on work that can outlive the call (job
+starters, triggers, deploys, long-running operations) or whose docs describe an asynchronous
+result. A read that is merely slow while it returns its result is not a starter and never has
+violation A (bounded output is [2.5](../output/bounded-lists.md)). Without a fixture, judge a
+documented starter from its help and a dry-run result: a handle (id, state) is promised or it is
+not. Pairing: the waiter of a starter is the command that views or waits on
 its handle, and the starter itself when it accepts `--wait` or another flag that waits. A command
 that blocks until a timeout or a final state is a waiter whether or not it has `--wait`; a
 `--timeout` flag stands in for `--wait`. Two kinds of violation, kept exclusive by what they
@@ -97,7 +101,7 @@ judge:
 
 - **No handle (A), judged on the starter:** without `--wait` it does not return within 10
   seconds, or its `--json` result lacks `id` or a `state` of `queued`, `running`, `succeeded`,
-  `failed` or `cancelled`.
+  `failed` or `cancelled`; where it cannot be run, its help and dry-run result promise no handle.
 - **Broken wait (B), judged on the waiter:** it has no `--timeout` (with `--wait` where it has
   that flag), or `--timeout 1s` (with `--wait` where it has it) on a still-running job exits other
   than 7 or prints a `state` other than `running`. A job that finished within the second is good if
@@ -112,7 +116,7 @@ one where a single wait in a thousand is broken.
 - **About half (3):** Under 25% have A and at least one slow command has A or B (for example the
   start command returns `{"id":7,"state":"queued"}` but a timed-out wait exits 1).
 - **Maximum (5):** No slow command has A or B.
-- **Not applicable when:** no command is slow.
+- **Not applicable when:** the tool has no starter (no command as defined above).
 - **Evidence:** `timeout 15 acme <start command> --json 2>/dev/null` (sandbox only) and read `id`
   and `state`; then `acme <view command> <id> --wait --timeout 1s --json 2>/dev/null` (without
   `--wait` when the waiter has only `--timeout`) and read the exit code and `state`.

@@ -1,5 +1,36 @@
 # Rubric changelog
 
+## 1.2.0
+
+Anchors and definitions changed, so scores may differ from 1.1.0. No practice maximum changed, so
+no category share changed.
+
+- S1: the search and explore hops are judged by behaviour: any documented command that searches
+  commands and topics, at any depth, and any documented command that lists or explains topics.
+- S2: a command "lists its fields" only when its own help or the tool's reference page lists
+  them; a field selector inherited from a global flag does not count; a JSON switch is judged from
+  the command's help or the global flag's documented scope.
+- S3: an old name is stale only inside a line that invokes the tool under test; matches in lines
+  for other tools are ignored.
+- S4: slow commands are those that start or wait on work that can outlive the call; a read that is
+  merely slow is not a violation; a starter can be judged from its help and a dry-run result.
+- S5: output paths are defined per mode (default when captured, JSON mode, error path); a path
+  that needs a pseudo-terminal is "not run" when none exists.
+- S6: "approval" is a gate enforced outside the CLI process; a flag that only skips the CLI's own
+  prompt is not a skip over a gate.
+- S7: "takes an id" is defined; a not-found probe answered with the denied class is not exercised;
+  an access query about an unknown subject is valid and not provoked.
+- S8: the error envelope needs an observed value only when the error concerns an input value.
+- S9: a command that fails with a usage error when run with no input counts as needing input.
+- S10: singular nouns ending in `s` are not plural; the nested-group rules do not apply to
+  top-level groups.
+- S11: only commands whose result has a natural follow-up are examined for `next`.
+- S12: the practice applies when the tool offers an output-path option or an identity lookup; the
+  scratch directory counts only under the allowed roots.
+- S13: the write-command part of the snapshot is judged only for write commands.
+- S14: an example in help is a runnable command with concrete values; exit codes may be stated
+  once centrally with a pointer from each command.
+
 ## 1.1.0
 
 Anchors and definitions changed, so scores may differ from 1.0.0. No practice maximum changed, so

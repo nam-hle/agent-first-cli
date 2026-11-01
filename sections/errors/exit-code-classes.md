@@ -101,7 +101,9 @@ Each provocation below is one counted run, with its expected exit status:
 - each probe command with `--no-such-flag`: 2;
 - each read probe command with a required input omitted, when it has one: 2;
 - bare `acme` and every group on the path to a probe command, without a verb: 2;
-- each read probe command that takes an id, given `nonexistent-0`: 3.
+- each read probe command that takes an id, given `nonexistent-0`: 3 (the
+  [id probe rules](../../benchmark/README.md#id-probe) say what takes an id and how a denied
+  answer is handled).
 
 A counted run violates when its exit status differs from the expected one (including 0, even
 with an error body or empty output, and a timeout).

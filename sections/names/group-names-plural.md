@@ -87,7 +87,12 @@ Maximum: 2 points. A twin group splits help and costs a guess per new verb; it t
 
 A violation is a group with a singular or plural twin (`pod` beside `pods`), or a group nested
 inside another group that has a singular name and offers `list`, or has a plural name and offers
-`view` without `list`, or has a singular name and offers no `view`.
+`view` without `list`, or has a singular name and offers no `view`. The last three clauses judge
+nested groups only; a top-level group is judged by the twin clause alone.
+
+A word ending in `s` is plural only when it is a plural noun. A singular noun ending in `s` is
+singular, for example `status`, `access`, `process`, `class`, `address`, `alias`, `series`,
+`analysis`, `bus`, `focus`, `canvas`. Judge any other such word by its meaning.
 
 The sample is the one on the entry page's Sampling (the first 30 leaf commands by sorted path,
 plus every write and slow command). The groups counted are those that appear as ancestors of the

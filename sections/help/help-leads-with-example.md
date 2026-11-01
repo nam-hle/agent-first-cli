@@ -99,14 +99,17 @@ Sample: the leaf commands of the sample (first 30 leaf commands by sorted path f
 --help`, plus every write command). Help of a command is `acme <path> --help` stdout. A command
 violates when any of these holds:
 
-- no example leads: no line starting with `acme <path>` or `$ acme <path>` appears before the
-  first flag line (a line whose first word starts with `-`), or more than 3 non-blank lines
-  precede that example;
+- no example leads: no example appears before the first flag line (a line whose first word
+  starts with `-`), or more than 3 non-blank lines precede it. An example is a line starting with
+  `acme <path>` or `$ acme <path>` that shows a runnable command with concrete values; a line of
+  placeholders alone (`acme pr view <id>`) does not count;
 - a required argument is not marked: the help names a positional or required flag but neither
   its usage line shows it in angle brackets (optional ones in square brackets) nor the word
   "required" appears next to it; commands with no arguments never violate here;
 - no output shape: no line states what a successful run prints (the `--json` keys or "text");
-- no exit codes: no line lists at least two exit codes by number.
+- no exit codes: no line lists at least two exit codes by number, and none points to a command
+  or page that lists them. Exit codes may be stated once centrally; per-command help then only
+  needs the pointer, and a pointer to a place that lists no codes does not count.
 
 - **0:** At least 25% of the sampled commands violate.
 - **About half (2):** Under 25% violate and at least one does.

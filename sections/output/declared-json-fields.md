@@ -92,9 +92,11 @@ it("every declared field is populated in real output", () => {
 Maximum: 3 points. Undeclared fields cost trial calls and context, but a wrong guess is visible.
 
 Count the commands among the sample (first 30 leaf commands by sorted path plus every write command)
-whose `--help` lists `--json`. A counted command violates when any of these holds:
+that have a JSON switch, and a command "lists its fields" only as the
+[entry page](../../benchmark/README.md#json-fields) defines both. A counted command violates when
+any of these holds:
 
-- **Undeclared:** `--help` does not list its JSON fields.
+- **Undeclared:** the command does not list its JSON fields.
 - **Selection broken:** `--json=<first declared field>` does not return exactly that field, or
   `--json=nosuchfield` exits 0 instead of a usage error that lists the valid fields. The
   `nosuchfield` probe runs on read commands only, never on a write.
@@ -105,7 +107,8 @@ whose `--help` lists `--json`. A counted command violates when any of these hold
 - **About half (2):** Under 25% violate and at least one does (for example help lists the fields
   but `--json=nosuchfield` is accepted and returns `{}`).
 - **Maximum (3):** No counted command violates.
-- **Not applicable when:** no command has `--json`.
-- **Evidence:** Read `acme <command> --help` for the field list. Run `acme <command> --json=<field>
+- **Not applicable when:** no command has a JSON switch.
+- **Evidence:** Read `acme <command> --help`, and the tool's reference page for the command, for
+  the field list. Run `acme <command> --json=<field>
   2>/dev/null`, then `acme <command> --json=nosuchfield` and read the exit code and stderr. Compare
   the keys of a plain `acme <command> --json 2>/dev/null` with the declared list.

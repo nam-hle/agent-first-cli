@@ -117,7 +117,9 @@ Each provocation below is one counted error:
 - each probe command with `--no-such-flag`;
 - each read probe command with a required input omitted, when it has one;
 - bare `acme` and every group on the path to a probe command, without a verb;
-- each read probe command that takes an id, given `nonexistent-0`.
+- each read probe command that takes an id, given `nonexistent-0` (the
+  [id probe rules](../../benchmark/README.md#id-probe)
+  say what takes an id).
 
 A counted error violates when any of these holds:
 
@@ -126,9 +128,11 @@ A counted error violates when any of these holds:
 - **Not one object:** stderr is not exactly one JSON object (plain text, a library help page, a
   stack trace, empty stderr).
 - **Missing key:** the object lacks `status`, `code`, `message` or `hint`, or its context has no
-  key that carries the failing input's name and observed value (any such key counts when the
-  tool's own docs or help state it, as in [3.3](context-names-input.md)). Only the context keys
-  are relaxed; the other four keep their names.
+  key that carries the failing input's name, or, when the error concerns an input value, no key
+  that carries the observed value (any such key counts when the tool's own docs or help state
+  it, as in [3.3](context-names-input.md)). An error with no value (missing command, missing
+  argument) needs the input name only. Only the context keys are relaxed; the other four keep
+  their names.
 - **Open code:** `code` does not match `^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$`.
 - **Leak:** stderr carries any stack trace or panic output.
 

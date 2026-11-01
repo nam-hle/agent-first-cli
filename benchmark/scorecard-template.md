@@ -37,7 +37,7 @@ Gap between the two passes above a quarter of the maximum. A person settles each
 ## Ungated destructive writes
 
 Ungated destructive writes: list every sampled write that deletes, overwrites or merges and has no
-approval gate (informational, not scored).
+gate of any kind (no prompt, no confirm flag, no approval); informational, not scored.
 
 ## Needs a fixture
 

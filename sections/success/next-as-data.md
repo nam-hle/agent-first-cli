@@ -87,8 +87,10 @@ test("next is short, concrete and real", () => {
 Maximum: 3 points. `next` saves a lookup after most results, but an agent can still find the
 follow-up by itself, so the weight is modest; a wrong `next` costs more than none.
 
-Examined commands: among the sample (first 30 leaf commands by sorted path), the commands that run
-with no required input and print JSON (an object or an array) under `--json`; writes only through
+Examined commands: among the sample (first 30 leaf commands by sorted path), the commands whose
+result has a natural follow-up (it creates something, or lists or shows something with an id the
+caller can act on), that run with no required input and print JSON (an object or an array) under
+`--json`; other commands are not counted; writes only through
 `--dry-run` and `--json` when `--dry-run` is listed in their help, otherwise excluded. A command
 violates when any of these holds:
 
@@ -108,6 +110,9 @@ violates when any of these holds:
   list-valued key, has any of `id`, `key`, `number`, `slug`, `uuid`, `name`. An empty `next: []`
   is not silent.
 
+The [small-samples rule](../../benchmark/README.md#small-samples) applies to the examined
+commands.
+
 When the tool documents an envelope, `next` may sit beside the result object or inside it, as the
 entry page's envelope rule says.
 
@@ -115,8 +120,8 @@ entry page's envelope rule says.
 - **About half (2):** Under 25% violate and at least one does (for example `next` is concrete and
   resolves everywhere but one list result carries ids and no `next`).
 - **Maximum (3):** No examined command violates.
-- **Not applicable when:** no sampled command supports `--json`, or no sampled command creates
-  or writes anything, or no sampled command is examinable in the sandbox (zero examined
+- **Not applicable when:** no sampled command supports `--json`, or no sampled command has a
+  natural follow-up, or no sampled command is examinable in the sandbox (zero examined
   commands). Never because no command prints an object.
 - **Evidence:** for each examined command run `acme <command> --json 2>/dev/null` under
   `timeout 10` (or `gtimeout 10`), stdin from `/dev/null`, stdout captured alone, and parse it

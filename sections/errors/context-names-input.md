@@ -106,7 +106,9 @@ Each provocation below is one counted error:
 
 - each probe command with `--no-such-flag`;
 - each read probe command with a required input omitted, when it has one;
-- each read probe command that takes an id, given `nonexistent-0`.
+- each read probe command that takes an id, given `nonexistent-0` (the
+  [id probe rules](../../benchmark/README.md#id-probe)
+  say what takes an id).
 
 A counted error violates when it exits 0 (the CLI accepted the garbage), or its stderr is not one
 JSON object, or the context has no key that carries the failing input's name, or that name is not
@@ -121,7 +123,7 @@ spelling. A missing-input error needs the name only.
   every error but the observed value is missing on the nonexistent id).
 - **Maximum (3):** No counted error violates.
 - **Not applicable when:** the sample holds no command that takes any input (no flag and no
-  positional), so no provocation command exists.
+  positional), so no provocation command exists, or every probe was not exercised.
 - **Evidence:** run each provocation under `timeout 10` (or `gtimeout 10`) with stdin from
   `/dev/null`, stderr redirected to a file in the sandbox, and note the exit code. Read
   the context keys that carry the input name and the observed value from that file with a JSON

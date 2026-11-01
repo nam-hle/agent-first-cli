@@ -99,7 +99,9 @@ diff must come with a changed `schemaVersion`.
 Maximum: 3 points. A missing schema costs trial calls and a silent rename goes unnoticed.
 
 Count the commands among the sample (first 30 leaf commands by sorted path plus every write command)
-whose `--help` lists `--json`. A counted command violates when any of these holds:
+that have a JSON switch, judged as the
+[entry page](../../benchmark/README.md#json-fields) says. A counted command violates when any of
+these holds:
 
 - **No schema:** `acme schema <command>` fails, or does not print a JSON Schema with a
   `schemaVersion`.
@@ -110,7 +112,7 @@ whose `--help` lists `--json`. A counted command violates when any of these hold
 - **About half (2):** Under 25% violate and at least one does (for example schemas exist for every
   command but `acme pr list --json` carries no `schemaVersion`).
 - **Maximum (3):** No counted command violates.
-- **Not applicable when:** no command has `--json`.
+- **Not applicable when:** no command has a JSON switch.
 - **Evidence:** `acme schema <command> --json 2>/dev/null` for the schema and its version; run
   `acme <command> --json 2>/dev/null`, adding `--limit 1` only where that command's `--help` lists
   it, and validate the result with any JSON Schema validator at hand, or compare required keys and
