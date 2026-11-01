@@ -108,11 +108,29 @@ closed set of values (listed in help as choices) or a number. Pass each one a ju
 - **Weak refusal:** non-zero, but not exit 2, or no envelope naming the flag, or for a choice flag
   no `allowed` list, or for a numeric flag no accepted range in `context`.
 
-- **0:** At least 25% of the collected flags silently accept junk.
-- **About half (3):** Under 25% silently accept, but some refusals are weak or some silently
-  accept (for example `--state opne` exits 2 with a message and no `allowed` list).
-- **Maximum (5):** Every collected flag refuses junk with exit 2 and an envelope naming the flag,
-  with `allowed` for choices and the range for numbers.
+**Fixed probe list.** The probed flags are every choice or numeric flag of the sample of the entry
+page (first 30 leaf commands by sorted path plus every write up to 30), in sorted command path
+order, never a set the scorer picks. For each, run exactly:
+
+- Choice flag: `<tool> <command> --<enum-flag> zzz-junk --no-input`
+- Numeric flag: `<tool> <command> --<number-flag> zzz-junk --no-input`
+
+A probe that cannot run (a write that would run for real because the junk value is not rejected at
+parse time and no sandbox exists, or a command that needs unavailable context) is listed as "not
+run". Not-run flags are not measurable: neither pass nor fail, and they leave the probed count N.
+If N is 0 the practice is not measurable.
+
+**Pass rule, stated as counts.** Let N be the probed flags, S the flags that silently accept junk,
+and W the flags with a weak refusal. Let F = S + W, the failures. Max when F = 0. Half when F >= 1
+and F x 4 < N. 0 when F x 4 >= N. The 25% boundary belongs to 0. With N < 4: 0 only if F = N, half
+if 0 < F < N. Example: of 8 probed flags, 0 fail is max, 1 fails is half, 2 or more fail is 0.
+One weak refusal among many never drops the score below half; only the share rule does.
+
+- **0:** F x 4 >= N: at least 25% of the probed flags silently accept junk or refuse weakly.
+- **About half (3):** F >= 1 and F x 4 < N: some flags accept junk or refuse weakly, under 25%
+  (for example one `--state opne` exits 2 with a message and no `allowed` list).
+- **Maximum (5):** F = 0: every probed flag refuses junk with exit 2 and an envelope naming the
+  flag, with `allowed` for choices and the range for numbers.
 - **Not applicable when:** no sampled command has a choice or numeric flag.
 - **Evidence:** Run `acme <command> --<flag> zzz-junk --no-input` for each collected flag. Read the
   exit code and the stderr envelope; for choices compare `allowed` with the help text.

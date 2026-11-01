@@ -4,7 +4,7 @@ Scores how agent-first a command line tool is, one practice at a time, using the
 practices. Design:
 [the benchmark design](../docs/superpowers/specs/2026-11-01-cli-benchmark-design.md).
 
-Rubric version: 1.5.0 ([changelog](CHANGELOG.md))
+Rubric version: 1.6.0 ([changelog](CHANGELOG.md))
 
 An agent applies this rubric by hand: no scripts, no runner. Each practice page has a "How to
 score" section with its maximum (front matter `max`) and its anchors. Fill in
@@ -58,9 +58,12 @@ real run. Say in the report that these five used the narrower sample.
   exhaustive. Pick whole points between anchors.
 - Category score = points earned / points possible x 100, rounded to a whole number. An N/A
   practice leaves both sums.
-- If N/A removes more than half of a category's points, or nothing is possible, the category
-  reports "n/a (low coverage)" instead of a number.
-- Show `earned/possible` beside every score. There is no total score.
+- If N/A or not measurable points together remove more than half of a category's points, or
+  nothing is possible, the category reports "n/a (low coverage)" instead of a number. The test
+  uses measured points only: low coverage holds when `possible` (the measured points) is less
+  than half of the category's full total (the Possible column above).
+- Show `earned/possible` beside every score, with the floor and the ceiling (see
+  [not measurable](#not-measurable)). There is no total score.
 - Tests, snapshots and lint rules never change a score. Score what the CLI does.
 - <a id="json-flag"></a>`--json` on a practice page means the CLI's documented switch to JSON
   output (for example `--json` or `--format json`); judge the behaviour, not the spelling. A JSON
@@ -113,6 +116,12 @@ real run. Say in the report that these five used the narrower sample.
   settle; until then each session keeps its own treatment. "n/a (low coverage)" is reported only
   when it holds in both sessions; if it holds in only one, report the numeric session's score,
   mark the category "unstable" and give no spread.
+- <a id="disagreement-cause"></a>Disagreement cause: for every practice where the two sessions'
+  points differ by more than a quarter of its maximum, the report names the single sentence of the
+  practice page or of this entry page that allowed both readings, quoted word for word, on a
+  "Disagreement cause" line under "Practices that differ". If no one sentence is to blame, the
+  line says "none found" and says what evidence differed. The sentence is the first candidate to
+  tighten in the next rubric version.
 
 ## Gates
 
@@ -146,6 +155,47 @@ gate of any kind (no prompt, no confirm flag and no approval); 6.5 is N/A when n
 The report lists ungated destructive writes
 (deletes, overwrites and merges with no gate of any kind: no prompt, no confirm flag, no approval)
 so the gap is visible even though it is not scored.
+
+## Not measurable
+
+<a id="not-measurable"></a>A practice that cannot run in a blind round with no fixture is "not
+measurable", reported as such and distinct from "N/A by nature" (the tool has nothing to exercise).
+Typical cases: 4.1 `name-what-happened`, 6.3 `repeat-is-unchanged`, 6.5 `parallel-writes`,
+`rename-leaves-a-hint`, 6.2 `confirm` (needs a real write), and 8.4 `audit-naming` when the
+investigation notes are unreadable. Its maximum is its "not-measurable points". A probe that cannot
+run inside a probe list counts the same way for that probe: not pass, not fail.
+
+Both sums (`earned` and `possible`) leave the not-measurable points, and N/A by nature points leave
+both sums too. For each category, report, from the same session as the score:
+
+- Score = earned / possible x 100, over measured practices (unchanged).
+- Floor = earned / (possible + NM) x 100, where NM is the not-measurable points: every
+  unmeasured point is worth 0.
+- Ceiling = (earned + NM) / (possible + NM) x 100: every unmeasured point is earned in full.
+
+Round all to whole numbers. Two versions or two tools compare on the same denominator
+(`possible + NM`) through floor and ceiling. N/A by nature points stay out of `possible + NM`.
+With NM = 0, floor = ceiling = score.
+
+Worked example, generic numbers: a category has 40 points in total. 6 points are N/A by nature and
+10 are not measurable. Measured: possible 24, earned 18. Score 18/24 = 75. Floor 18/(24+10) = 53.
+Ceiling (18+10)/(24+10) = 82. Low coverage: possible 24 is not less than half of 40, so the
+category keeps its number.
+
+## Summary table
+
+The report opens its categories with one fixed table, one row per category in the fixed order
+below, so two rounds diff cleanly. Columns, in order: category, score (0-100 or "n/a (low
+coverage)"), earned/possible, not-measurable points (NM), N/A points, floor, ceiling, spread (the
+two sessions' difference), gate status (a badge or "none"). Figures are the standing session's.
+Under the table, two fixed lines:
+
+- "Five biggest gains versus the last round": the five practices whose points rose most, with the
+  gain, or "no previous round".
+- "Practices where the sessions differ by more than a quarter of max": ids, or "none". Each also
+  gets its Disagreement cause line.
+
+The [scorecard template](scorecard-template.md) holds the table to copy.
 
 ## Probes and safety
 
@@ -227,4 +277,4 @@ a blind round must not read them. 8.4 `audit-naming` is then N/A (not checked), 
   differ from the previous version; see the [changelog](CHANGELOG.md).
 - A change that moves a category's share of total points by more than 5 percentage points gets a
   changelog line.
-- The version is the `Rubric version: 1.5.0` line near the top of this page.
+- The version is the `Rubric version: 1.6.0` line near the top of this page.

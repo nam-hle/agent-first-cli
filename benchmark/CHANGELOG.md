@@ -1,5 +1,23 @@
 # Rubric changelog
 
+## 1.6.0
+
+Anchors and reporting changed, so scores may differ from 1.5.0. No practice maximum, front matter
+id or category possible total changed, so no category share changed.
+
+- Y1: `missing-input-fails`, `enums-refuse-typos` and `work-where-agents-run` have a fixed probe
+  list and a pass rule stated as counts (max at 0 failures, half below 25%, 0 at 25% or more;
+  the boundary belongs to 0); probes that cannot run are "not run", not measurable. For
+  `enums-refuse-typos`, weak refusals now count in the failure share, not only silent accepts.
+- Y2: practices that cannot run in a blind round with no fixture are "not measurable", distinct
+  from N/A by nature; reports add a floor and a ceiling over `possible` plus not-measurable points.
+  The low-coverage rule uses measured points only.
+- Y3: one fixed summary table (categories in fixed order, with not-measurable points, N/A points,
+  floor, ceiling, spread, gate), a "five biggest gains versus the last round" line and a line for
+  practices where the sessions differ by more than a quarter of max.
+- Y4: for every practice where the sessions differ by more than a quarter of max, the report names
+  the one rubric sentence that allowed both readings ("Disagreement cause").
+
 ## 1.5.0
 
 Anchors and definitions changed, so scores may differ from 1.4.0. No practice maximum changed, so

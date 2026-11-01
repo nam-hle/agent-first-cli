@@ -121,14 +121,28 @@ are the working directory and the system temporary directory. A tool that refuse
 them with a hint naming the allowed roots is fine. A scratch directory counts as an allowed path
 only if it lies under the allowed roots.
 
-- **0:** When applicable, anything but Maximum: a remote identity and no `whoami`-style lookup,
-  a lookup that exits non-zero, a missing filterable user field, or, if the CLI has `--output`,
-  a refusal of a path under an allowed root or a refusal that names no allowed root in
-  `context.allowed` or `hint`.
-- **Maximum (1):** Where the identity half is judged, `acme whoami --json` (or the equivalent)
-  exits 0 with an object holding the identifier that filters take; and, if the CLI has
-  `--output`, it accepts a path under an allowed root and refuses a path outside them naming the
-  allowed roots. A local tool with `--output` and no lookup is judged on the output half alone.
+**Fixed probe list.** At most three probes, in this order, each run once:
+
+1. Identity (judged when a remote identity or lookup exists): `<tool> whoami --json`, or the
+   documented equivalent.
+2. Accepted path (judged when an output-path option exists): `<tool> <read-command> --output
+   <scratch>/out.json`, with `<read-command>` the first sampled read command that takes the
+   option and `<scratch>` under an allowed root.
+3. Refused path (same condition): the same command with `--output /nonexistent/dir/out.json`.
+
+A probe that cannot run (not signed in, no sandbox, no command takes the option) is "not run". A
+not-run probe is not measurable: neither pass nor fail, and it leaves the judged count N. If N is
+0 the practice is not measurable.
+
+**Pass rule, stated as counts.** Let N be the judged probes (1 to 3) and F the failing ones. A
+probe fails when: probe 1 exits non-zero or lacks the identifier that filters take; probe 2 is
+refused or exits non-zero; probe 3 is accepted, or is refused without naming an allowed root in
+`context.allowed` or `hint`. This practice has one point, so there is no half: the small-sample
+rule does not apply, and one failure among the judged probes is 0.
+
+- **0:** F >= 1 of N judged probes fail.
+- **Maximum (1):** F = 0 of N judged probes fail, with N >= 1. A local tool with `--output` and no
+  lookup is judged on probes 2 and 3 alone.
 - **Not applicable when:** the tool has no output-path option, no remote identity and no identity
   lookup.
 - **Evidence:** Inside the sandbox session, signed in, run `acme whoami --json`, then

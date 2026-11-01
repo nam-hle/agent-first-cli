@@ -104,6 +104,26 @@ A command needs input when its help marks a required flag or positional, or when
 argument-less probe in the sandbox hangs or fails with a usage error. A command that succeeds
 with no input and marks nothing required is not counted. A read that times out while still
 producing output is a slow read: not counted, neither a hang nor a weak failure. Count the rest.
+
+**Fixed probe list.** The probe set is the sample of the entry page (first 30 leaf commands by
+sorted path plus every write up to 30), never a set the scorer picks. Run exactly:
+
+1. Each sampled read: `<tool> <read-command> --no-input < /dev/null` under `timeout 5`, in the
+   empty temporary working directory.
+2. Each sampled write: `<tool> <write-command> --dry-run --no-input < /dev/null` with the required
+   input omitted, under `timeout 5`. A write with no dry-run form is "not run".
+
+A probe that cannot run (no sandbox, or it would need a real write) is listed as "not run". Not-run
+commands are not measurable: they count neither as pass nor as fail, and they leave the probed
+count N. If N is 0 the practice is not measurable (see the entry page's
+[not measurable](../../benchmark/README.md#not-measurable) rule).
+
+**Pass rule, stated as counts.** Let N be the probed commands that need input, and F the probed
+commands that violate (hang or weak failure). Max when F = 0. Half when F >= 1 and F x 4 < N (fewer
+than 25% fail). 0 when F x 4 >= N (25% or more fail). The 25% boundary belongs to 0. With N < 4,
+use the small-sample rule: 0 only if F = N, half if 0 < F < N. Example: of 12 probed commands, 0
+fail is max, 1 or 2 fail is half, 3 or more fail is 0.
+
 Two kinds of violation:
 
 - **Hang (reads):** the read prompts or blocks until the timeout. Exit by timeout counts as a
@@ -116,10 +136,10 @@ A good command exits 2 with an envelope whose context names the flag, positional
 list under any key that the tool's own docs or help state (for example `field`, `fields`, `input`,
 `missingFields`); only that such a key exists is required, not its spelling.
 
-- **0:** At least 25% of the counted commands hang, or fewer than 25% of them are good.
-- **About half (4):** Not 0 and not Maximum: under 25% hang and at least 25% are good, but some
-  hang or fail weakly (for example `acme ticket create --no-input` exits 1 with "missing title").
-- **Maximum (8):** No counted command hangs and every one is good.
+- **0:** F x 4 >= N: at least 25% of the probed commands hang or fail weakly.
+- **About half (4):** F >= 1 and F x 4 < N: some hang or fail weakly, under 25% (for example one
+  `acme ticket create --no-input` exits 1 with "missing title" among many good commands).
+- **Maximum (8):** F = 0: no probed command hangs or fails weakly.
 - **Not applicable when:** no sampled command needs input (none is counted).
 - **Evidence:** In the empty temporary working directory of the entry page's "Probes and safety"
   section, with a dedicated or copied data file for the CLI, run `acme <command> --no-input

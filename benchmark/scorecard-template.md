@@ -12,14 +12,25 @@ Sample: <the commands used, one per line or comma separated>.
 
 No total score.
 
-| Category | Score | Earned/possible | Gate |
-|---|---|---|---|
-| Command surface | <0-100 or n/a (low coverage)> | <earned>/<possible> | |
-| Input | <score> | <earned>/<possible> | |
-| Output | <score> | <earned>/<possible> | |
-| Errors and guidance | <score> | <earned>/<possible> | |
-| Safe writes | <score> | <earned>/<possible> | <Safe writes capped at N: id> |
-| Discoverable and maintainable | <score> | <earned>/<possible> | |
+## Summary table
+
+Fixed table: one row per category, always in this order, so rounds diff cleanly. Figures are the
+standing (lower) session's. e/p is earned/possible; NM is the not-measurable points. Floor =
+earned / (possible + NM) x 100; ceiling = (earned + NM) / (possible + NM) x 100. Formulas and a
+worked example are on the entry page.
+
+| Category | Score (0-100) | Earned/poss. | NM | N/A | Floor | Ceiling | Spread | Gate |
+|---|---|---|---|---|---|---|---|---|
+| Command surface | <0-100, n/a> | e/p | n | n | n | n | n | none |
+| Input | <score> | e/p | n | n | n | n | n | none |
+| Output | <score> | e/p | n | n | n | n | n | none |
+| Errors and guidance | <score> | e/p | n | n | n | n | n | none |
+| Safe writes | <score> | e/p | n | n | n | n | n | capped at N: id |
+| Discoverable and maintainable | <score> | e/p | n | n | n | n | n | none |
+
+Five biggest gains versus the last round: <id +n, ... up to five, or no previous round>
+
+Practices where the sessions differ by more than a quarter of max: <ids, or none>
 
 Score is the lower of the two sessions' category scores; earned/possible is that session's.
 Each session applies its own N/A and gates before its category score.
@@ -30,9 +41,12 @@ Each session applies its own N/A and gates before its category score.
 
 ## Practices
 
-| id | Session 1 points | Session 2 points | Reason | Evidence | N/A |
+| id | Session 1 points | Session 2 points | Reason | Evidence | N/A or not measurable |
 |---|---|---|---|---|---|
-| <slug> | <earned> of <max> | <earned> of <max> | <one line> | <evidence> | <N/A reason> |
+| <slug> | <earned> of <max> | <earned> of <max> | <one line> | <evidence> | <N/A or NM reason> |
+
+For the Input practices with a fixed probe list, put the probed count and failures in the reason
+(for example "N=12, F=1").
 
 ## Practices that differ
 
@@ -42,6 +56,11 @@ only one session. A person settles each; until then each session keeps its own t
 | id | Session 1 | Session 2 |
 |---|---|---|
 | <slug> | <points or N/A> | <points or N/A> |
+
+For each practice above that differs by more than a quarter of its maximum, one required line:
+
+- Disagreement cause, <slug>: "<the single rubric sentence, quoted, that allowed both readings>"
+  (or "none found" and what evidence differed)
 
 ## Ungated destructive writes
 
