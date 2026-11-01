@@ -9,17 +9,22 @@ as the real run and the same refusals (duplicate, locked, forbidden, conflict), 
 structured output in the same shape as the real result, with `result` naming what would happen. An
 agent cannot see the future, so it uses the preview to decide. A preview that is a stub tells it
 "fine" and the real write then fails with an error the preview should have shown. A person eyeballs
-a plan and spots the gap; an agent trusts it.
+a plan and spots the gap; an agent trusts it. A write result, preview or real, lists what it
+changed or would change and echoes the mode it ran under (`dryRun`, `blocked`).
+
+```json
+{"dryRun":true,"blocked":false,"files":[{"path":"a.md","change":"would-update"}]}
+```
 
 ### Do
 
 ```sh
 acme pr merge 42 --dry-run
-# exit 6, error envelope: code "conflict", hint "acme pr rebase 42"
+# exit 6, error envelope: code "CONFLICT", hint "acme pr rebase 42"
 # the real merge would refuse for the same reason, so the preview refuses
 
 acme ticket link ACME-1 ACME-2 --dry-run
-# {"result":{"outcome":"would-link","dry_run":true},"next":[...]}
+# {"outcome":"would-link","dryRun":true,"next":[...]}
 ```
 
 ### Don't
@@ -49,7 +54,7 @@ agent cannot tell whether to stop or continue, because the preview promised a cl
   would be written, so callers need no special case.
 - **Shape.** The preview uses the one-object result of [2.2](../output/json-everywhere.md) and
   declares its fields as in [2.3](../output/declared-json-fields.md). Mark it with a field such as
-  `dry_run`, and use the same outcome words as [4.1](../success/name-what-happened.md) with a
+  `dryRun`, and use the same outcome words as [4.1](../success/name-what-happened.md) with a
   `would-` prefix.
 - **Exit code.** A refused preview exits with the same class as the real refusal, per
   [3.4](../errors/exit-code-classes.md), not 0.
@@ -58,7 +63,8 @@ agent cannot tell whether to stop or continue, because the preview promised a cl
 ### How to check it
 
 Walk the command tree, find every write, and require the flag. Then run one preview against a
-known-bad state and compare it with the real refusal.
+known-bad state and compare it with the real refusal. Also assert that a dry run lists the same
+changes as the real run.
 
 ```ts
 import { execFileSync, spawnSync } from "node:child_process";

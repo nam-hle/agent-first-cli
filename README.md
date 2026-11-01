@@ -35,7 +35,10 @@ untrusted caller.
 
 **TL;DR:** Commands are `acme <noun> <verb>`. The last segment is always a verb from a short list
 (`list`, `view`, `create`, `edit`, `delete`, `search`, plus domain verbs such as `merge`), and a verb
-means the same on every noun. No synonyms, no aliases, no abbreviations.
+means the same on every noun. No synonyms, no aliases, no abbreviations. A domain verb is allowed
+only when it composes several primitives or a core verb would mislead, and it still starts with a
+core verb (`add-column`, not `insert-column`). Where two verbs sound alike, define which has which
+side effect (`create` makes a new top-level thing, `add` attaches under an existing one).
 
 **Otherwise:** An agent that has seen `show` once guesses `show` everywhere, and `get`, `fetch` and
 `ls` as well. Each guess is a failed call, and an alias that works teaches a second spelling.
@@ -88,7 +91,8 @@ acme pr status list      # a singleton asked to list
 ### 1.3 At most two positionals
 
 **TL;DR:** A positional is the thing acted on, then its child or value. Everything else is a flag.
-Name each for what it accepts, in kebab-case.
+Name each for what it accepts, in kebab-case. A tool whose inputs are long multi-part addresses may
+go flags-only; then it says so and holds to it on every command.
 
 **Otherwise:** Three positionals cannot be told apart from a typo, and `<id>` does not say whose id.
 
@@ -112,7 +116,9 @@ acme comments get <id> <id> <number>
 ### 1.4 One concept, one flag name; one name, one purpose #strategic
 
 **TL;DR:** `--since` is the start of a window everywhere, never `--from` in one command and `--after`
-in another. Keep a committed table of flag name to purpose so a clash shows as a diff.
+in another. When a command takes two things of the same kind, name each flag for its role
+(`--source`, `--target`), not its type. Keep a committed table of flag name to purpose so a clash
+shows as a diff.
 
 **Otherwise:** The same flag name meaning two things makes every guess a coin toss, and the
 inconsistency compounds with each command added.
@@ -164,7 +170,8 @@ acme pr list --user 42 --no-dry-run --skip-prompts
 ### 1.6 Placeholders name a type; multi-value flags repeat
 
 **TL;DR:** `<path>`, `<count>`, `<user>`, never `<value>`. A flag that takes several values is
-singular and repeats or takes commas (`--label a --label b,c`); it never reads the words after it.
+singular and repeats (`--label a --label b`); it never takes commas and never reads the words after
+it.
 
 **Otherwise:** `--output <value>` says nothing, and a flag that swallows following words eats the
 positional that comes next.
@@ -172,7 +179,7 @@ positional that comes next.
 **Do**
 
 ```text
---output <path>   --limit <count>   --label <name>   (repeat, or --label a,b)
+--output <path>   --limit <count>   --label <name>   (repeat: --label a --label b)
 ```
 
 **Don't**
@@ -271,7 +278,8 @@ taken.
 ### 2.4 No colour, spinner or pager off a terminal
 
 **TL;DR:** Off a TTY there are no escape sequences, spinners or pagers. Honour `NO_COLOR` and
-`TERM=dumb`.
+`TERM=dumb`. The output format never depends on whether stdout is a terminal: `--json` is the only
+way to get JSON, so the same command gives the same data in CI and in a shell.
 
 **Otherwise:** Escape sequences in piped output show up as garbage in an agent's context and in logs.
 
@@ -760,7 +768,9 @@ an allowed location.
 ### 6.1 Every write has `--dry-run` #strategic
 
 **TL;DR:** The preview uses the same selection logic as the real run, runs the same refusals
-(duplicate, locked, forbidden) and returns structured output.
+(duplicate, locked, forbidden) and returns structured output. A write's result, preview or real,
+lists what it changed or would change and echoes the mode it ran under (`dryRun`, `blocked`), so the
+caller never infers it.
 
 **Otherwise:** A preview that is a stub passes, and the real write then fails with an error the preview
 should have shown.
@@ -836,7 +846,8 @@ acme ticket link ACME-1 ACME-2   # linked again, a duplicate link
 
 **TL;DR:** If a write needs an approval, the approval is the gate, enforced where the caller cannot
 add a flag to skip it. Several sources recommend `--yes` for automation; for gated writes this
-practice disagrees.
+practice disagrees. A flag may override a check the caller is allowed to weigh (a validation
+failure, with `forced` echoed in the result), never an approval the caller is not allowed to grant.
 
 **Otherwise:** A flag the agent can add is a gate the agent can open, including after a prompt
 injection.

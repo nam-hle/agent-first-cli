@@ -5,20 +5,20 @@ Practice 1.6 in the [guide](../../README.md).
 ### One paragraph explainer
 
 Placeholders are `<path>`, `<count>`, `<user>`, never `<value>`. A flag that takes several values
-is singular and repeats or takes commas (`--label a --label b,c`); it never reads the words after
-it. The placeholder in help is the only type information a caller gets before it guesses, and an
-agent builds its next call from it. A greedy flag is worse: it swallows the positional that comes
-next and the command still parses, with the wrong meaning.
+is singular and repeats (`--label a --label b`); it never takes commas and never reads the words
+after it. The placeholder in help is the only type information a caller gets before it guesses,
+and an agent builds its next call from it. A greedy flag is worse: it swallows the positional that
+comes next and the command still parses, with the wrong meaning.
 
 ### Do
 
 ```text
 acme pr list --limit <count> --output <path> --label <name>
-                                              (repeat, or --label a,b)
+                                              (repeat the flag)
 ```
 
 ```sh
-acme pr list --label bug --label ui,urgent
+acme pr list --label bug --label ui
 ```
 
 ### Don't
@@ -41,10 +41,9 @@ labels. The agent reads a large unrelated result as the answer to its question.
 
 ### Edge cases and trade-offs
 
-- "Comma and repeat are two ways to do one thing." They are one rule, the two spellings are
-  equal, and neither is a synonym of a flag. Document both once in the placeholder line.
-- Values that contain commas (a title, a query) cannot use the comma form. Accept repeats there
-  only, and say so in help.
+- Repeat only, never commas: values may contain commas (a title, a query), so a comma form
+  splits them wrongly. One rule for every flag keeps the caller from guessing which ones split.
+- Put the value grammar in the flag description (`--label <name>`: any text, repeat for several).
 - Enum placeholders list their members, `--state <open|merged|declined>`, and a wrong member is
   refused with the valid set, see [input/enums-refuse-typos](../input/enums-refuse-typos.md).
 - A type name is not a unit: `<count>` is an integer, `<duration>` states `30s` or `5m` in its

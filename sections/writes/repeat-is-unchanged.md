@@ -14,8 +14,8 @@ the first time, `unchanged` the second.
 ### Do
 
 ```sh
-acme ticket link ACME-1 ACME-2   # {"result":{"outcome":"linked", ...}}
-acme ticket link ACME-1 ACME-2   # {"result":{"outcome":"unchanged", ...}}   exit 0
+acme ticket link ACME-1 ACME-2   # {"outcome":"linked", ...}
+acme ticket link ACME-1 ACME-2   # {"outcome":"unchanged", ...}   exit 0
 ```
 
 ### Don't

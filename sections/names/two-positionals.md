@@ -40,6 +40,8 @@ other input is a named flag the agent must spell out.
 - Variadic input (many files, many ids) is the one place a positional repeats. Prefer a repeated
   flag, see [1.6](typed-placeholders.md); if the command truly acts on a list, make it the only
   positional.
+- A tool whose inputs are long multi-part addresses may go flags-only. It must say so in its docs
+  and hold to it on every command, so a caller never has to guess which commands take positionals.
 - Name the placeholder for the type and owner: `<pr>`, `<comment-id>`, never `<id>`. A bare `<id>`
   does not say whose id.
 - A missing positional must fail with the usage, not prompt, see

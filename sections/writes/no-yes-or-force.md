@@ -42,6 +42,10 @@ same command stops and asks a person, who sees what is about to happen and says 
   [6.2](confirm.md) already covers unattended runs.
 - **"CI needs to run unattended."** Give CI its own identity with its own grants, so the approval
   is pre-issued by the process that enforces it. Do not give CI a flag that everyone shares.
+- **Override a check vs grant an approval.** A flag may override a check the caller is allowed to
+  weigh, such as a validation failure, and the result echoes it:
+  `acme page edit 7 --allow-invalid` returns `{"forced":true}`. A flag never grants an approval
+  the caller is not allowed to give.
 - **Environment variables and config files** are flags in disguise if the caller can set them.
   Ban them too.
 - **"Force" for a real conflict.** A different, honest need, such as overwriting a changed value,
