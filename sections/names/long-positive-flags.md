@@ -1,3 +1,8 @@
+---
+id: long-positive-flags
+category: Command surface
+max: 3
+---
 # Long, unambiguous flags with positive booleans
 
 Practice 1.5 in the [guide](../../README.md).
@@ -81,3 +86,20 @@ it("uses long, positive flags", () => {
   }
 });
 ```
+
+### How to score
+
+Maximum: 3 points. A misread flag runs the wrong write without an error; it touches every flag.
+
+A violation is a flag with no long spelling, a bare ambiguous name (`--user`, `--name`, `--id`,
+`--key`, `--type`, `--file`), a `--skip-*` flag, a name that is not kebab-case, or a `--no-` flag
+that negates a behaviour that is not on by default (`--no-dry-run`; `--no-color` is allowed).
+
+- **0:** At least 25% of the distinct flags in the sample are violations.
+- **About half (2):** At least one violation, but below 25% of the distinct flags.
+- **Maximum (3):** No violation: every flag has a long kebab-case spelling, none is a bare
+  ambiguous name, booleans are positive, and `--no-` appears only on default-on behaviour.
+- **Not applicable when:** no sampled command declares a flag.
+- **Evidence:** Run `acme <command> --help` for the first 30 commands by sorted path from walking
+  `acme --help`, plus every write command, and list the flags. Run `acme pr list --help` and look
+  for `--user-id` against a bare `--user`.

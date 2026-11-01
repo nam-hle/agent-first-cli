@@ -1,3 +1,8 @@
+---
+id: update-hidden-callers
+category: Discoverable and maintainable
+max: 3
+---
 # Update the callers you cannot see
 
 Practice 8.3 in the [guide](../../README.md).
@@ -72,3 +77,27 @@ exit $status
 Run `find-old-form.sh -- "--assignee"` before merging a rename. A non-zero exit lists the files
 still to update. Wire it into the rename PR's checklist, not into CI, because most of the locations
 live outside the repo.
+
+### How to score
+
+Maximum: 3 points. Stale callers fail every session that loads them, but the count is bounded by
+the few renames a tool makes, so the weight is moderate.
+
+Old forms: the removed or renamed flags and commands from the removed-names table, `CHANGELOG.md` or
+`docs/`, newest 10. Instruction locations: `hooks/`, `skills/`, `.claude/`, `docs/`, `scripts/`,
+`AGENTS.md`, `CLAUDE.md` and `.github/` or `.bitbucket/` templates in the repo, plus any location
+the repo's own list names. A stale hit is an old form found, as a whole token, in an instruction
+location outside the changelog, the removed-names table and text marked as history. Process
+evidence is present when a committed script, checklist or PR template names the locations to search
+for an old form. An old form is stale when it has at least one stale hit.
+
+- **0:** At least 25% of the old forms are stale.
+- **About half (2):** Under 25% of the old forms are stale and at least one is, or none is stale
+  and no process evidence is present.
+- **Maximum (3):** No old form is stale and process evidence is present.
+- **Not applicable when:** the repo and docs are not readable (a closed or vendor CLI); or the
+  changelog and docs show no removed or renamed name.
+- **Evidence:** read the changelog for the old forms, run `grep -rnF -- "<old form>"` over each
+  existing location (read-only; skip a location outside the repo unless the repo names it), and
+  look for the process in `scripts/`, the PR template and `CONTRIBUTING.md`. Capture each old
+  form, the matching file and line, and the process file path.

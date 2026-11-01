@@ -1,3 +1,8 @@
+---
+id: typed-placeholders
+category: Command surface
+max: 1
+---
 # Placeholders name a type; multi-value flags repeat
 
 Practice 1.6 in the [guide](../../README.md).
@@ -82,3 +87,19 @@ it("names a type and never reads trailing words", () => {
 ```
 
 A plural flag that is genuinely a noun (`--status`) goes on a short reviewed exception list.
+
+### How to score
+
+Maximum: 1 point. A vague placeholder or a greedy flag misleads one call at a time; it is narrow.
+
+- **0:** At least one sampled flag that takes a value shows a generic placeholder (`<value>`,
+  `<arg>`, `<val>`, `<string>`) or none, or takes several values in one use (`--labels a b`, or
+  commas such as `--labels a,b`), or has a plural name (ends in `s`, such as `--labels <label>`;
+  a singular noun that ends in `s`, such as `--status`, is not plural).
+- **Maximum (1):** No sampled value flag meets a 0 condition: every one shows a placeholder that
+  names a type (`<path>`, `<count>`, `<name>`) and takes one value per use, and several values
+  come from repeating a singular flag (`--label a --label b`).
+- **Not applicable when:** no sampled command has a flag that takes a value.
+- **Evidence:** Run `acme <command> --help` for the first 30 commands by sorted path from walking
+  `acme --help`, plus every write command, and read each option line. Run
+  `acme pr list --label bug --label ui` and check that both labels apply.

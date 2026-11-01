@@ -1,6 +1,10 @@
+---
+id: no-documented-pipes
+category: Input
+max: 2
+---
 # No documented pipe, redirect or `cd ... &&`
 
-Practice 7.3 in the [guide](../../README.md).
 Practice 7.3 in the [guide](../../README.md#73-no-documented-pipe-redirect-or-cd--).
 
 ### One paragraph explainer
@@ -77,3 +81,27 @@ test("no documented workflow uses a pipe, redirect or cd chain", () => {
   }
 });
 ```
+
+### How to score
+
+Maximum: 2 points. A documented pipe cannot be run or approved as one step; it spreads through
+every workflow the docs teach.
+
+Workflow lines are the lines containing `acme` in fenced shell blocks of the README, the docs folder
+and the examples in `acme <command> --help` for the first 30 commands by sorted path. Blocks marked
+as checks (`# check`) are skipped. A violation is a workflow line with a pipe, a redirect, `;`,
+`&&`, `||`, command substitution or a `cd ... &&` prefix.
+
+Counted lines: strip a leading `$ ` and anything after ` #` (a comment), then count only lines
+that start with the CLI name.
+
+Pool the fenced `acme` lines and the help examples into one count, then apply the threshold.
+
+- **0:** At least 25% of the pooled workflow lines are violations.
+- **About half (1):** Under 25% but at least one workflow line is a violation.
+- **Maximum (2):** No workflow line is a violation.
+- **Not applicable when:** there is no workflow documentation, so no fenced `acme` line exists
+  outside the blocks marked as checks.
+- **Evidence:** Run `grep -nE '\s(\|\||\||&&|;|>>?|2>)\s|\$\(|`|cd .* &&' README.md docs/*.md`
+  and drop hits in check blocks. Divide the hits by the count of fenced `acme` lines, and add the
+  same counts from the help examples before dividing.

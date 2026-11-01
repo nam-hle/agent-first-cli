@@ -1,3 +1,8 @@
+---
+id: next-as-data
+category: Errors and guidance
+max: 3
+---
 # Offer the next step as data
 
 Practice 4.2 in the [guide](../../README.md).
@@ -76,3 +81,36 @@ test("next is short, concrete and real", () => {
   }
 });
 ```
+
+### How to score
+
+Maximum: 3 points. `next` saves a lookup after most results, but an agent can still find the
+follow-up by itself, so the weight is modest; a wrong `next` costs more than none.
+
+Examined commands: among the sample (first 30 commands by sorted path), the commands that run
+with no required input and print JSON (an object or an array) under `--json`; writes only through
+`--dry-run` and `--json` when `--dry-run` is listed in their help, otherwise excluded. A command
+violates when any of these holds:
+
+- **Too long:** `next` holds more than 3 entries.
+- **Placeholder:** an entry contains `<` and `>` around a word, or the literal `...`.
+- **Does not resolve:** an entry's command path (the longest leading run of non-flag words, after
+  `acme`, for which `acme <path> --help` exits 0, longest tried first) does not exist, or a
+  `--flag` in the entry is missing from that help text.
+- **Silent:** the result is a top-level array (it cannot hold `next`), or it is an object with
+  no `next` key whose top level, an object nested one level deep (`{"task":{"id":"T-1"}}`), or
+  first element of any top-level list-valued key, has any of `id`, `key`, `number`, `slug`,
+  `uuid`, `name`. An empty `next: []` is not silent.
+
+- **0:** At least 25% of the examined commands violate.
+- **About half (2):** Under 25% violate and at least one does (for example `next` is concrete and
+  resolves everywhere but one list result carries ids and no `next`).
+- **Maximum (3):** No examined command violates.
+- **Not applicable when:** no sampled command supports `--json`, or no sampled command creates
+  or writes anything, or no sampled command is examinable in the sandbox (zero examined
+  commands). Never because no command prints an object.
+- **Evidence:** for each examined command run `acme <command> --json 2>/dev/null` under
+  `timeout 10` (or `gtimeout 10`), stdin from `/dev/null`, stdout captured alone, and parse it
+  with a JSON parser. Read `next`; check its length, scan for placeholders and run
+  `acme <path> --help` for each entry; a path resolves by the entry page's "resolves" rule (the
+  help text names the path). Never run an entry that is a write.

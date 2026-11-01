@@ -1,3 +1,8 @@
+---
+id: audit-naming
+category: Discoverable and maintainable
+max: 2
+---
 # Audit naming and record the decisions
 
 Practice 8.4 in the [guide](../../README.md).
@@ -68,3 +73,25 @@ test("every flag with several purposes has a recorded decision", () => {
   }
 });
 ```
+
+### How to score
+
+Maximum: 2 points. A missing record lets one maintainer undo another's decision, but the harm is
+slow and local, so the weight is small.
+
+Audit document: a file under `docs/investigations/`, `docs/audits/` or `docs/decisions/`, or any
+file under `docs/` whose name contains "naming" or "audit", that carries a date (in its name or a
+`Date:` line) and names what was compared (flags, placeholders, verbs). The newest such file is
+judged. Its findings are its list items, table rows or headings under a findings section; zero
+findings is allowed when the compared kinds are named. A finding is undecided when its own line
+or item states neither a change made nor "no change". A "no change" is reasoned when a reason
+follows "because"; one without is a bare dismissal. U is the undecided share of the findings
+(0% when there are none).
+
+- **0:** No such dated audit document exists, or U is at least 25%.
+- **About half (1):** U is under 25% and either at least one finding is undecided or at least
+  one "no change" is a bare dismissal.
+- **Maximum (2):** U is 0 and every "no change" is reasoned.
+- **Not applicable when:** the repo and docs are not readable (a closed or vendor CLI).
+- **Evidence:** list the folders above with `ls` and read the newest dated file. Capture its path
+  and date, the compared kinds, and each finding with the sentence that records its decision.

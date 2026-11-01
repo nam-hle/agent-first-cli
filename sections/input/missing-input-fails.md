@@ -1,3 +1,8 @@
+---
+id: missing-input-fails
+category: Input
+max: 8
+---
 # A missing input fails naming the flag; nothing prompts without a terminal
 
 Practice 5.1 in the [guide](../../README.md).
@@ -85,3 +90,29 @@ test.each(leaves)("%j fails fast without input", (...path) => {
   expect(envelope.context.field ?? envelope.context.missing).toBeDefined();
 });
 ```
+
+### How to score
+
+Maximum: 8 points. A hang stalls a whole agent run with no output, and any command can have it.
+
+Sample the first 30 commands by sorted path plus every write. Run each with no arguments, stdin
+closed and `--no-input`. A command needs input when its help lists a required flag or positional.
+Commands with none are not counted. Count the rest. Two kinds of violation:
+
+- **Hang:** the command prompts or blocks until the timeout.
+- **Weak failure:** it exits 0 with the input omitted, or exits non-zero but not with 2, or
+  prints no envelope that names the missing flag or positional.
+
+A good command exits 2 with an envelope whose `context` names the flag, positional or `missing`
+list.
+
+- **0:** At least 25% of the counted commands hang, or fewer than 25% of them are good.
+- **About half (4):** Not 0 and not Maximum: under 25% hang and at least 25% are good, but some
+  hang or fail weakly (for example `acme ticket create --no-input` exits 1 with "missing title").
+- **Maximum (8):** No counted command hangs and every one is good.
+- **Not applicable when:** no sampled command's help lists a required flag or positional.
+- **Evidence:** In the empty temporary working directory of the entry page's "Probes and safety"
+  section, with a dedicated or copied data file for the CLI, run `acme <command> --no-input
+  < /dev/null` under `timeout 5` for each sampled command. Exit 124 is a hang; otherwise read the
+  exit code and the stderr envelope. Where a real service is the only target, the probe is "not
+  exercised".

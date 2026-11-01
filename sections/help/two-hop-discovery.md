@@ -1,6 +1,10 @@
+---
+id: two-hop-discovery
+category: Discoverable and maintainable
+max: 5
+---
 # Discoverable in two hops
 
-Practice 7.2 in the [guide](../../README.md).
 Practice 7.2 in the [guide](../../README.md#72-discoverable-in-two-hops).
 
 ### One paragraph explainer
@@ -86,3 +90,28 @@ test("every referenced topic exists", () => {
   for (const ref of tree.topicReferences as string[]) expect(topics.has(ref)).toBe(true);
 });
 ```
+
+### How to score
+
+Maximum: 5 points. An undiscoverable feature does not exist for an agent, and the gap spans the
+whole tool, so it weighs as much as the other whole-surface practices.
+
+Counted probes: one per each of the first 10 commands by sorted path of the sample (all, when
+fewer), plus the two probes below, so there are always at least two. A command probe uses the last
+word of its path as the word (for `pr merge`, `merge`) and has two hops: hop 1 is
+`acme search <word>`, hop 2 is `acme explore <name>` or `acme <path> --help` for the name hop 1
+returned. The command probe violates when hop 1 exits non-zero, hop 1 lists no result naming the
+command's path, or hop 2 exits non-zero or prints no line starting with `acme <path>`. The extra
+probes: `acme search zzz-no-such` violates when its output names neither `acme explore` nor a topic
+list; `acme explore` with no topic violates when it exits non-zero or lists no topic.
+
+- **0:** At least 25% of the counted probes violate (for 12 probes, 3 or more). This includes a CLI
+  with no `search` or `explore` command, where every probe violates.
+- **About half (3):** Under 25% violate and at least one does.
+- **Maximum (5):** No counted probe violates.
+- **Not applicable when:** never; the two extra probes always run.
+- **Evidence:** run each call under `timeout 10` with stdin from `/dev/null` (search, explore and
+  help are reads), with `--json` when offered, stdout and exit code saved to the sandbox. Match the
+  command by its `name` field or, in text output, a line holding its full path. Record both hops
+  and the exit codes per probe. Hop 2 resolves by the entry page's "resolves" rule: its help text
+  names the path.

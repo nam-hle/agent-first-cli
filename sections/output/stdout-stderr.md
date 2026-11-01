@@ -1,3 +1,8 @@
+---
+id: stdout-stderr
+category: Output
+max: 8
+---
 # Data on stdout, everything else on stderr
 
 Practice 2.1 in the [guide](../../README.md).
@@ -81,3 +86,32 @@ describe.each(commands.items)("%s", (name: string) => {
   });
 });
 ```
+
+### How to score
+
+Maximum: 8 points. A polluted stdout breaks the parse of every call that hits it, in any command.
+
+Sample the first 30 commands by sorted path plus every write command. Run each with valid
+arguments (writes only against a sandbox service) and once more with `--no-such-flag` appended.
+Two kinds of violation:
+
+- **Polluted stdout:** a run that exits 0 prints more than the result on stdout: a progress line,
+  banner, warning or hint sentence. Probe both the default text mode and the JSON mode: in text
+  mode a hint, progress line or warning on stdout is pollution; in JSON mode stdout is not one
+  JSON document.
+- **Error on stdout:** a run that exits non-zero prints anything on stdout.
+
+A good command has neither. A command that cannot be run safely is judged on the second kind only.
+`--help`, `--version` and a bare confirmation line such as `OK` are not "more than the result". A
+CLI that ignores `--no-such-flag` and exits 0 violates the second kind.
+
+- **0:** At least 25% of the sampled commands violate.
+- **About half (4):** Under 25% of the sampled commands violate and at least one does (for example
+  `acme pr list --json` prints "Fetching page 1 of 3..." on stdout before the JSON).
+- **Maximum (8):** No sampled command violates.
+- **Not applicable when:** never.
+- **Evidence:** For each sampled command run `acme <command> 2>/dev/null` and, where it has a JSON
+  switch, `acme <command> --json 2>/dev/null`; parse stdout as one document or read it line by
+  line. Run
+  `acme <command> --no-such-flag 2>/dev/null` and check stdout is empty and the exit is non-zero.
+  Run it once with `1>/dev/null` to see that the messages are on stderr.

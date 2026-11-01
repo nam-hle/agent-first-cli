@@ -1,3 +1,8 @@
+---
+id: two-positionals
+category: Command surface
+max: 2
+---
 # At most two positionals
 
 Practice 1.3 in the [guide](../../README.md).
@@ -75,3 +80,18 @@ it("has at most two named positionals per command", () => {
   expect(rows.join("\n")).toMatchSnapshot();
 });
 ```
+
+### How to score
+
+Maximum: 2 points. Swapped positionals parse silently and give a wrong answer; it touches inputs.
+
+A violation is a command with more than two positionals, a positional named `<id>` or `<value>`
+instead of its owner and type (`<pr>`, `<comment-id>`), or long text taken as a positional.
+
+- **0:** At least 25% of the sampled commands are violations.
+- **About half (1):** At least one violation, but below 25% of the sampled commands.
+- **Maximum (2):** No sampled command is a violation. Every positional is named for what it
+  accepts, in kebab-case, and every other input is a named flag.
+- **Not applicable when:** no sampled command declares a positional.
+- **Evidence:** For the first 30 commands by sorted path from `acme --help` walking, plus every
+  write command, run `acme <command> --help` and read the usage line for `<...>` placeholders.

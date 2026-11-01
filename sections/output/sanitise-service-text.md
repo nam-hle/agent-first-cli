@@ -1,3 +1,8 @@
+---
+id: sanitise-service-text
+category: Safe writes
+max: 8
+---
 # Sanitise text that came from another system
 
 Practice 2.6 in the [guide](../../README.md).
@@ -83,3 +88,23 @@ it.each([["--json"], []])("hostile title is neutralised %s", (...flags) => {
   expect(out).toContain("\\u{202E}");
 });
 ```
+
+### How to score
+
+Maximum: 8 points. Service text reaches the model as instructions and the screen as escapes.
+
+- **0:** Human (text) output carries a raw ESC sequence or U+202E from the service text.
+- **About half (4):** Human output is clean, but another path is not: for example `--json` values,
+  the error envelope, stderr or streamed output still carry raw escapes or invisible characters.
+- **Maximum (8):** No raw escape on any path (human, `--json`, errors, stderr, streaming): ESC
+  sequences are stripped and direction-changing or invisible characters appear visibly, such as
+  `\u{202E}`.
+- **Not applicable when:** the CLI never prints content that originated outside its own fixed
+  strings and the current invocation. A file or data store the user or others can edit counts as
+  outside content, so printing it means the practice applies.
+- **Evidence:** Only inside the entry page's "Probes and safety" sandbox, plant a title with
+  `\u001b[2J` and U+202E in the sandbox's own data, then run `acme ticket view <key>`, the same
+  with `--json`, and a failing command that echoes it. Check each output for raw bytes with
+  `cat -v`. With no run (no sandbox, or no way to plant the text) the score is capped at a quarter
+  of the maximum and marked "unverified" (see the entry page's Evidence rules).
+- **Gate:** failing caps Safe writes at 60

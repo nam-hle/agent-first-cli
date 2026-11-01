@@ -1,6 +1,10 @@
+---
+id: self-describing-schema
+category: Output
+max: 3
+---
 # The tool describes its own output, versioned
 
-Practice 7.5 in the [guide](../../README.md).
 Practice 7.5 in the [guide](../../README.md#75-the-tool-describes-its-own-output-versioned).
 
 ### One paragraph explainer
@@ -89,3 +93,26 @@ test.each(run("schema", "--json").items.map((c: any) => c.name))("%s matches", (
 
 Snapshot the printed schemas ([8.1](../evolving/snapshot-the-surface.md)): a changed field in the
 diff must come with a changed `schemaVersion`.
+
+### How to score
+
+Maximum: 3 points. A missing schema costs trial calls and a silent rename goes unnoticed.
+
+Count the commands among the sample (first 30 by sorted path plus every write command) whose
+`--help` lists `--json`. A counted command violates when any of these holds:
+
+- **No schema:** `acme schema <command>` fails, or does not print a JSON Schema with a
+  `schemaVersion`.
+- **Output disagrees:** its real `--json` result has no `schemaVersion`, a different one from the
+  schema, or fails validation against the printed schema (a required key missing, a wrong type).
+
+- **0:** At least 25% of the counted commands violate.
+- **About half (2):** Under 25% violate and at least one does (for example schemas exist for every
+  command but `acme pr list --json` carries no `schemaVersion`).
+- **Maximum (3):** No counted command violates.
+- **Not applicable when:** no command has `--json`.
+- **Evidence:** `acme schema <command> --json 2>/dev/null` for the schema and its version; run
+  `acme <command> --json 2>/dev/null`, adding `--limit 1` only where that command's `--help` lists
+  it, and validate the result with any JSON Schema validator at hand, or compare required keys and
+  types by reading. Never run a write for real: use its dry-run if `--help` lists one, otherwise
+  leave that write out of the sample for the output check (the schema check still applies).

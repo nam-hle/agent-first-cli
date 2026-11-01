@@ -1,3 +1,8 @@
+---
+id: confirm
+category: Safe writes
+max: 3
+---
 # Every write has `--confirm`, and an agent never needs it
 
 Practice 6.2 in the [guide](../../README.md).
@@ -77,3 +82,22 @@ test("no terminal, no prompt", () => {
   }
 });
 ```
+
+### How to score
+
+Maximum: 3 points. A prompt that hangs an unattended caller costs time, not safety.
+
+- **0:** `no-yes-or-force` fails, or at least 25% of the sampled writes are violations (a write
+  that lacks `--confirm`, or waits on a prompt such as "Merge? [y/N]" without a terminal or under
+  `--no-input`; the [small-samples rule](../../benchmark/README.md#small-samples) applies).
+- **About half (2):** At least one violation, but below 25% of the sampled writes; the rest
+  behave as at Maximum.
+- **Maximum (3):** Every write accepts `--confirm`. Without a terminal or under `--no-input`,
+  every write returns at once, never prints prompt text and never reads stdin: it runs, or it
+  exits 5 because approval is pending or denied. Exiting 5 earns full marks.
+- **Not applicable when:** the CLI has no write commands, or `no-yes-or-force` is N/A (no write
+  has an approval gate of any kind).
+- **Evidence:** Only inside the entry page's "Probes and safety" sandbox, against throwaway
+  items, run `acme <write> <item> --no-input </dev/null` and `echo y | acme <write> <item>` for
+  each write; check it never waits and stderr has no `[y/N]`. Run with `--confirm` too. Where no
+  sandbox can be set up the probe is not exercised (see the entry page).

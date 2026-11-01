@@ -1,3 +1,8 @@
+---
+id: check-command-strings
+category: Discoverable and maintainable
+max: 3
+---
 # Check every command written inside a string
 
 Practice 4.4 in the [guide](../../README.md).
@@ -75,3 +80,30 @@ test("every command written in a string resolves", () => {
   }
 });
 ```
+
+### How to score
+
+Maximum: 3 points. A stale command string is a wrong instruction the tool itself issued, but it
+sits on a few text surfaces (hints, `next`, examples, docs), not on every command.
+
+Sample of strings: every command line that starts with `acme`, taken in this order and stopped at
+60 strings: the `hint` and `next` values of the error provocations (`acme zzz-no-such`, and
+`--no-such-flag` on each of the first 10 sampled commands); the help examples of those 10 commands;
+then the code spans and fenced lines of `README.md` and `docs/**/*.md`, by sorted path. Strings
+holding a `<...>` placeholder, and strings inside a block marked as a deliberate counter-example
+(a "Don't" block), are not counted. A counted string resolves when its command path (the longest
+leading run of non-flag words for which `acme <path> --help` exits 0) exists and every `--flag` in
+it appears in that help text. A path exits 0 for this only if its help text names the path, as in
+the entry page's "resolves" rule. A counted string violates when it does not resolve.
+
+- **0:** At least one string is counted and at least 25% of the counted strings violate.
+- **About half (2):** At least one string is counted, under 25% violate, and at least one does.
+- **Maximum (3):** At least one string is counted and none violates.
+- **Not applicable when:** no string is counted at all (nothing in hints, `next`, help examples
+  or readable docs names a command). When the repo and docs are not readable (a closed or vendor
+  CLI), skip the docs part and score the live strings only (hints, `next`, help examples).
+- **Evidence:** list the strings with `grep -rhoE '`acme [^`]+`' README.md docs` (read-only) and
+  add the hints and examples captured from the probes. For each, run
+  `timeout 10 acme <path> --help` with stdin from `/dev/null` (a help call parses flags and never
+  runs the command, so it is safe on writes) and search the output for each flag. Capture the
+  string, its source file and the verdict; the violating share proves the anchor.

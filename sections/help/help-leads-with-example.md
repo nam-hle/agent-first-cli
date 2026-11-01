@@ -1,6 +1,10 @@
+---
+id: help-leads-with-example
+category: Discoverable and maintainable
+max: 3
+---
 # Help leads with an example
 
-Practice 7.1 in the [guide](../../README.md).
 Practice 7.1 in the [guide](../../README.md#71-help-leads-with-an-example).
 
 ### One paragraph explainer
@@ -85,3 +89,29 @@ test.each(leaves())("help of %s leads with an example", (...path) => {
   expect(text).toMatch(/EXIT CODES/);
 });
 ```
+
+### How to score
+
+Maximum: 3 points. Help is the first page an agent reads for every command, but a gap there costs
+a retry, not a wrong write, so the weight is moderate.
+
+Sample: the leaf commands of the sample (first 30 by sorted path from walking `acme --help`, plus
+every write command). Help of a command is `acme <path> --help` stdout. A command violates when
+any of these holds:
+
+- no example leads: no line starting with `acme <path>` or `$ acme <path>` appears before the
+  first flag line (a line whose first word starts with `-`), or more than 3 non-blank lines
+  precede that example;
+- a required argument is not marked: the help names a positional or required flag but neither
+  its usage line shows it in angle brackets (optional ones in square brackets) nor the word
+  "required" appears next to it; commands with no arguments never violate here;
+- no output shape: no line states what a successful run prints (the `--json` keys or "text");
+- no exit codes: no line lists at least two exit codes by number.
+
+- **0:** At least 25% of the sampled commands violate.
+- **About half (2):** Under 25% violate and at least one does.
+- **Maximum (3):** No sampled command violates.
+- **Not applicable when:** never; a single-command CLI is sampled as `acme --help` itself.
+- **Evidence:** run `timeout 10 acme <path> --help` with stdin from `/dev/null` for each sampled
+  command, save stdout to a sandbox file, and read its first 12 non-blank lines for the example
+  and the whole text for the other three checks. Record one verdict per command and per check.

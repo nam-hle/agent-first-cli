@@ -1,3 +1,8 @@
+---
+id: long-text-from-file
+category: Input
+max: 3
+---
 # Long text comes from a file or stdin
 
 Practice 5.4 in the [guide](../../README.md).
@@ -98,3 +103,30 @@ test("--input - reads a batch from stdin", () => {
   expect(JSON.parse(run.stdout).items).toHaveLength(2);
 });
 ```
+
+### How to score
+
+Maximum: 3 points. Shell-mangled text posts a truncated body with exit 0; it touches the few
+commands that take prose or batches.
+
+Sample the first 30 commands by sorted path plus every write. Text commands take free text such as
+`--body` or `--description`. Batch commands take many items. Four kinds of violation:
+
+- **No file form:** a text command has no `--<name>-file <path>` (and `-` for stdin), or a batch
+  command has no `--input <path>` (and `-`).
+- **Altered bytes:** the file form changes the text (trimmed, re-encoded, escapes interpreted).
+- **Silent pick:** the inline and file forms given together are not a usage error naming both.
+- **Silent failure:** a missing file does not fail with an error naming the path.
+
+- **0:** Fewer than 25% of the text and batch commands have a file or stdin form, or on any
+  command that has the form it alters the bytes (quotes, backticks, newlines).
+- **About half (2):** At least 25% of the text and batch commands have the form and none alters
+  bytes, but not Maximum (for example some commands lack it, or both flags together silently
+  prefer `--body`, or a missing file does not name the path).
+- **Maximum (3):** Every text and batch command has the file and stdin form, it keeps the bytes,
+  both forms together are a usage error naming both, and a missing file names the path.
+- **Not applicable when:** no sampled command takes free text or many items.
+- **Evidence:** Write a body with backticks, quotes, `$HOME`, a tab and a newline to a file, run
+  `acme <text-command> --body-file <file> --json`, and compare the stored body byte for byte.
+  Also pass both `--body x` and `--body-file <file>`, and a nonexistent path; for a batch command
+  run `--input <file> --dry-run` and `--input - --dry-run < <file>`.

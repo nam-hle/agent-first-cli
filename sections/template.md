@@ -1,3 +1,8 @@
+---
+id: page-slug            # the page file name without .md
+category: Category name  # one of the six names listed in benchmark/README.md
+max: 3                   # one of 1, 2, 3, 5, 8 by severity and breadth
+---
 # <Practice title>
 
 Practice <number> in the [guide](../../README.md). Keep the title the same as the README entry.
@@ -32,3 +37,14 @@ interacts with neighbouring practices (link them by number).
 
 The test that walks the command tree, or the snapshot that shows the drift as a diff. Include a
 short runnable sketch of the test (TypeScript or shell, against `acme`).
+
+### How to score
+
+Maximum: N points. One line: severity and breadth that justify N.
+
+- **0:** what absent or contradicted looks like.
+- **About half (K):** the common partial case, concrete. (K is the ceiling of N/2; a max-1 practice
+  omits this line.)
+- **Maximum (N):** all commands behave as the practice says.
+- **Not applicable when:** the condition, or "never".
+- **Evidence:** the command to run or the file to read.

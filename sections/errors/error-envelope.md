@@ -1,3 +1,8 @@
+---
+id: error-envelope
+category: Errors and guidance
+max: 8
+---
 # One envelope for every failure
 
 Practice 3.1 in the [guide](../../README.md).
@@ -98,3 +103,38 @@ test("unexpected error has no stack", () => {
   expect(JSON.stringify(err)).not.toMatch(/\bat .*\(.*:\d+:\d+\)/);
 });
 ```
+
+### How to score
+
+Maximum: 8 points. Every recovery step branches on the error shape, so one unshaped failure
+breaks the loop for every command that can hit it.
+
+Probe set: the first 10 read commands by sorted path of the sample, plus, for the unknown-flag
+provocation only, every write command of the sample (a parse failure never runs the command).
+Each provocation below is one counted error:
+
+- the root unknown command `acme zzz-no-such`;
+- each probe command with `--no-such-flag`;
+- each read probe command with a required input omitted, when it has one;
+- bare `acme` and every group on the path to a probe command, without a verb;
+- each read probe command that takes an id, given `nonexistent-0`.
+
+A counted error violates when any of these holds:
+
+- **Exit 0:** the provocation exits 0 (the input was accepted, or an error body came with exit 0,
+  or the output is empty).
+- **Not one object:** stderr is not exactly one JSON object (plain text, a library help page, a
+  stack trace, empty stderr).
+- **Missing key:** the object lacks any of `status`, `code`, `message`, `context`, `hint`.
+- **Open code:** `code` does not match `^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$`.
+- **Leak:** stderr carries any stack trace or panic output.
+
+- **0:** At least 25% of the counted errors violate.
+- **About half (4):** Under 25% violate and at least one does (for example every error is an
+  envelope except `acme build` alone, which prints the parser's help page).
+- **Maximum (8):** No counted error violates.
+- **Not applicable when:** never; the root unknown-command provocation always runs.
+- **Evidence:** run each provocation under `timeout 10` (or `gtimeout 10`) with stdin from
+  `/dev/null`, stderr redirected to a file in the sandbox. Parse that file with a JSON parser
+  (`jq -e .` or `node -e`): it must be one object with the five keys. Check stdout separately only
+  to note it; it does not affect this score.

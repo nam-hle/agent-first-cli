@@ -1,3 +1,8 @@
+---
+id: closed-verb-set
+category: Command surface
+max: 5
+---
 # Use one shape and a closed verb set
 
 Practice 1.1 in the [guide](../../README.md).
@@ -83,3 +88,24 @@ it("uses the closed verb set", () => {
 ```
 
 Adding a verb means editing `VERBS`, which makes the change visible in review.
+
+### How to score
+
+Maximum: 5 points. A guessed verb that fails costs a turn on every noun; it touches every command.
+
+A violation is a sampled leaf that ends in a banned synonym (`show`, `get`, `ls`, `rm`, `remove`,
+`fetch`, `describe`), an abbreviation, or a verb-noun shape such as `acme add-comment`; or that
+has an alias (for example `acme pr show` also resolves to `view`); or whose domain verb does not
+start with a core verb (`insert-column` instead of `add-column`).
+
+When no sampled leaf has a noun (every command is `acme <verb>`), judge the verbs only against
+the closed set and the synonym rules; a missing `acme <noun> <verb>` shape is then not a violation.
+
+- **0:** At least 25% of the sampled leaves are violations, or some sampled leaf has a noun and
+  the tree has no common `acme <noun> <verb>` shape.
+- **About half (3):** At least one violation, but below 25% of the sampled leaves.
+- **Maximum (5):** No sampled leaf is a violation.
+- **Not applicable when:** the CLI has no subcommands, only flags on a single command.
+- **Evidence:** Sample the first 30 commands by sorted path from walking `acme --help` down, plus
+  every write command. Read the last segment of each path. Run `acme pr show --help` and
+  `acme pr ls --help` and check whether they resolve or fail as unknown.

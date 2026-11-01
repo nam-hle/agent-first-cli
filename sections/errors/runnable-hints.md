@@ -1,3 +1,8 @@
+---
+id: runnable-hints
+category: Errors and guidance
+max: 5
+---
 # The hint is a command that runs
 
 Practice 3.2 in the [guide](../../README.md).
@@ -87,3 +92,38 @@ test("every hint names a command that exists with flags that exist", () => {
   }
 });
 ```
+
+### How to score
+
+Maximum: 5 points. A wrong or missing hint turns a one-step recovery into guessing, on every
+error path, so it weighs more than the field-naming practices.
+
+Probe set: the first 10 read commands by sorted path of the sample, plus, for the unknown-flag
+provocation only, every write command of the sample (a parse failure never runs the command).
+Each provocation below is one counted error:
+
+- the root unknown command `acme zzz-no-such`;
+- each probe command with `--no-such-flag`;
+- each read probe command with a required input omitted, when it has one;
+- bare `acme` and every group on the path to a probe command, without a verb;
+- each read probe command that takes an id, given `nonexistent-0`.
+
+A hint is the `hint` string of the stderr JSON object. A command line in it starts with `acme`;
+it resolves when its command path (the longest leading run of non-flag words for which
+`acme <path> --help` exits 0, longest tried first) exists, every `--flag` in the line appears in
+that help text, and no `<...>` placeholder remains. A path exits 0 for this only if its help text
+names the path, as in the entry page's "resolves" rule. A counted error violates when it exits 0,
+has
+no `hint`, has a hint with no command (prose such as "see the docs"), or has a hint in which any
+command line does not resolve.
+
+- **0:** At least 25% of the counted errors violate.
+- **About half (3):** Under 25% violate and at least one does (for example every hint resolves
+  except the one on `--no-such-flag`, which says "check your options").
+- **Maximum (5):** No counted error violates.
+- **Not applicable when:** never; the root unknown-command provocation always runs, and a missing
+  hint on it is a violation.
+- **Evidence:** run each provocation under `timeout 10` (or `gtimeout 10`) with stdin from
+  `/dev/null`, stderr redirected to a file in the sandbox. Read `hint` from that file with a JSON
+  parser (`jq -r .hint` or `node -e`; unparsable stderr is a violation). For each hint, run
+  `acme <path> --help` and search the output for each flag in the hint.

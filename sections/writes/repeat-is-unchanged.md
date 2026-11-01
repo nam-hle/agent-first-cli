@@ -1,3 +1,8 @@
+---
+id: repeat-is-unchanged
+category: Safe writes
+max: 5
+---
 # A repeated write ends `unchanged`
 
 Practice 6.3 in the [guide](../../README.md).
@@ -76,3 +81,20 @@ test.each(idempotent)("a repeated write ends unchanged: %s", (...args) => {
   expect(JSON.parse(second.stdout).result.outcome).toBe("unchanged");
 });
 ```
+
+### How to score
+
+Maximum: 5 points. Retries are routine for agents; each duplicate is a stray change.
+
+- **0:** Repeating a state-setting write duplicates the effect, or errors with "already exists".
+- **About half (3):** Some repeats end `unchanged` with exit 0 (for example `acme ticket link`),
+  but others duplicate or error, such as `acme ticket label add` run twice.
+- **Maximum (5):** Every write that sets a state (link, label, transition, assign) reports
+  `unchanged`, exits 0 and changes nothing on the second run.
+- **Not applicable when:** the CLI has no write commands, or no sampled write is a repeatable
+  state-setting write (the writes only create or delete).
+- **Evidence:** Only inside the entry page's "Probes and safety" sandbox (a fresh working
+  directory and a copied or dedicated data file), run each state-setting write twice with `--json`
+  on throwaway items; check the second `outcome`, exit code and the target's state. Where a real
+  service is the only target, the probe is "not exercised" (defined on the entry page, Probes and
+  safety).

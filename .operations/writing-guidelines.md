@@ -15,3 +15,8 @@
 7. **Tags.** `#strategic` shapes the design, `#advanced` needs infrastructure, `#security` concerns an
    untrusted caller.
 8. **Disagree openly.** When a practice contradicts a well-known source, say so and say why.
+9. **Scorable.** A new practice needs an id (its page slug), a category from
+   [benchmark/README.md](../benchmark/README.md), a maximum from {1, 2, 3, 5, 8}, and a "How to
+   score" section with 0, about half and maximum anchors that are mutually exclusive and exhaustive.
+   `node benchmark/check.mjs` must print `ok`; a change to a maximum or to the practice list
+   bumps the rubric version on the entry page, per its Evolving section.

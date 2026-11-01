@@ -1,3 +1,8 @@
+---
+id: one-flag-one-purpose
+category: Command surface
+max: 5
+---
 # One concept, one flag name; one name, one purpose
 
 Practice 1.4 in the [guide](../../README.md). Strategic: this is the practice that decays fastest.
@@ -84,3 +89,26 @@ it("keeps one purpose per flag name", () => {
 ```
 
 A flag with two descriptions appears as two entries on one line, which is the diff to question.
+
+### How to score
+
+Maximum: 5 points. One concept under two names, or one name under two meanings, breaks calls
+silently; it touches every command with flags.
+
+A violation is a flag name involved in a synonym split (`--since` in one command and `--from` or
+`--after` in another for the same window start; likewise `--limit` against `--max`, `--count`,
+`--num`) or a flag name whose help text states two different purposes across commands.
+
+A flag name has one purpose when every command that uses it means the same concept by it: a
+`--status` that filters in `acme task list` and sets the field in `acme task update` is one
+purpose, the task status. It has two purposes when the same name means different concepts: `--from`
+as a date in `acme audit view` and as a source in `acme file copy`.
+
+- **0:** Four or more distinct flag names are violations across the sampled commands.
+- **About half (3):** One to three distinct flag names are violations.
+- **Maximum (5):** No violation. Each concept has one flag name and each name has one purpose
+  across all sampled commands.
+- **Not applicable when:** no sampled command declares a flag.
+- **Evidence:** Run `acme <command> --help` for the first 30 commands by sorted path from walking
+  `acme --help`, plus every write command. Group the flags by help text and compare names. Run
+  `acme audit view --help` and `acme pr stats view --help` to compare the window flags.

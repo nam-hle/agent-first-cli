@@ -1,3 +1,8 @@
+---
+id: group-names-plural
+category: Command surface
+max: 2
+---
 # One group name, plural for collections
 
 Practice 1.2 in the [guide](../../README.md).
@@ -75,3 +80,19 @@ it("has no singular twin and no plural singleton", () => {
 ```
 
 A new group that trips the test is either renamed or added to a reviewed exception list.
+
+### How to score
+
+Maximum: 2 points. A twin group splits help and costs a guess per new verb; it touches groups only.
+
+A violation is a group with a singular or plural twin (`pod` beside `pods`), or a group nested
+inside another group that has a singular name and offers `list`, or has a plural name and offers
+`view` without `list`, or has a singular name and offers no `view`.
+
+- **0:** At least 25% of the groups in the sample are violations.
+- **About half (1):** At least one violation, but below 25% of the groups in the sample.
+- **Maximum (2):** No group in the sample is a violation.
+- **Not applicable when:** the CLI has no group that contains subcommands.
+- **Evidence:** Walk `acme --help` and each group's help for the first 30 commands by sorted path,
+  plus every write command, and list the group names. Run `acme pr comments --help` and
+  `acme pr comment --help` and check that only one of them resolves.

@@ -1,3 +1,8 @@
+---
+id: parallel-writes
+category: Safe writes
+max: 2
+---
 # Plan for parallel writes
 
 Practice 6.5 in the [guide](../../README.md).
@@ -87,3 +92,19 @@ test("five parallel writes get five explained outcomes", async () => {
   expect(declined).toEqual([]);
 });
 ```
+
+### How to score
+
+Maximum: 2 points. Rare to hit but misleads the agent; affects only gated writes.
+
+- **0:** Several parallel gated writes yield one approval and the rest fail with "declined" or
+  "busy" and no reason.
+- **About half (1):** Parallel writes each get an outcome, but a reason is missing or reused, for
+  example a timeout reported with the same word as a person's denial.
+- **Maximum (2):** Five parallel gated writes end with five distinct outcomes (approved exit 0,
+  denied exit 5, timed out exit 8), each with its reason.
+- **Not applicable when:** no approval gate exists.
+- **Evidence:** Only inside the entry page's "Probes and safety" sandbox, start five gated writes
+  on throwaway items with `--json` in parallel, deny one and let one time out; compare each exit
+  code and `error.message`. Where a real service is the only target, the probe is "not
+  exercised" (defined on the entry page, Probes and safety).

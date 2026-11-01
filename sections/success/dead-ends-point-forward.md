@@ -1,3 +1,8 @@
+---
+id: dead-ends-point-forward
+category: Errors and guidance
+max: 2
+---
 # Dry runs, empty results and cut-offs all point forward
 
 Practice 4.3 in the [guide](../../README.md).
@@ -80,3 +85,40 @@ test("dry run next is the real command", () => {
   expect(out.next).toContain("acme pr merge 42");
 });
 ```
+
+### How to score
+
+Maximum: 2 points. A dead end costs retries only at three specific outputs, so the weight is
+small.
+
+Fixture: the sandbox must hold at least two rows for each list probed. A list that cannot be
+seeded to two rows is "not exercised" for the cut-list probe only.
+
+Exercised dead ends, from the sample (first 30 commands by sorted path):
+
+- **Dry run:** each write that lists `--dry-run` in its help, run with `--dry-run` and inputs
+  taken from read output of the sandbox; one that errors is not exercised.
+- **Empty list:** each list command run with one filter flag (not `--limit`) set to
+  `zzz-no-match-0`; one that rejects the value as a usage error is not exercised.
+- **Cut list:** each list command run with `--limit 1` over a list seeded to at least two rows.
+
+A dead end violates when it lacks a resolving way forward. Resolving means the entry's command
+path (the longest leading run of non-flag words, after `acme`, for which `acme <path> --help`
+exits 0, longest tried first) exists and each `--flag` in it appears in that help:
+
+- **Dry run:** no `next` (or printed line) holds the same command with the same arguments minus
+  `--dry-run`.
+- **Empty list:** the output is blank, or says nothing matched but offers no resolving command.
+- **Cut list:** it gives no count of omitted rows (`total`, "N more", "1 of N") or no resolving
+  command that returns more.
+
+- **0:** At least 25% of the exercised dead ends violate.
+- **About half (1):** Under 25% violate and at least one does (for example a dry run and a cut
+  list point forward but an empty list prints nothing).
+- **Maximum (2):** No exercised dead end violates.
+- **Not applicable when:** no dead end is exercised: no sampled write has `--dry-run`, no sampled
+  list accepts a filter value that matches nothing, and no sampled list can be seeded to two rows.
+- **Evidence:** run each dead end under `timeout 10` (or `gtimeout 10`), stdin from `/dev/null`,
+  with `--json` when listed. Capture stdout alone and stderr alone; read `items`, `total` and
+  `next` from the JSON, or the text lines when no `--json`. Never run a write without its
+  `--dry-run`; a write without one is excluded.

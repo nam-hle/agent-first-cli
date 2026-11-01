@@ -1,3 +1,8 @@
+---
+id: no-secrets-in-flags
+category: Safe writes
+max: 8
+---
 # No secret in a flag or an environment variable
 
 Practice 5.2 in the [guide](../../README.md).
@@ -84,3 +89,18 @@ test("no secret-named environment variable is read", () => {
   expect(hits).toEqual([]);
 });
 ```
+
+### How to score
+
+Maximum: 8 points. A leaked credential is readable by the caller and any injected instruction.
+
+- **0:** Any command accepts a secret in a flag (`--token abc`, `acme config set token <value>`).
+- **About half (4):** No flag takes a secret, but a secret can be given through an environment
+  variable such as `ACME_TOKEN`, or the credential store is readable by the calling user.
+- **Maximum (8):** Neither a flag nor an environment variable takes a secret. A setup command
+  run once by a person fills a store the caller cannot read, and `acme pr list` then works.
+- **Not applicable when:** the CLI needs no credential.
+- **Evidence:** Search every `acme <command> --help` for token, password, secret or key flags
+  and for documented variables. Find the store location the docs or `acme config` print, then
+  run `ls -l <store>` and check the mode and owner deny the calling user.
+- **Gate:** failing caps Safe writes at 40

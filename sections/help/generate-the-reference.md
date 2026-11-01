@@ -1,6 +1,10 @@
+---
+id: generate-the-reference
+category: Discoverable and maintainable
+max: 3
+---
 # Generate the reference, do not write it
 
-Practice 7.4 in the [guide](../../README.md).
 Practice 7.4 in the [guide](../../README.md#74-generate-the-reference-do-not-write-it).
 
 ### One paragraph explainer
@@ -80,3 +84,30 @@ test("every command is fully described", () => {
   }
 });
 ```
+
+### How to score
+
+Maximum: 3 points. A stale reference is read as fact by every agent that uses it, but it affects
+one documentation surface, not the commands themselves.
+
+Reference docs: the pages under `docs/reference/`, else under `docs/`, `reference/` or `api/`, or
+the published site that the README names; a site that cannot be reached is not exercised, not 0.
+Compared commands: the first 10 by sorted path of the benchmark sample (all, when fewer). A
+compared command disagrees when it has no reference page or section, or when the set of
+`--flag` names on its page differs from the set in `acme <path> --help` (ignoring `--help` and
+`--version`). A generation marker is present when the first 10 lines of any compared page say it
+is generated or "do not edit", or the README, docs or package scripts name a command that
+produces the reference.
+
+- **0:** The repo and docs are readable, hold no reference docs and name no published site, or at
+  least 25% of the compared commands disagree.
+- **About half (2):** Under 25% disagree and either at least one does or no generation marker is
+  present.
+- **Maximum (3):** No compared command disagrees and a generation marker is present.
+- **Not applicable when:** the repo and docs are not readable (a closed or vendor CLI); or the
+  only reference is a published site that cannot be reached.
+- **Evidence:** list the reference folder, read each compared page, and compare its flags with
+  `timeout 10 acme <path> --help` (stdin from `/dev/null`). Capture the page header and the
+  documented generation command. Run that command only when it can write to a sandbox directory
+  (a documented output option); otherwise do not run it, and the documented name alone counts
+  as the marker.

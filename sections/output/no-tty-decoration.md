@@ -1,3 +1,8 @@
+---
+id: no-tty-decoration
+category: Output
+max: 3
+---
 # No colour, spinner or pager off a terminal
 
 Practice 2.4 in the [guide](../../README.md).
@@ -78,3 +83,30 @@ for cmd in "pr list" "pr view 1" "ticket list" "--help" "pr list --help"; do
   fi
 done
 ```
+
+### How to score
+
+Maximum: 3 points. Stray escape bytes cost tokens and a pager is a hang, but both are easy to spot.
+
+Sample the first 30 commands by sorted path plus every write command (writes only against a
+sandbox service). Run each, and its `--help`, with stdout and stderr sent to one capture (a pipe or
+a redirect to a file) and stdin closed, under a 5 second timeout (`timeout` or `gtimeout`,
+whichever exists). A command violates
+when any of these holds:
+
+- **Escape bytes:** the capture contains an ESC byte (0x1b) or a carriage-return spinner frame.
+- **Pager:** there is evidence of one: a `less` or `more` process started by the CLI, or output
+  that stops at a pager prompt such as `(END)` or `:`. A timeout alone is not a pager violation.
+- **Format changes with the terminal:** the data fields differ between the piped run and a run
+  with `NO_COLOR=1 TERM=dumb` (relative timestamps such as "2 minutes ago" are not compared).
+  Where a pseudo-terminal exists, an ESC byte under `NO_COLOR=1` also counts.
+
+- **0:** At least 25% of the sampled commands violate.
+- **About half (2):** Under 25% violate and at least one does (for example `acme --help` is plain
+  but `acme pr list` prints `\x1b[32m` colour codes into a pipe).
+- **Maximum (3):** No sampled command violates.
+- **Not applicable when:** never.
+- **Evidence:** `timeout 5 acme <command> 2>&1 < /dev/null | cat`, then search the capture for the
+  byte 0x1b (for example `grep -c "$(printf '\033')"`) and for `\r`; compare data fields with
+  `NO_COLOR=1 TERM=dumb acme <command> 2>&1 < /dev/null | cat`. On a timeout, look for a `less` or
+  `more` process (`ps`) or a trailing `(END)` before calling it a pager.

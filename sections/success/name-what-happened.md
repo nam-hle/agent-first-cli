@@ -1,3 +1,8 @@
+---
+id: name-what-happened
+category: Output
+max: 2
+---
 # Say what happened and name the thing
 
 Practice 4.1 in the [guide](../../README.md).
@@ -73,3 +78,25 @@ test("json result carries the key", () => {
   expect(out.key).toMatch(/^[A-Z]+-\d+$/);
 });
 ```
+
+### How to score
+
+Maximum: 2 points. An unnamed result costs a lookup and risks the wrong item, but only after writes.
+
+Count every write command that has an item to name; a write with none (such as `config set`)
+has no id or key and is excluded, as is a write that cannot be run in a sandbox. Run each counted
+write against a sandbox service with valid arguments. A write violates when its successful run
+does not name the thing; failing both checks below counts once:
+
+- **Unnamed text:** the first stdout line has no id or key of the item, or is a bare "Done" or "OK".
+- **Unnamed JSON:** `--json` stdout has no `id` or `key` field, at the top level or nested one
+  level deep (`{"task":{"id":"T-1"}}` counts as the identifier). A bulk write lists them in any
+  top-level list-valued key.
+
+- **0:** At least 25% of the counted writes violate.
+- **About half (1):** Under 25% violate and at least one does (for example `acme ticket delete T-1`
+  prints "Done." while the other writes print "Deleted T-1").
+- **Maximum (2):** No counted write violates.
+- **Not applicable when:** no write command exists, or none can be run against a sandbox.
+- **Evidence:** `acme <write command> <valid args>` and read the first line; then the same with
+  `--json 2>/dev/null` and look for `id` or `key` in the parsed result.

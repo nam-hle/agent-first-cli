@@ -1,3 +1,8 @@
+---
+id: exit-code-classes
+category: Errors and guidance
+max: 3
+---
 # The exit code is the class of failure
 
 Practice 3.4 in the [guide](../../README.md).
@@ -82,4 +87,30 @@ test("the table is pinned", () => {
   expect(table).toMatchSnapshot();
 });
 ```
-```
+
+### How to score
+
+Maximum: 3 points. A wrong exit status misleads every caller that cannot parse JSON (hooks, CI,
+wrappers), but the JSON `code` still holds the precise answer, so the weight is modest.
+
+Probe set: the first 10 read commands by sorted path of the sample, plus, for the unknown-flag
+provocation only, every write command of the sample (a parse failure never runs the command).
+Each provocation below is one counted run, with its expected exit status:
+
+- the root unknown command `acme zzz-no-such`: 2;
+- each probe command with `--no-such-flag`: 2;
+- each read probe command with a required input omitted, when it has one: 2;
+- bare `acme` and every group on the path to a probe command, without a verb: 2;
+- each read probe command that takes an id, given `nonexistent-0`: 3.
+
+A counted run violates when its exit status differs from the expected one (including 0, even
+with an error body or empty output, and a timeout).
+
+- **0:** At least 25% of the counted runs violate.
+- **About half (2):** Under 25% violate and at least one does (for example usage errors exit 2
+  and a missing id exits 1 on a few commands).
+- **Maximum (3):** No counted run violates.
+- **Not applicable when:** never; the root unknown-command provocation always runs.
+- **Evidence:** run each provocation under `timeout 10` (or `gtimeout 10`) with stdin from
+  `/dev/null` and capture the exit status alone, one run per call. A status of 124 means the
+  timeout fired and is a violation.

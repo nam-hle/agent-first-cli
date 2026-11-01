@@ -15,6 +15,12 @@ Don't, and how to check it. Some link to a deeper write-up.
 
 Examples use a made-up tool called `acme`.
 
+## Benchmark
+
+The [benchmark](benchmark/README.md) turns the guide into a score. Each practice page carries its
+maximum points in front matter and a "How to score" section with anchors for 0, about half and the
+maximum. An agent can follow the benchmark to score any CLI against the guide.
+
 ## Table of contents
 
 1. [Names](#1-names) (6)

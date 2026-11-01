@@ -1,3 +1,8 @@
+---
+id: bounded-lists
+category: Output
+max: 5
+---
 # Bound every list and say when you cut
 
 Practice 2.5 in the [guide](../../README.md).
@@ -93,3 +98,29 @@ it("order is stable", () => {
   );
 });
 ```
+
+### How to score
+
+Maximum: 5 points. A silent cut or an unbounded dump makes an agent decide on partial data.
+
+Count the list and search commands in the sample (first 30 commands by sorted path): those that
+return a collection of items. A set fixed by the tool itself (its verbs, workflow states) is small
+by nature and is not counted. A counted command violates when any of these holds:
+
+- **Unbounded:** `--help` lists no `--limit` (or equivalent) and no default page size.
+- **Silent cut:** with `--limit 1` over data of at least two rows, it returns one row and no
+  `total`, `hasMore`, `nextCursor` or sentence saying more exist. Not tested when the sandbox data
+  has fewer than two rows.
+- **Unstable order:** help states no order, or two identical runs return different row orders.
+  Help "states an order" when it names a sort key or default order or offers a sort flag. A command
+  with no stated order violates only if it returns more than one row.
+
+- **0:** At least 25% of the counted commands violate.
+- **About half (3):** Under 25% violate and at least one does (for example `acme pr list --limit 2`
+  returns two rows with no sign that 132 more exist).
+- **Maximum (5):** No counted command violates.
+- **Not applicable when:** no sampled command lists or searches.
+- **Evidence:** `acme <command> --help` for the limit flag (`--limit` or the equivalent it names)
+  and the order. Run `acme <command> <limit flag> 1 --json 2>/dev/null` twice, only when the
+  command lists both that flag and `--json`; read the keys beside `items` and compare the row
+  order of the two runs.

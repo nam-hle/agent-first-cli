@@ -1,3 +1,8 @@
+---
+id: parse-failures
+category: Errors and guidance
+max: 3
+---
 # Parse failures look the same at any depth
 
 Practice 3.6 in the [guide](../../README.md).
@@ -91,3 +96,34 @@ test.each(leaves())("leaf %j with a bad option", (...path) => {
   expect(JSON.parse(r.stderr).code).toBe("UNKNOWN_OPTION");
 });
 ```
+
+### How to score
+
+Maximum: 3 points. Parser failures are the first errors an agent meets while exploring, but they
+are one class among the failures, so the weight is modest.
+
+Probe set: the first 10 read commands by sorted path of the sample, plus, for the unknown-flag
+provocation only, every write command of the sample (a parse failure never runs the command).
+Each provocation below is one counted run:
+
+- the root unknown command `acme zzz-no-such`;
+- bare `acme` and every group on the path to a probe command, without a verb;
+- each probe command with `--no-such-flag`.
+
+A counted run violates when any of these holds:
+
+- **Wrong status:** the exit status is not 2.
+- **Dirty stdout:** stdout is not empty.
+- **No envelope:** stderr is not one JSON object with a string `code` matching
+  `^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$`, or (for a group without a verb) `context.availableCommands`
+  is absent or empty.
+
+- **0:** At least 25% of the counted runs violate.
+- **About half (2):** Under 25% violate and at least one does (for example every group returns the
+  envelope except the groups at depth three or more, which print the parser's help with exit 0).
+- **Maximum (3):** No counted run violates.
+- **Not applicable when:** never; the root unknown-command provocation always runs.
+- **Evidence:** run each provocation under `timeout 10` (or `gtimeout 10`) with stdin from
+  `/dev/null`. Capture stdout alone, stderr alone (to files in the sandbox) and the exit status.
+  Parse stderr with a JSON parser (`jq -e .` or `node -e`). Compare shallow and deep groups: the
+  same shape must appear at every depth.

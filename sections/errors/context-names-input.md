@@ -1,3 +1,8 @@
+---
+id: context-names-input
+category: Errors and guidance
+max: 3
+---
 # `context` names the failing input
 
 Practice 3.3 in the [guide](../../README.md).
@@ -89,3 +94,33 @@ test.each([
   expect(context.observed).toBe(observed);
 });
 ```
+
+### How to score
+
+Maximum: 3 points. Naming the failing input saves one guess per error; it matters on every input
+error, but the call can still be repaired from the message, so the weight is modest.
+
+Probe set: the first 10 read commands by sorted path of the sample, plus, for the unknown-flag
+provocation only, every write command of the sample (a parse failure never runs the command).
+Each provocation below is one counted error:
+
+- each probe command with `--no-such-flag`;
+- each read probe command with a required input omitted, when it has one;
+- each read probe command that takes an id, given `nonexistent-0`.
+
+A counted error violates when it exits 0 (the CLI accepted the garbage), or its stderr is not one
+JSON object, or `context.field` is absent, or
+`context.field` is not the flag as typed or the positional name shown in `--help`, or (for the
+unknown flag and the nonexistent id) `context.observed` is absent or differs from the typed value.
+A missing-input error needs `field` only.
+
+- **0:** At least 25% of the counted errors violate.
+- **About half (2):** Under 25% violate and at least one does (for example `field` is right on
+  every error but `observed` is missing on the nonexistent id).
+- **Maximum (3):** No counted error violates.
+- **Not applicable when:** the sample holds no command that takes any input (no flag and no
+  positional), so no provocation command exists.
+- **Evidence:** run each provocation under `timeout 10` (or `gtimeout 10`) with stdin from
+  `/dev/null`, stderr redirected to a file in the sandbox, and note the exit code. Read
+  `context.field` and `context.observed` from that file with a JSON parser (`jq .context` or
+  `node -e`). Compare them with the typed value and the usage line of `acme <command> --help`.

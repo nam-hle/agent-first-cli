@@ -1,3 +1,8 @@
+---
+id: work-where-agents-run
+category: Input
+max: 1
+---
 # Work where agents run
 
 Practice 5.5 in the [guide](../../README.md).
@@ -100,3 +105,22 @@ test("a refusal names an allowed place", () => {
   expect(JSON.parse(refused.stderr).context.allowed.length).toBeGreaterThan(0);
 });
 ```
+
+### How to score
+
+Maximum: 1 point. Without a known identity or a usable output path an agent guesses, but only in
+sandboxed runs.
+
+- **0:** When applicable, anything but Maximum: no `whoami` command (in a CLI with a remote
+  identity), any non-zero exit, a missing filterable user field, or, if the CLI has `--output`, a refusal of the scratch directory or a refusal that names
+  no allowed place in `context.allowed` or `hint`.
+- **Maximum (1):** `acme whoami --json` exits 0 with an object holding the identifier that filters
+  take, and, if the CLI has `--output`, it accepts a path in the scratch directory and refuses a
+  path outside it naming an allowed place. A CLI with no `--output` is judged on `whoami` alone.
+- **Not applicable when:** there is no agent sandbox, so the agent runs with a normal home, a free
+  filesystem and its own user; or the CLI has no remote identity (a purely local tool has nothing
+  to look up by `whoami`).
+- **Evidence:** Inside the sandbox session, signed in, run `acme whoami --json`, then
+  `acme <command> --output <scratch>/out.json` and
+  `acme <command> --output /nonexistent/dir/out.json`. Read the exit codes and the stderr envelope
+  of the refusal. The second path must not exist, so the probe never writes outside the sandbox.

@@ -1,3 +1,8 @@
+---
+id: enums-refuse-typos
+category: Input
+max: 5
+---
 # Enum over string; refuse typos
 
 Practice 5.3 in the [guide](../../README.md).
@@ -89,3 +94,25 @@ test.each(cases)("$path $flag refuses junk", ({ path, flag, choices }) => {
   if (choices) expect(envelope.context.allowed).toEqual(choices);
 });
 ```
+
+### How to score
+
+Maximum: 5 points. A silently accepted typo reads as a true empty result; it touches every choice
+and numeric flag.
+
+Sample the first 30 commands by sorted path plus every write. Collect their flags that take a closed
+set of values (listed in help as choices) or a number. Pass each one a junk value (`zzz-junk`). Two
+kinds of violation:
+
+- **Silent accept:** exit 0, an empty result, or a coerced value (`--limit abc` becomes 0).
+- **Weak refusal:** non-zero, but not exit 2, or no envelope naming the flag, or for a choice flag
+  no `allowed` list, or for a numeric flag no accepted range in `context`.
+
+- **0:** At least 25% of the collected flags silently accept junk.
+- **About half (3):** Under 25% silently accept, but some refusals are weak or some silently
+  accept (for example `--state opne` exits 2 with a message and no `allowed` list).
+- **Maximum (5):** Every collected flag refuses junk with exit 2 and an envelope naming the flag,
+  with `allowed` for choices and the range for numbers.
+- **Not applicable when:** no sampled command has a choice or numeric flag.
+- **Evidence:** Run `acme <command> --<flag> zzz-junk --no-input` for each collected flag. Read the
+  exit code and the stderr envelope; for choices compare `allowed` with the help text.

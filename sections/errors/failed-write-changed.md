@@ -1,3 +1,8 @@
+---
+id: failed-write-changed
+category: Safe writes
+max: 5
+---
 # A failed write says whether anything changed
 
 Practice 3.5 in the [guide](../../README.md).
@@ -86,3 +91,20 @@ test.each([
   expect(error.context.changed).toBe(changed);
 });
 ```
+
+### How to score
+
+Maximum: 5 points. A wrong retry duplicates work; it applies to every failing write.
+
+- **0:** Failed writes carry no statement of whether anything changed, only a message.
+- **About half (3):** `context.changed` exists but falls short of Maximum: inconsistent (a
+  boolean in some codes, a string in others), `"no"` and `"yes"` only and never `"unknown"` after a
+  lost connection, or consistent but transient codes lack `retryable: true`.
+- **Maximum (5):** Every failed write has `context.changed` as the string `"no"`, `"unknown"` or
+  `"yes"`, and transient codes also carry `retryable: true`.
+- **Not applicable when:** the CLI has no write commands.
+- **Evidence:** Only inside the entry page's "Probes and safety" sandbox, force a validation
+  failure (a write with a required field omitted) and a network failure (the service setting
+  pointed at a local port with no listener) with `--json`, and read `context.changed` in each
+  envelope. With no run (no sandbox, or no way to inject the failures) the score is capped at a
+  quarter of the maximum and marked "unverified" (see the entry page's Evidence rules).

@@ -1,3 +1,8 @@
+---
+id: slow-commands
+category: Output
+max: 5
+---
 # A slow command returns an id and a state
 
 Practice 4.5 in the [guide](../../README.md).
@@ -78,3 +83,33 @@ test("a timeout is transient and the job continues", () => {
   expect(["succeeded", "failed", "cancelled"]).toContain(JSON.parse(again.stdout).state);
 });
 ```
+
+### How to score
+
+Maximum: 5 points. A blocked call is killed and repeated, which duplicates the job.
+
+A slow command is a starter: one whose help says it starts a job or waits, or that takes more than
+10 seconds in the sandbox. Pairing: the waiter of a starter is the command that views or waits on
+its handle, and the starter itself when it accepts `--wait` or another flag that waits. Two kinds
+of violation, kept exclusive by what they judge:
+
+- **No handle (A), judged on the starter:** without `--wait` it does not return within 10
+  seconds, or its `--json` result lacks `id` or a `state` of `queued`, `running`, `succeeded`,
+  `failed` or `cancelled`.
+- **Broken wait (B), judged on the waiter:** it has no `--wait --timeout`, or
+  `--wait --timeout 1s` on a still-running job exits other than 7 or prints a `state` other than
+  `running`. A job that finished within the second is good if its exit matches its final state:
+  0 for `succeeded`, 8 for `cancelled`, and for `failed` the exit class of its cause (table in
+  3.4), 1 only if the cause is unknown. A starter with violation A is not also judged on B.
+
+The two tiers are deliberate: a CLI where every wait is broken (B only) scores half, the same as
+one where a single wait in a thousand is broken.
+
+- **0:** At least 25% of the slow commands have violation A.
+- **About half (3):** Under 25% have A and at least one slow command has A or B (for example the
+  start command returns `{"id":7,"state":"queued"}` but a timed-out wait exits 1).
+- **Maximum (5):** No slow command has A or B.
+- **Not applicable when:** no command is slow.
+- **Evidence:** `timeout 15 acme <start command> --json 2>/dev/null` (sandbox only) and read `id`
+  and `state`; then `acme <view command> <id> --wait --timeout 1s --json 2>/dev/null` and read
+  the exit code and `state`.
