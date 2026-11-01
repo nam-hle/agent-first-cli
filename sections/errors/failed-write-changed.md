@@ -1,6 +1,6 @@
 ---
 id: failed-write-changed
-category: Safe writes
+category: Write outcomes
 max: 5
 ---
 # A failed write says whether anything changed

@@ -1,6 +1,6 @@
 ---
 id: repeat-is-unchanged
-category: Safe writes
+category: Write outcomes
 max: 5
 ---
 # A repeated write ends `unchanged`

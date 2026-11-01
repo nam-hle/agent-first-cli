@@ -1,5 +1,7 @@
 # Agent-first CLI benchmark Implementation Plan
 
+> Note: rubric 2.0.0 regrouped the categories into eight; this plan keeps the original six.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Turn the 42-practice guide into a rubric an agent applies to any CLI, producing six 0 to 100 category scores with reasons and evidence.

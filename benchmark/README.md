@@ -4,7 +4,7 @@ Scores how agent-first a command line tool is, one practice at a time, using the
 practices. Design:
 [the benchmark design](../docs/superpowers/specs/2026-11-01-cli-benchmark-design.md).
 
-Rubric version: 1.8.0 ([changelog](CHANGELOG.md))
+Rubric version: 2.0.0 ([changelog](CHANGELOG.md))
 
 An agent applies this rubric by hand: no scripts, no runner. Each practice page has a "How to
 score" section with its maximum (front matter `max`) and its anchors. Fill in
@@ -12,14 +12,19 @@ score" section with its maximum (front matter `max`) and its anchors. Fill in
 
 ## Categories
 
-| Category | Practices | Possible |
-|---|---|---|
-| Command surface | 1.1 to 1.6 | 18 |
-| Input | 5.1, 5.3, 5.4, 5.5, 7.3 | 19 |
-| Output | 2.1 to 2.5, 4.1, 4.5, 7.5 | 34 |
-| Errors and guidance | 3.1, 3.2, 3.3, 3.4, 3.6, 4.2, 4.3 | 27 |
-| Safe writes | 2.6, 3.5, 5.2, 6.1 to 6.5 | 44 |
-| Discoverable and maintainable | 4.4, 7.1, 7.2, 7.4, 8.1 to 8.4 | 32 |
+| Category | Question | Practices | Possible |
+|---|---|---|---|
+| Command surface | What must an agent guess to name a command or flag? | 1.1 to 1.6 | 18 |
+| Input | What does an agent send in, and how does the tool take it? | 5.1, 5.3, 5.4, 5.5, 7.3 | 19 |
+| Output | What shape does a successful result have? | 2.1 to 2.5 | 24 |
+| Errors and guidance | What does a failure or a next step tell the agent? | 3.1, 3.2, 3.3, 3.4, 3.6, 4.2, 4.3 | 27 |
+| Safety and trust | What does the tool refuse to do unasked, and what will it not leak or obey? | 2.6, 5.2, 6.1, 6.2, 6.4 | 32 |
+| Write outcomes | What can an agent know and rely on after a write or a long job? | 3.5, 4.1, 4.5, 6.3, 6.5 | 19 |
+| Discoverable | How does an agent find what exists and how to use it? | 4.4, 7.1, 7.2, 7.4, 7.5 | 17 |
+| Evolving | Do names and surface stay stable and findable over time? | 8.1 to 8.4 | 18 |
+
+Mutual exclusion: each practice belongs to exactly one category, decided by which question it
+answers first, in the order listed above.
 
 ## How to run it
 
@@ -126,7 +131,7 @@ real run. Say in the report that these five used the narrower sample.
 
 ## Gates
 
-Three failures cap Safe writes, whatever easy points were earned:
+Three failures cap Safety and trust, whatever easy points were earned:
 
 - [6.4 `no-yes-or-force`](../sections/writes/no-yes-or-force.md): a skip flag over a real
   approval. Cap 40.
@@ -135,14 +140,14 @@ Three failures cap Safe writes, whatever easy points were earned:
 - [2.6 `sanitise-service-text`](../sections/output/sanitise-service-text.md): unsanitised
   service text. Cap 60.
 
-- Compute the Safe writes score first (earned/possible x 100, rounded), then cap it:
+- Compute the Safety and trust score first (earned/possible x 100, rounded), then cap it:
   score = min(score, cap). With several gates failed, the lowest cap applies. The displayed
   `earned/possible` stays the raw sum.
 - A gate fails when the practice earns at most a quarter of its maximum.
 - [`confirm`](../sections/writes/confirm.md) (6.2) is N/A when 6.4 is N/A. 6.4 is judged only from
   its own anchors; 6.2 is not measurable when no sandbox lets the prompt path run, whatever 6.4
   scored.
-- Show a gate as a badge in the report, for example "Safe writes capped at 40: 6.4".
+- Show a gate as a badge in the report, for example "Safety and trust capped at 40: 6.4".
 
 ## Not applicable
 
@@ -286,4 +291,4 @@ a blind round must not read them. 8.4 `audit-naming` is then N/A (not checked), 
   differ from the previous version; see the [changelog](CHANGELOG.md).
 - A change that moves a category's share of total points by more than 5 percentage points gets a
   changelog line.
-- The version is the `Rubric version: 1.8.0` line near the top of this page.
+- The version is the `Rubric version: 2.0.0` line near the top of this page.

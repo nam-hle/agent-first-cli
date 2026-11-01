@@ -25,8 +25,10 @@ worked example are on the entry page.
 | Input | <score> | e/p | n | n | n | n | n | none |
 | Output | <score> | e/p | n | n | n | n | n | none |
 | Errors and guidance | <score> | e/p | n | n | n | n | n | none |
-| Safe writes | <score> | e/p | n | n | n | n | n | capped at N: id |
-| Discoverable and maintainable | <score> | e/p | n | n | n | n | n | none |
+| Safety and trust | <score> | e/p | n | n | n | n | n | capped at N: id |
+| Write outcomes | <score> | e/p | n | n | n | n | n | none |
+| Discoverable | <score> | e/p | n | n | n | n | n | none |
+| Evolving | <score> | e/p | n | n | n | n | n | none |
 
 Five biggest gains versus the last round: <id +n, ... up to five, or no previous round>
 

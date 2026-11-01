@@ -1,6 +1,6 @@
 ---
 id: no-secrets-in-flags
-category: Safe writes
+category: Safety and trust
 max: 8
 ---
 # No secret in a flag or an environment variable
@@ -106,4 +106,4 @@ Maximum: 8 points. A leaked credential is readable by the caller and any injecte
 - **Evidence:** Search every `acme <command> --help` for token, password, secret or key flags
   and for documented variables. Find the store location the docs or `acme config` print, then
   run `ls -l <store>` and check the mode and owner deny the calling user.
-- **Gate:** failing caps Safe writes at 40
+- **Gate:** failing caps Safety and trust at 40

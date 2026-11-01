@@ -1,6 +1,6 @@
 ---
 id: slow-commands
-category: Output
+category: Write outcomes
 max: 5
 ---
 # A slow command returns an id and a state

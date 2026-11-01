@@ -1,6 +1,6 @@
 ---
 id: dry-run
-category: Safe writes
+category: Safety and trust
 max: 5
 ---
 # Every write has `--dry-run`

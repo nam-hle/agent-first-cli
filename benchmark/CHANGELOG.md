@@ -1,5 +1,17 @@
 # Rubric changelog
 
+## 2.0.0
+
+Breaking: the 42 practices are regrouped into eight mutually exclusive categories, each defined by
+one question: Command surface, Input, Output, Errors and guidance, Safety and trust, Write
+outcomes, Discoverable, Evolving. Category scores are not comparable with 1.x category scores.
+Practice-level points are unchanged: no practice maximum, id or anchor changed.
+
+- The gates (6.4, 5.2, 2.6) now cap Safety and trust instead of Safe writes; caps stay 40, 40
+  and 60.
+- Category totals: 18, 19, 24, 27, 32, 19, 17, 18 (sum 174).
+- The summary table has eight rows in a fixed order.
+
 ## 1.8.0
 
 Ambiguities closed that two independent scorers listed, so scores may differ from 1.7.0. No

@@ -1,6 +1,6 @@
 ---
 id: sanitise-service-text
-category: Safe writes
+category: Safety and trust
 max: 8
 ---
 # Sanitise text that came from another system
@@ -133,4 +133,4 @@ form is a visible escape (for example the text `\u{202E}`) in the decoded value.
   score is then capped at a quarter of the maximum and marked "unverified" (see the entry
   page's Evidence rules). Any path run is scored.
   Default path clean with the JSON and error paths not run scores half, marked "unverified".
-- **Gate:** failing caps Safe writes at 60
+- **Gate:** failing caps Safety and trust at 60

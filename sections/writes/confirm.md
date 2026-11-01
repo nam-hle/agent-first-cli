@@ -1,6 +1,6 @@
 ---
 id: confirm
-category: Safe writes
+category: Safety and trust
 max: 3
 ---
 # Every write has `--confirm`, and an agent never needs it

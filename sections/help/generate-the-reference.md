@@ -1,6 +1,6 @@
 ---
 id: generate-the-reference
-category: Discoverable and maintainable
+category: Discoverable
 max: 3
 ---
 # Generate the reference, do not write it

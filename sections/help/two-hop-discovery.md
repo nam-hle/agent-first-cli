@@ -1,6 +1,6 @@
 ---
 id: two-hop-discovery
-category: Discoverable and maintainable
+category: Discoverable
 max: 5
 ---
 # Discoverable in two hops

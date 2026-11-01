@@ -1,6 +1,6 @@
 ---
 id: no-yes-or-force
-category: Safe writes
+category: Safety and trust
 max: 8
 ---
 # No `--yes` or `--force` over a real gate
@@ -131,4 +131,4 @@ it is gated if refused without a required confirm flag in a non-terminal run, ot
   exercised" (defined on the entry page, Probes and safety).
   Search `acme <command> --help` of every gated write for yes, force, skip and confirm flags.
   Find where the approval setting lives and run `ls -l` on it to see who can write it.
-- **Gate:** failing caps Safe writes at 40
+- **Gate:** failing caps Safety and trust at 40
