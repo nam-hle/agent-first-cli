@@ -7,10 +7,8 @@ export const CATEGORIES = [
   'Input',
   'Output',
   'Errors and guidance',
-  'Safety and trust',
-  'Write outcomes',
-  'Discoverable',
-  'Evolving'
+  'Writes',
+  'Discoverable and evolving'
 ];
 const ALLOWED_MAX = [1, 2, 3, 5, 8];
 const GATE_IDS = ['no-yes-or-force', 'no-secrets-in-flags', 'sanitise-service-text'];

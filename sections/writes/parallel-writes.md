@@ -1,6 +1,6 @@
 ---
 id: parallel-writes
-category: Write outcomes
+category: Writes
 max: 2
 ---
 # Plan for parallel writes

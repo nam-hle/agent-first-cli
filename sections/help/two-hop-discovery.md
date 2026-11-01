@@ -1,6 +1,6 @@
 ---
 id: two-hop-discovery
-category: Discoverable
+category: Discoverable and evolving
 max: 5
 ---
 # Discoverable in two hops

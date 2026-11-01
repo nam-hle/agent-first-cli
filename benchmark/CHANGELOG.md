@@ -1,5 +1,17 @@
 # Rubric changelog
 
+## 2.1.0
+
+Breaking: replaces the unreleased 2.0.0 eight-category grouping with six mutually exclusive
+categories, each defined by one question: Command surface, Input, Output, Errors and guidance,
+Writes, Discoverable and evolving. Category scores from 1.x and 2.0.0 are not comparable with
+2.1.0 scores. Practice-level points are unchanged: no practice maximum, id or anchor changed.
+
+- Each gate now caps its own category: 6.4 caps Writes at 40, 5.2 caps Input at 40 and 2.6 caps
+  Output at 60.
+- Category totals: 18, 27, 32, 32, 30, 35 (sum 174).
+- The summary table has six rows in a fixed order.
+
 ## 2.0.0
 
 Breaking: the 42 practices are regrouped into eight mutually exclusive categories, each defined by

@@ -1,6 +1,6 @@
 ---
 id: name-what-happened
-category: Write outcomes
+category: Writes
 max: 2
 ---
 # Say what happened and name the thing

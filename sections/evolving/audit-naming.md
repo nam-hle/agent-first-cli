@@ -1,6 +1,6 @@
 ---
 id: audit-naming
-category: Evolving
+category: Discoverable and evolving
 max: 2
 ---
 # Audit naming and record the decisions

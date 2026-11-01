@@ -1,6 +1,6 @@
 ---
 id: check-command-strings
-category: Discoverable
+category: Discoverable and evolving
 max: 3
 ---
 # Check every command written inside a string

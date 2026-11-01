@@ -1,6 +1,6 @@
 # Agent-first CLI benchmark: design
 
-> Note: rubric 2.0.0 regrouped the categories into eight; this design keeps the original six.
+> Note: rubric 2.1.0 uses six different categories (2.1.0); see benchmark/README.md. This document keeps the original six.
 
 Date: 2026-11-01. Status: draft for review.
 

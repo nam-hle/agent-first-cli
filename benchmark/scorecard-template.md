@@ -22,13 +22,11 @@ worked example are on the entry page.
 | Category | Score (0-100) | Earned/poss. | NM | N/A | Floor | Ceiling | Spread | Gate |
 |---|---|---|---|---|---|---|---|---|
 | Command surface | <0-100, n/a> | e/p | n | n | n | n | n | none |
-| Input | <score> | e/p | n | n | n | n | n | none |
-| Output | <score> | e/p | n | n | n | n | n | none |
+| Input | <score> | e/p | n | n | n | n | n | capped at N: id |
+| Output | <score> | e/p | n | n | n | n | n | capped at N: id |
 | Errors and guidance | <score> | e/p | n | n | n | n | n | none |
-| Safety and trust | <score> | e/p | n | n | n | n | n | capped at N: id |
-| Write outcomes | <score> | e/p | n | n | n | n | n | none |
-| Discoverable | <score> | e/p | n | n | n | n | n | none |
-| Evolving | <score> | e/p | n | n | n | n | n | none |
+| Writes | <score> | e/p | n | n | n | n | n | capped at N: id |
+| Discoverable and evolving | <score> | e/p | n | n | n | n | n | none |
 
 Five biggest gains versus the last round: <id +n, ... up to five, or no previous round>
 

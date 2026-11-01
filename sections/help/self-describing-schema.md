@@ -1,6 +1,6 @@
 ---
 id: self-describing-schema
-category: Discoverable
+category: Discoverable and evolving
 max: 3
 ---
 # The tool describes its own output, versioned

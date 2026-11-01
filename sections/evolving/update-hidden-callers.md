@@ -1,6 +1,6 @@
 ---
 id: update-hidden-callers
-category: Evolving
+category: Discoverable and evolving
 max: 3
 ---
 # Update the callers you cannot see

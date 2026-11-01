@@ -1,6 +1,6 @@
 ---
 id: snapshot-the-surface
-category: Evolving
+category: Discoverable and evolving
 max: 8
 ---
 # Snapshot the whole surface

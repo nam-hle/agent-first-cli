@@ -1,6 +1,6 @@
 ---
 id: repeat-is-unchanged
-category: Write outcomes
+category: Writes
 max: 5
 ---
 # A repeated write ends `unchanged`

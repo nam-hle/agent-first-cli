@@ -64,9 +64,14 @@ test('checkPage rejects a max outside 1, 2, 3, 5, 8', () => {
 });
 
 test('gate practices must carry a Gate line', () => {
-  for (const id of ['no-yes-or-force', 'no-secrets-in-flags', 'sanitise-service-text']) {
-    assert.ok(checkPage(page(id, 'Safety and trust', 5)).some((p) => p.includes('Gate')), id);
-    const gated = page(id, 'Safety and trust', 5, '- **Gate:** caps at half.\n');
+  const gates = {
+    'no-yes-or-force': 'Writes',
+    'no-secrets-in-flags': 'Input',
+    'sanitise-service-text': 'Output'
+  };
+  for (const [id, category] of Object.entries(gates)) {
+    assert.ok(checkPage(page(id, category, 5)).some((p) => p.includes('Gate')), id);
+    const gated = page(id, category, 5, '- **Gate:** caps at half.\n');
     assert.deepEqual(checkPage(gated), []);
   }
   assert.deepEqual(checkPage(page('other', 'Output', 5, '- **Gate:** extra.\n')), []);
@@ -112,17 +117,15 @@ test('--category rejects an unknown or missing value', () => {
 
 const EXPECTED_TOTALS = {
   'Command surface': 18,
-  Input: 19,
-  Output: 24,
-  'Errors and guidance': 27,
-  'Safety and trust': 32,
-  'Write outcomes': 19,
-  Discoverable: 17,
-  Evolving: 18
+  Input: 27,
+  Output: 32,
+  'Errors and guidance': 32,
+  Writes: 30,
+  'Discoverable and evolving': 35
 };
 
-test('there are eight categories with the expected totals across the real pages', () => {
-  assert.equal(CATEGORIES.length, 8);
+test('there are six categories with the expected totals across the real pages', () => {
+  assert.equal(CATEGORIES.length, 6);
   assert.deepEqual([...CATEGORIES].sort(), Object.keys(EXPECTED_TOTALS).sort());
   const pages = [];
   for (const dir of readdirSync(join(ROOT, 'sections'), { withFileTypes: true })) {
@@ -141,7 +144,7 @@ test('there are eight categories with the expected totals across the real pages'
   assert.deepEqual(totals, EXPECTED_TOTALS);
 });
 
-test('--category accepts each of the eight valid names', () => {
+test('--category accepts each of the six valid names', () => {
   for (const name of CATEGORIES) {
     const result = runCheck('--category', name);
     assert.equal(result.status, 0, `${name}: ${result.stdout}`);
