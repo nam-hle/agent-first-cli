@@ -20,10 +20,10 @@ Examples use a made-up tool called `acme`.
 1. [Names](#1-names) (6)
 2. [Output](#2-output) (6)
 3. [Errors](#3-errors) (6)
-4. [Success and next steps](#4-success-and-next-steps) (4)
+4. [Success and next steps](#4-success-and-next-steps) (5)
 5. [Input](#5-input) (5)
 6. [Writes](#6-writes) (5)
-7. [Help and discovery](#7-help-and-discovery) (4)
+7. [Help and discovery](#7-help-and-discovery) (5)
 8. [Evolving the surface](#8-evolving-the-surface) (4)
 
 Tags: `#strategic` shapes the design, `#advanced` needs infrastructure, `#security` concerns an
@@ -61,8 +61,9 @@ no alias is registered. Adding a verb means editing the list.
 
 ### 1.2 One group name, plural for collections
 
-**TL;DR:** A noun group is plural and has no singular twin. In a group with one verb, a plural noun
-takes `list` and a singular noun takes `view`.
+**TL;DR:** The top-level group for an entity is singular (`pr`, `ticket`); a group for a collection
+inside it is plural (`comments`, `pods`). No group has a singular twin. In a group with one verb, a
+plural noun takes `list` and a singular noun takes `view`.
 
 **Otherwise:** `comment` beside `comments` doubles the surface and splits the help.
 
@@ -204,7 +205,7 @@ acme pr list --json 2>/dev/null    # exactly one JSON document
 
 ```text
 Fetching page 2...          <- on stdout, before the JSON
-[{"id": 1}]
+{"items": [{"id": 1}]}
 ```
 
 **Check:** run the built binary with stderr discarded and parse stdout as exactly one document, for
@@ -212,11 +213,12 @@ every command.
 
 [Read more](sections/output/stdout-stderr.md) | [Return to top](#table-of-contents)
 
-### 2.2 `--json` on every command, flat and stable
+### 2.2 `--json` on every command, shallow and stable
 
-**TL;DR:** Every command has `--json`. Keys are flat, one name and one type per concept, one key style
-(camelCase), timestamps in ISO 8601. `--json` carries the same content as the human output, machine
-formatted.
+**TL;DR:** Every command has `--json`, and its result is always one object, never a bare array, so
+there is room for `next` (4.2) and a cut-off note (2.5). Keys are shallow (one level of nesting, such
+as `author.name`), one name and one type per concept, one key style (camelCase), timestamps in
+ISO 8601. `--json` carries the same content as the human output, machine formatted.
 
 **Otherwise:** A number in one command and a string in another for the same concept forces per-command
 parsing code.
@@ -292,8 +294,10 @@ acme pr list | cat             # no ESC bytes, no spinner, no pager
 
 ### 2.5 Bound every list and say when you cut
 
-**TL;DR:** Every list or search takes `--limit` with a declared default. A cut result says so and how
-to continue: "20 of 134, narrow with `--state`".
+**TL;DR:** Every list or search takes `--limit` with a declared default and a stated, deterministic
+order (a sort key plus the id, so pages never overlap). A cut result says so and how to continue:
+"20 of 134, narrow with `--state`". When narrowing is not enough, the JSON carries `total` and an
+opaque `nextCursor`, and `next` holds the runnable command that uses it.
 
 **Otherwise:** An unbounded dump fills the agent's context, and a silent cut-off looks like the whole
 answer.
@@ -311,7 +315,7 @@ answer.
 ```
 
 **Check:** a test finds every list and search command and asserts it takes `--limit` or is small by
-nature; a full page offers a bigger `--limit`.
+nature; a full page offers a bigger `--limit`; two runs over the same data return the same order.
 
 [Return to top](#table-of-contents)
 
@@ -420,8 +424,8 @@ other mention and checks the command and its flags exist.
 
 ### 3.4 The exit code is the class of failure
 
-**TL;DR:** One table maps codes to exit classes: success, unexpected, usage, not found, auth, denied,
-conflict, transient, cancelled. The tool prints the table.
+**TL;DR:** One table maps codes to exit classes: 0 success, 1 unexpected, 2 usage, 3 not found,
+4 auth, 5 denied, 6 conflict, 7 transient, 8 cancelled. The tool prints the table.
 
 **Otherwise:** Exit 1 for everything makes a script unable to tell "retry" from "fix your input".
 
@@ -443,9 +447,9 @@ acme ticket view NOPE-1; echo $?     # 1, same as every other failure
 
 ### 3.5 A failed write says whether anything changed
 
-**TL;DR:** On a failed write, `context.changed` is `false`, `"unknown"` after a lost connection or an
-unexpected error, or `true` when only showing the result failed. Transient codes carry
-`retryable: true` as data.
+**TL;DR:** On a failed write, `context.changed` is a string: `"no"`, `"unknown"` after a lost
+connection or an unexpected error, or `"yes"` when only showing the result failed. Transient codes
+carry `retryable: true` as data.
 
 **Otherwise:** After a timeout the agent cannot tell if the ticket was created. It retries and
 duplicates, or gives up and leaves the work undone.
@@ -454,6 +458,12 @@ duplicates, or gives up and leaves the work undone.
 
 ```json
 { "code": "NETWORK_ERROR", "context": { "changed": "unknown", "retryable": true } }
+```
+
+**Don't**
+
+```json
+{ "code": "NETWORK_ERROR", "context": { "changed": false } }   // a boolean here, a string there
 ```
 
 **Don't**
@@ -516,7 +526,7 @@ Done.
 
 ### 4.2 Offer the next step as data
 
-**TL;DR:** Add a `next` field to the JSON success envelope: up to three runnable commands using real
+**TL;DR:** Add a `next` field to the JSON result object: up to three runnable commands using real
 values from this output, never placeholders. Human mode prints it dimmed on stderr, only on a TTY.
 
 **Otherwise:** The agent invents the next command from memory, and gets it wrong when the tool
@@ -525,13 +535,13 @@ changed.
 **Do**
 
 ```json
-{ "status": "ok", "key": "ACME-12", "next": ["acme ticket view ACME-12"] }
+{ "key": "ACME-12", "next": ["acme ticket view ACME-12"] }
 ```
 
 **Don't**
 
 ```json
-{ "status": "ok", "next": ["acme ticket view <ticket>", "acme see-also"] }
+{ "next": ["acme ticket view <ticket>", "acme see-also"] }
 ```
 
 **Check:** a test asserts at most three, no `<placeholder>`, and each command exists.
@@ -588,6 +598,33 @@ flags included.
 
 [Return to top](#table-of-contents)
 
+### 4.5 A slow command returns an id and a state
+
+**TL;DR:** A command that can take minutes returns at once with an `id`, a `state` (`queued`,
+`running`, `succeeded`, `failed`, `cancelled`) and a `next` that resumes it. `--wait` blocks, and
+`--wait --timeout <duration>` that runs out exits as transient (7) with `state: running`: the job
+continues, and that is not a failure.
+
+**Otherwise:** The agent either hangs on a call with no end or polls blindly, and a timeout looks
+like a failed job, so it starts the work a second time.
+
+**Do**
+
+```json
+{ "id": 7, "state": "running", "next": ["acme build view 7 --wait --timeout 10m"] }
+```
+
+**Don't**
+
+```text
+(no output for eleven minutes, then exit 1 "timed out", the job still running)
+```
+
+**Check:** a test starts a job, waits past the timeout, asserts exit 7 with `state: running`, and that
+a second `--wait` on the same id reaches a final state.
+
+[Return to top](#table-of-contents)
+
 # 5. Input
 
 ### 5.1 A missing input fails naming the flag; nothing prompts without a terminal #strategic
@@ -600,8 +637,8 @@ without a TTY or under `--no-input`. A prompt is for people and never the only p
 **Do**
 
 ```text
-$ acme ticket create --no-input
-Error: missing required input. Pass --title.        (exit 2)
+$ acme ticket create --no-input                     (exit 2, envelope on stderr)
+{ "code": "VALIDATION_ERROR", "context": { "field": "--title" }, "hint": "Pass --title" }
 ```
 
 **Don't**
@@ -649,8 +686,9 @@ an error, not ignored. Numbers are parsed and junk is refused.
 **Do**
 
 ```text
-$ acme pr list --state opne
-Error: --state must be one of open, merged, declined
+$ acme pr list --state opne                         (exit 2, envelope on stderr)
+{ "code": "VALIDATION_ERROR",
+  "context": { "field": "--state", "observed": "opne", "allowed": ["open", "merged", "declined"] } }
 ```
 
 **Don't**
@@ -667,7 +705,8 @@ No pull requests.
 ### 5.4 Long text comes from a file or stdin
 
 **TL;DR:** Offer `--body-file <path>` beside `--body <text>`. Multi-line text through shell quoting
-gets mangled by agents and by shells.
+gets mangled by agents and by shells. The same goes for structured input: a command that takes many
+items reads a JSON file or stdin (`--input <path>`, `--input -`) beside its flags.
 
 **Otherwise:** Backticks, quotes and newlines in a comment body corrupt the command line.
 
@@ -684,7 +723,8 @@ acme pr comments add 42 --body "Fix `foo()`: it said \"done\"
 and broke on the second line"
 ```
 
-**Check:** a test posts a body with quotes, backticks and newlines through the file form.
+**Check:** a test posts a body with quotes, backticks and newlines through the file form, and one
+structured input through `--input`.
 
 [Return to top](#table-of-contents)
 
@@ -744,8 +784,9 @@ acme pr merge 42 --dry-run     # prints "would merge" without checking for confl
 ### 6.2 Every write has `--confirm`, and an agent never needs it
 
 **TL;DR:** `--confirm` skips the prompt a person sees on a terminal. Without a terminal, or under
-`--no-input`, a write runs directly, so an unattended caller does not need the flag. If approval
-matters, it is enforced outside the flag (see 6.4).
+`--no-input`, the prompt is not there, so an unattended caller does not need the flag. That is safe
+only when approval is enforced outside the flag (see 6.4); a prompt alone guards nothing from an
+agent.
 
 **Otherwise:** A prompt that exists only on a terminal leaves unattended writes either blocked or
 unguarded.
@@ -914,7 +955,8 @@ acme pr list --jq '.[].title' --output titles.txt
 acme pr list --json | jq '.[].title' > titles.txt
 ```
 
-**Check:** a docs test fails on a documented pipe or redirect.
+**Check:** a docs test fails on a documented pipe or redirect in a workflow. The test commands in
+this guide (`2>/dev/null` in 2.1, `| cat` in 2.4) are checks, not workflows, and are exempt.
 
 [Return to top](#table-of-contents)
 
@@ -939,6 +981,32 @@ docs/reference.md      <- edited by hand next to the code
 
 **Check:** a generation step in the build; a test fails on a command without a description or
 example.
+
+[Return to top](#table-of-contents)
+
+### 7.5 The tool describes its own output, versioned
+
+**TL;DR:** `acme schema <command>` prints the JSON Schema of that command's `--json` output, and the
+output names a `schemaVersion`. A new field is additive within a version; a rename or removal is
+breaking and bumps it. `acme --version` stays a plain version string.
+
+**Otherwise:** The agent learns the shape by trial, and cannot tell whether a changed output is a new
+tool version or its own mistake.
+
+**Do**
+
+```sh
+acme schema pr-list --json     # { "schemaVersion": "v1", "schema": { ... } }
+```
+
+**Don't**
+
+```text
+"The fields are listed in the wiki."
+```
+
+**Check:** a test validates every command's real `--json` output against its printed schema, and a
+snapshot (8.1) pins `schemaVersion`.
 
 [Return to top](#table-of-contents)
 
@@ -980,14 +1048,14 @@ stale instruction survives to break the next session.
 
 **Do**
 
-```text
-Error: unknown option --text (renamed to --body)
+```json
+{ "code": "UNKNOWN_OPTION", "message": "unknown option --text (renamed to --body)" }
 ```
 
 **Don't**
 
-```text
-Error: unknown option --text
+```json
+{ "code": "UNKNOWN_OPTION", "message": "unknown option --text" }
 ```
 
 **Check:** a test per entry in the removed-names table; a changelog entry marked breaking.
@@ -1047,7 +1115,7 @@ baseline from [clig.dev](https://clig.dev/). Agent angle from
 [Agent-first CLI: a design pattern](https://akeemjenkins.com/blog/agent-first-cli-a-design-pattern/),
 [CLI-first architecture](https://agents-squads.com/engineering/cli-first-architecture/) and
 [Designing a CLI for AI agents](https://arcjet.com/blog/designing-a-cli-for-ai-agents). Practices not
-traced to those come from running an agent-driven CLI in practice, and say so in their deep dive.
+traced to those come from running an agent-driven CLI in practice.
 
 ## Contributing
 
