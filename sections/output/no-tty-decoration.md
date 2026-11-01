@@ -102,14 +102,17 @@ when any of these holds:
   the default output format differs between the captured run and a run through a pseudo-terminal
   (for example text on a terminal, JSON when piped). A format difference is a different output
   structure (text versus JSON, or a presentation-only table on a terminal versus JSON when
-  captured), never a colour or width difference. Where a pseudo-terminal exists, an ESC byte
+  captured), never a colour or width difference. A documented, deliberate default of text on a
+  terminal and JSON when captured is still a format difference and still violates, because agents
+  run captured; the documentation does not excuse it. Where a pseudo-terminal exists, an ESC byte
   under `NO_COLOR=1` also counts.
 
 The terminal-versus-captured comparison covers at least 5 leaf commands (all if fewer than 5),
 the first leaves by sorted path, plus two writes in dry-run form (when fewer than two writes
-exist or none has a dry-run form, compare the leaf commands only). When no pseudo-terminal can be
-allocated, the comparison is "not run": mark the practice "unverified" and the score cannot
-exceed half.
+exist or none has a dry-run form, compare the leaf commands only). Recipe: from the shell tool,
+run the command under `script -q /dev/null <cmd>` and compare its stdout with the captured run.
+When that cannot be done, the comparison is "not run": mark the practice "unverified" and the
+score cannot exceed half.
 
 - **0:** At least 25% of the sampled commands violate.
 - **About half (2):** Under 25% violate and at least one does (for example `acme --help` is plain

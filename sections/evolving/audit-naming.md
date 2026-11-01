@@ -94,6 +94,8 @@ follows "because"; one without is a bare dismissal. U is the undecided share of 
   one "no change" is a bare dismissal.
 - **Maximum (2):** U is 0 and every "no change" is reasoned.
 - **Not applicable when:** the repo and docs are not readable (a closed or vendor CLI), or the
-  evidence is not readable (for example it exists only in a folder the scorer may not read).
+  evidence is not readable (for example it exists only in a folder the scorer may not read), or
+  the round is blind and has no access to the tool's own investigation notes (N/A, not checked,
+  never 0).
 - **Evidence:** list the folders above with `ls` and read the newest dated file. Capture its path
   and date, the compared kinds, and each finding with the sentence that records its decision.

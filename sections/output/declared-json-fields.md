@@ -92,9 +92,9 @@ it("every declared field is populated in real output", () => {
 Maximum: 3 points. Undeclared fields cost trial calls and context, but a wrong guess is visible.
 
 Count the commands among the sample (first 30 leaf commands by sorted path plus every write command)
-that have a JSON switch, and a command "lists its fields" only as the
-[entry page](../../benchmark/README.md#json-fields) defines both. A counted command violates when
-any of these holds:
+that have a JSON switch and were actually exercised (that is the denominator), and a command
+"lists its fields" only as the [entry page](../../benchmark/README.md#json-fields) defines both. A
+counted command violates when any of these holds:
 
 - **Undeclared:** the command does not list its JSON fields.
 - **Selection broken:** `--json=<first declared field>` does not return exactly that field, or
@@ -103,7 +103,9 @@ any of these holds:
 - **Drift:** a key in the plain `--json` result is not in the declared list, or a declared field
   is absent from every row of a result that has rows. The declared list must cover the result the
   command actually returns in JSON mode, including its dry-run result when it has one; a dry-run
-  result whose keys differ from the declared list is a violation.
+  result whose keys differ from the declared list is a violation. A command counts as undeclared
+  when its result has any key missing from the declared fields; an optional key absent from a
+  result is not drift.
 
 - **0:** At least 25% of the counted commands violate.
 - **About half (2):** Under 25% violate and at least one does (for example help lists the fields

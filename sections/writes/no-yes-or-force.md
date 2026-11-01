@@ -98,13 +98,17 @@ enforced outside the CLI process. A confirm flag that only skips the CLI's own p
 bypasses the approval is not a skip flag here; a flag or variable that bypasses it is. A
 destructive write is one that deletes, overwrites, merges or otherwise changes state in a way that
 cannot be undone. The CLI's own prompt, or a `--confirm`-style flag with no external approval, is a
-gate of the CLI's own. Judge the practice on the gated destructive writes only (those with a
-prompt, a confirm flag or an approval); a non-destructive write is never a 0 case here.
+gate of the CLI's own. The difference: a destructive local write (deletes or clears local state)
+gated only by the tool's own confirm flag counts as gated, with no cap, when the confirm is a
+required flag and the command is refused without it; a remote or shared destructive write with no
+gate beyond the CLI's own scores 0 as before. Judge the practice on the gated destructive writes
+only (those with a prompt, a confirm flag or an approval); a non-destructive write is never a 0
+case here.
 
 - **0:** Any gated destructive write has a flag or variable that bypasses the approval (`--yes`,
   `--force`, `--no-verify`, `ACME_ASSUME_YES=1`), or the only gate on a destructive write is the
   CLI's own (a prompt, or a confirm-style flag with no external approval), including a prompt
-  answered by piped input.
+  answered by piped input; the local-write case above is excepted.
 - **About half (4):** No gated destructive write has a skip flag or variable, but the approval
   decision lives where the caller can change it (a config file or setting the calling user can
   edit), so the gate is enforced inside the caller's reach.

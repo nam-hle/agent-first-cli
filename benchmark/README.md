@@ -4,7 +4,7 @@ Scores how agent-first a command line tool is, one practice at a time, using the
 practices. Design:
 [the benchmark design](../docs/superpowers/specs/2026-11-01-cli-benchmark-design.md).
 
-Rubric version: 1.4.0 ([changelog](CHANGELOG.md))
+Rubric version: 1.5.0 ([changelog](CHANGELOG.md))
 
 An agent applies this rubric by hand: no scripts, no runner. Each practice page has a "How to
 score" section with its maximum (front matter `max`) and its anchors. Fill in
@@ -38,6 +38,12 @@ The sample is the first 30 leaf commands (commands that have no subcommands) by 
 walking `--help`, plus every write command and every slow command, so writes and slow jobs are
 never left with nothing to score. For a practice about group names, the denominator is the groups
 that appear as ancestors of the sampled leaves.
+
+"Every write command" means every write up to 30; with more than 30, the first 30 in help order.
+Local access and configuration writes are included in that count.
+
+"First N" for commands always counts leaf commands by sorted path, taken from the sample above (for
+example, the first 10 read commands). A built-in per-group `help` pseudo-command is not a leaf.
 
 Practices judged from provoked errors (3.1, 3.2, 3.3, 3.4, 3.6) use a narrower sample: the first
 10 read commands plus every write command, and only for the unknown-flag probe. A parse failure
@@ -191,6 +197,9 @@ of all N/A points, including those not applicable by nature. Both figures are co
 session and printed for the session whose category score stands (the lower one). Categories that
 lose too much follow the [low-coverage rule](#scoring).
 
+A blind round is one scored without the tool's own investigation notes (audits, decision records);
+a blind round must not read them. 8.4 `audit-naming` is then N/A (not checked), never 0.
+
 ## Evidence
 
 - Every score cites one quoted command and its output, or one file and line.
@@ -218,4 +227,4 @@ lose too much follow the [low-coverage rule](#scoring).
   differ from the previous version; see the [changelog](CHANGELOG.md).
 - A change that moves a category's share of total points by more than 5 percentage points gets a
   changelog line.
-- The version is the `Rubric version: 1.4.0` line near the top of this page.
+- The version is the `Rubric version: 1.5.0` line near the top of this page.

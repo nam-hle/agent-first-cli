@@ -120,6 +120,9 @@ dashes, or the positional's help name) or a documented alias; the key's own name
 (for example `field`, `fields`, `input`, `missingFields`). The docs need not list the key
 names: a documented statement that errors carry a field naming the failing input counts
 when a sampled error shows such a key. A missing-input error needs the name only.
+A key named after the input (for example `package`) whose value is the observed input counts as
+naming the input; the key need not be documented when help or docs state that `context` holds the
+failed input.
 For an error with no failing input value (missing command, missing argument), listing the
 available commands or the missing argument under any documented key names the input.
 

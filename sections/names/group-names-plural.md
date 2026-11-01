@@ -96,7 +96,9 @@ singular, for example `status`, `access`, `process`, `class`, `address`, `alias`
 
 A mass or uncountable noun used as a group name (for example `access` or `settings` as a group
 of permissions or options, `acme access grant`) counts as a singular noun. The plural rule
-applies only to countable nouns (`pods`, `users`).
+applies only to countable nouns (`pods`, `users`). The "singular group that offers `list`"
+violation is waived for such a group when it has no list verb or its verbs act on a single mass
+resource (`acme access grant`, `acme telemetry send`).
 
 The sample is the one on the entry page's Sampling (the first 30 leaf commands by sorted path,
 plus every write and slow command). The groups counted are those that appear as ancestors of the

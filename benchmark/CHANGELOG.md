@@ -1,5 +1,30 @@
 # Rubric changelog
 
+## 1.5.0
+
+Anchors and definitions changed, so scores may differ from 1.4.0. No practice maximum changed, so
+no category share changed.
+
+- X1: a documented, deliberate text-on-terminal and JSON-when-captured default is still a format
+  difference and violates; the pseudo-terminal recipe is `script -q /dev/null <cmd>`.
+- X2: a mass noun group is singular, and the "singular group offers list" violation is waived when
+  it has no list verb or its verbs act on a single mass resource.
+- X3: a context key named after the input whose value is the observed input names the input; the
+  key need not be documented when help or docs say context holds the failed input.
+- X4: a destructive local write gated by a required, enforced confirm flag counts as gated with no
+  cap; an ungated remote or shared destructive write still scores 0.
+- X5: in a blind round without the tool's investigation notes, 8.4 is N/A (not checked), not 0.
+- X6: 2.3 counts the commands exercised; any result key missing from the declared fields makes a
+  command undeclared; absent optional keys are not drift; dry-run keys must be declared.
+- X7: a list command is any command returning a growable array of records; a command that states
+  no order counts as unbounded for the order sub-check.
+- X8: "first N" always counts leaf commands by sorted path from the sample; a built-in per-group
+  `help` pseudo-command is not a leaf.
+- X9: "every write" is every write up to 30, then the first 30 in help order, local access and
+  configuration writes included.
+- X10: the slow-command handle is any field named `id` or ending in `Id` plus a state field,
+  judged by behaviour; `--timeout` accepts the tool's documented unit.
+
 ## 1.4.0
 
 Anchors and definitions changed, so scores may differ from 1.3.0. No practice maximum changed, so
