@@ -113,8 +113,10 @@ sandboxed runs.
 
 The practice applies when the tool offers an output-path option, or an identity lookup, or has a
 remote identity (an identity on a remote service). The identity half is judged when the tool has a
-remote identity or a lookup (`whoami` or an equivalent); the output half is judged when it has an
-output-path option. A half that is not judged does not count against the tool. The allowed roots
+remote identity or a lookup (`whoami` or an equivalent: any
+command that prints the authenticated identity on the remote service; printing a configured
+default value does not count); the output half is judged when it has an output-path option.
+A half that is not judged does not count against the tool. The allowed roots
 are the working directory and the system temporary directory. A tool that refuses a path outside
 them with a hint naming the allowed roots is fine. A scratch directory counts as an allowed path
 only if it lies under the allowed roots.

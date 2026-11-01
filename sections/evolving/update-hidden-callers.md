@@ -92,7 +92,8 @@ per source); an undated entry sorts last. Instruction
 locations: `hooks/`, `skills/`, `.claude/`, `docs/`, `scripts/`, `AGENTS.md`, `CLAUDE.md` and
 `.github/` or `.bitbucket/` templates in the repo, plus any location the repo's own list names. A
 stale hit is an old form found, as a whole token, inside a line that
-invokes the tool under test (a line containing `acme` followed by the old form), in an instruction
+invokes the tool under test (a line containing `acme` followed by the old form; an old name
+matches only inside a line that invokes the same command path as the old form), in an instruction
 location outside the changelog, the removed-names table and text marked as history. Matches in
 lines for other tools are ignored. Process
 evidence is present when a committed script, checklist or PR template names the locations to search
@@ -106,6 +107,7 @@ for an old form. An old form is stale when it has at least one stale hit.
   changelog and docs show no removed or renamed name.
 - **Evidence:** read the changelog for the old forms, run `grep -rnF -- "<old form>"` over each
   existing location (read-only; skip a location outside the repo unless the repo names it), keep
-  only the matching lines that invoke `acme`, and
-  look for the process in `scripts/`, the PR template and `CONTRIBUTING.md`. Capture each old
-  form, the matching file and line, and the process file path.
+  only the matching lines that invoke the same command path as the old form (an old name
+  matches only inside such a line), and look for the process in `scripts/`, the PR template
+  and `CONTRIBUTING.md`. Capture each old form, the matching file and line, and the process
+  file path.

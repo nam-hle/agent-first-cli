@@ -112,11 +112,16 @@ Each provocation below is one counted error:
 
 A counted error violates when it exits 0 (the CLI accepted the garbage), or its stderr is not one
 JSON object, or the context has no key that carries the failing input's name, or that name is not
-the flag as typed or the positional name shown in `--help`, or (for the unknown flag and the
-nonexistent id) the context has no key that carries the observed value, or the value differs from
-the typed one. Any key counts (for example `field`, `fields`, `input`, `missingFields` for the
-name) when the tool's own docs or help state it; only that such a key exists is required, not its
-spelling. A missing-input error needs the name only.
+the help name of the input, a documented alias, or (for an unknown flag) the flag as
+typed, or (for the unknown flag and the nonexistent id) the context has no key that carries
+the observed value, or the value differs from the typed one. A context key counts when its
+value is the failing input's name as written in the command's help (the flag with its
+dashes, or the positional's help name) or a documented alias; the key's own name may vary
+(for example `field`, `fields`, `input`, `missingFields`). The docs need not list the key
+names: a documented statement that errors carry a field naming the failing input counts
+when a sampled error shows such a key. A missing-input error needs the name only.
+For an error with no failing input value (missing command, missing argument), listing the
+available commands or the missing argument under any documented key names the input.
 
 - **0:** At least 25% of the counted errors violate.
 - **About half (2):** Under 25% violate and at least one does (for example `field` is right on
@@ -127,5 +132,6 @@ spelling. A missing-input error needs the name only.
 - **Evidence:** run each provocation under `timeout 10` (or `gtimeout 10`) with stdin from
   `/dev/null`, stderr redirected to a file in the sandbox, and note the exit code. Read
   the context keys that carry the input name and the observed value from that file with a JSON
-  parser (`jq .context` or `node -e`), and check the keys are documented. Compare them with the
-  typed value and the usage line of `acme <command> --help`.
+  parser (`jq .context` or `node -e`), and check that a sampled error shows such a key (the
+  documentation need not list the key names). Compare them with the typed value and the usage
+  line of `acme <command> --help`.

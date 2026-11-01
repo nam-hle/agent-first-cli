@@ -130,9 +130,11 @@ A counted error violates when any of these holds:
 - **Missing key:** the object lacks `status`, `code`, `message` or `hint`, or its context has no
   key that carries the failing input's name, or, when the error concerns an input value, no key
   that carries the observed value (any such key counts when the tool's own docs or help state
-  it, as in [3.3](context-names-input.md)). An error with no value (missing command, missing
-  argument) needs the input name only. Only the context keys are relaxed; the other four keep
-  their names.
+  it, as in [3.3](context-names-input.md); the docs need not list the key names, a documented
+  statement that errors carry a field naming the failing input counts when a sampled error shows
+  such a key). An error with no value (missing command, missing argument) needs the input name
+  only; listing the available commands or the missing argument under any documented key names
+  it. Only the context keys are relaxed; the other four keep their names.
 - **Open code:** `code` does not match `^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$`.
 - **Leak:** stderr carries any stack trace or panic output.
 

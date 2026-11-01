@@ -94,6 +94,10 @@ A word ending in `s` is plural only when it is a plural noun. A singular noun en
 singular, for example `status`, `access`, `process`, `class`, `address`, `alias`, `series`,
 `analysis`, `bus`, `focus`, `canvas`. Judge any other such word by its meaning.
 
+A mass or uncountable noun used as a group name (for example `access` or `settings` as a group
+of permissions or options, `acme access grant`) counts as a singular noun. The plural rule
+applies only to countable nouns (`pods`, `users`).
+
 The sample is the one on the entry page's Sampling (the first 30 leaf commands by sorted path,
 plus every write and slow command). The groups counted are those that appear as ancestors of the
 sampled leaves; that is the denominator. Each distinct group name counts once, in the denominator

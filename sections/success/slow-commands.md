@@ -109,6 +109,10 @@ judge:
   class of its cause (table in 3.4), 1 only if the cause is unknown. A starter with violation A is
   not also judged on B.
 
+The exit codes named above (7, 8 and the class codes in 3.4) are the documented code for the
+class, with the guide's table as the reference. A different number for the same class is
+acceptable if the tool's own help or docs map it and it is used consistently.
+
 The two tiers are deliberate: a CLI where every wait is broken (B only) scores half, the same as
 one where a single wait in a thousand is broken.
 

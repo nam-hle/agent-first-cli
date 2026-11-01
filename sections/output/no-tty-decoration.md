@@ -101,11 +101,15 @@ when any of these holds:
   with `NO_COLOR=1 TERM=dumb` (relative timestamps such as "2 minutes ago" are not compared), or
   the default output format differs between the captured run and a run through a pseudo-terminal
   (for example text on a terminal, JSON when piped). A format difference is a different output
-  structure (text versus JSON), never a colour or width difference. Where a pseudo-terminal
-  exists, an ESC byte under `NO_COLOR=1` also counts.
+  structure (text versus JSON, or a presentation-only table on a terminal versus JSON when
+  captured), never a colour or width difference. Where a pseudo-terminal exists, an ESC byte
+  under `NO_COLOR=1` also counts.
 
-When no pseudo-terminal can be allocated, the terminal-versus-captured comparison is "not run":
-mark the practice "unverified" and the score cannot exceed half.
+The terminal-versus-captured comparison covers at least 5 leaf commands (all if fewer than 5),
+the first leaves by sorted path, plus two writes in dry-run form (when fewer than two writes
+exist or none has a dry-run form, compare the leaf commands only). When no pseudo-terminal can be
+allocated, the comparison is "not run": mark the practice "unverified" and the score cannot
+exceed half.
 
 - **0:** At least 25% of the sampled commands violate.
 - **About half (2):** Under 25% violate and at least one does (for example `acme --help` is plain

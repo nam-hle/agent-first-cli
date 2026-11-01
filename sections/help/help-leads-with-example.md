@@ -99,8 +99,9 @@ Sample: the leaf commands of the sample (first 30 leaf commands by sorted path f
 --help`, plus every write command). Help of a command is `acme <path> --help` stdout. A command
 violates when any of these holds:
 
-- no example leads: no example appears before the first flag line (a line whose first word
-  starts with `-`), or more than 3 non-blank lines precede it. An example is a line starting with
+- no example leads: the first section after the one-line summary and the usage line is not the
+  examples (a flags table before the examples fails; a one-line `-h, --help` hint in the usage
+  line is not a flags table). An example is a line starting with
   `acme <path>` or `$ acme <path>` that shows a runnable command with concrete values; a line of
   placeholders alone (`acme pr view <id>`) does not count;
 - a required argument is not marked: the help names a positional or required flag but neither
@@ -116,5 +117,6 @@ violates when any of these holds:
 - **Maximum (3):** No sampled command violates.
 - **Not applicable when:** never; a single-command CLI is sampled as `acme --help` itself.
 - **Evidence:** run `timeout 10 acme <path> --help` with stdin from `/dev/null` for each sampled
-  command, save stdout to a sandbox file, and read its first 12 non-blank lines for the example
-  and the whole text for the other three checks. Record one verdict per command and per check.
+  command, save stdout to a sandbox file, and check that the first section after the one-line
+  summary and usage line is the examples, and read the whole text for the other three checks.
+  Record one verdict per command and per check.

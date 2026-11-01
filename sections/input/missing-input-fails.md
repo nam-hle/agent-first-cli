@@ -95,15 +95,22 @@ test.each(leaves)("%j fails fast without input", (...path) => {
 
 Maximum: 8 points. A hang stalls a whole agent run with no output, and any command can have it.
 
-Sample the first 30 leaf commands by sorted path plus every write. Run each with no arguments, stdin
-closed and `--no-input`. A command needs input when its help marks a required flag or positional, or
-when its argument-less probe in the sandbox hangs or fails with a usage error. A command that
-succeeds with no input and marks nothing required is not counted. Count the rest.
+Sample the first 30 leaf commands by sorted path plus every write. Run each read with no
+arguments, stdin closed and `--no-input`. A write is probed only through its dry-run form (the
+entry page's [parse-only probe](../../benchmark/README.md#parse-only)) with the required input
+omitted; an invalid-flag probe is not a missing-input probe, and a write with no dry-run form is
+"not exercised" for this practice (not counted, not a violation). Hangs are judged on reads only.
+A command needs input when its help marks a required flag or positional, or when its
+argument-less probe in the sandbox hangs or fails with a usage error. A command that succeeds
+with no input and marks nothing required is not counted. A read that times out while still
+producing output is a slow read: not counted, neither a hang nor a weak failure. Count the rest.
 Two kinds of violation:
 
-- **Hang:** the command prompts or blocks until the timeout.
-- **Weak failure:** it exits 0 with the input omitted, or exits non-zero but not with 2, or
-  prints no envelope that names the missing flag or positional.
+- **Hang (reads):** the read prompts or blocks until the timeout. Exit by timeout counts as a
+  hang only when the read waited for input (a prompt or a stdin read).
+- **Weak failure:** it exits 0 with the input omitted, or exits non-zero but not with 2 (a
+  write dry-run probe that times out is one; a slow read is not), or prints no envelope that
+  names the missing flag or positional.
 
 A good command exits 2 with an envelope whose context names the flag, positional or missing
 list under any key that the tool's own docs or help state (for example `field`, `fields`, `input`,
@@ -116,6 +123,7 @@ list under any key that the tool's own docs or help state (for example `field`, 
 - **Not applicable when:** no sampled command needs input (none is counted).
 - **Evidence:** In the empty temporary working directory of the entry page's "Probes and safety"
   section, with a dedicated or copied data file for the CLI, run `acme <command> --no-input
-  < /dev/null` under `timeout 5` for each sampled command. Exit 124 is a hang; otherwise read the
-  exit code and the stderr envelope. Where a real service is the only target, the probe is "not
-  exercised".
+  < /dev/null` under `timeout 5` for each sampled read (writes: the dry-run form with the input
+  omitted). Exit 124 on a read is a hang only if it waited for input, a slow read (not
+  counted) if it was still producing output; otherwise read the exit code and the stderr
+  envelope. Where a real service is the only target, the probe is "not exercised".

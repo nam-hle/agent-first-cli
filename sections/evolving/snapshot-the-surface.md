@@ -108,7 +108,11 @@ stale when its committed entry differs from the live output (flag set or help li
 listed as a write, code, class or hint, description, or the text of `acme <path> --help` after
 whitespace normalisation: runs of whitespace and line breaks collapse to one space, so a
 difference in words, flags or ordering is stale and a difference only in wrapping is not). V is
-(missing + stale) over all sampled entries of exercised parts.
+the share of the V sample that is missing or stale. The V sample is drawn across the exercised
+parts: take the first ceil(20/E) entries of each exercised part in sorted order; a part's
+unused share is not redistributed, and a part with fewer entries gives all of them. When the
+total exceeds 20, drop entries from the last exercised parts first (in the order the parts are
+listed above), one per part from the end, until exactly 20 remain.
 
 - **0:** P is 0 (no artifact for any exercised part), or V is at least 25%.
 - **About half (4):** P is at least 1, V is under 25%, and either P is under E or V is above 0.

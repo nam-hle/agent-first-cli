@@ -4,7 +4,7 @@ Scores how agent-first a command line tool is, one practice at a time, using the
 practices. Design:
 [the benchmark design](../docs/superpowers/specs/2026-11-01-cli-benchmark-design.md).
 
-Rubric version: 1.3.0 ([changelog](CHANGELOG.md))
+Rubric version: 1.4.0 ([changelog](CHANGELOG.md))
 
 An agent applies this rubric by hand: no scripts, no runner. Each practice page has a "How to
 score" section with its maximum (front matter `max`) and its anchors. Fill in
@@ -67,7 +67,9 @@ real run. Say in the report that these five used the narrower sample.
   applies to the envelope as a whole.
 - <a id="write-command"></a>A write command is one that changes state outside the process and its
   own cache (a remote service, a repository, a shared file). The tool's own configuration and
-  cache files are not shared files. Commands that only change the tool's own local configuration
+  cache files are not shared files. A command that changes the current repository or working
+  tree (checkout, switch, reset) is a write; a download to a caller-chosen path is an output, not
+  a write. Commands that only change the tool's own local configuration
   or access settings are local writes.
   A local write is counted in the violation share of 6.1 and 6.2 only if the tool documents a
   dry-run or confirm form for it.
@@ -163,6 +165,13 @@ so the gap is visible even though it is not scored.
   because no run happened.
 - Probes that run a command with no arguments (for example for missing-input behaviour) run in the
   empty temporary working directory so default files cannot be touched.
+- <a id="parse-only"></a>A "parse-only probe" is the command with an invalid flag, or with its
+  dry-run form. Never run a write with no arguments in any other way.
+- Context-dependent commands (they need a project, branch or repository) are probed with the
+  context the tool's own read-only status or setup output reports; when the machine lacks such a
+  context the command is "not exercised".
+- The terminal-versus-captured comparison of 2.4 `no-tty-decoration` covers at least 5 leaf
+  commands plus two writes in dry-run form; see that page.
 - When a page's probe appends `--no-input` (or any optional flag), use it only if the command's
   help lists it; otherwise close stdin (`< /dev/null`) and use `timeout` or `gtimeout`.
 - Capturing output may use a pipe or a redirect to a file; the agent is not bound by the "no
@@ -209,4 +218,4 @@ lose too much follow the [low-coverage rule](#scoring).
   differ from the previous version; see the [changelog](CHANGELOG.md).
 - A change that moves a category's share of total points by more than 5 percentage points gets a
   changelog line.
-- The version is the `Rubric version: 1.3.0` line near the top of this page.
+- The version is the `Rubric version: 1.4.0` line near the top of this page.

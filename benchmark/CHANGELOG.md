@@ -1,5 +1,48 @@
 # Rubric changelog
 
+## 1.4.0
+
+Anchors and definitions changed, so scores may differ from 1.3.0. No practice maximum changed, so
+no category share changed.
+
+- U1: a command that changes the current repository or working tree (checkout, switch, reset) is a
+  write; a download to a caller-chosen path is an output, not a write.
+- U2: a mass or uncountable noun used as a group name counts as singular; the plural rule applies
+  only to countable nouns.
+- U3: an error with no failing input value names the input by listing the available commands or
+  the missing argument under any documented key.
+- U4: a context key counts when its value is the failing input's name as written in help or a
+  documented alias; the key's own name may vary.
+- U5: a "parse-only probe" is the command with an invalid flag or its dry-run form; a write is
+  never run with no arguments in any other way.
+- U6: the snapshot staleness share V is taken over up to 20 entries drawn across the
+  exercised parts, the first ceil(20/E) of each in sorted order.
+- U7: keys inside a service-defined map or dictionary (user data) are exempt from the key-style
+  rule.
+- U8: a presentation-only table on a terminal versus JSON when captured is a format difference;
+  the comparison covers at least 5 leaf commands plus two writes in dry-run form.
+- U9: a "natural follow-up" is a result that carries an identifier or key to pass to another
+  command, or a list.
+- U10: a served reference with summaries only is judged on summaries only; a command with no
+  summary counts as disagreeing; summaries-only with under 25% missing is the half case.
+- U11: help "leads with an example" when the examples are the first section after the summary and
+  usage line; a flags table before them fails.
+- U12: an equivalent identity lookup prints the authenticated identity on the remote service; a
+  configured default does not count.
+- U13: output sanitising is judged on the decoded value and the terminal bytes; a JSON escape that
+  decodes to a control or bidirectional character is raw.
+- U14: the docs need not list the context key names; a documented statement that errors carry a
+  field naming the failing input counts when a sampled error shows such a key.
+- U15: leading whitespace is trimmed from a line before testing that it starts with the command
+  path.
+- U16: exit codes are the documented code for each class; a different documented, consistently
+  used number is acceptable.
+- U17: context-dependent commands are probed with the context the tool's own read-only status
+  reports; without such a context they are "not exercised".
+- U18: an old name matches only inside a line that invokes the same command path as the old form.
+- U19: exit by timeout is a hang only when the command waited for input; a command still
+  producing output is a slow read.
+
 ## 1.3.0
 
 Anchors and definitions changed, so scores may differ from 1.2.0. No practice maximum changed, so

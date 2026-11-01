@@ -93,26 +93,33 @@ one documentation surface, not the commands themselves.
 Reference docs: the pages under `docs/reference/`, else under `docs/`, `reference/` or `api/`, or
 the published site that the README names, or a reference served by a command of the tool (for
 example a docs subcommand); a site that cannot be reached is not exercised, not 0. A served
-reference is reference docs, not "no reference docs".
+reference is reference docs, not "no reference docs". A served reference holds, for every
+command, its one-line summary and its flags, in one reference command or in per-command pages. A
+served reference with summaries but no flags is judged on summaries only: no flag comparison.
 Compared commands: the first 10 by sorted path of the benchmark sample (all, when fewer). A
-compared command disagrees when it has no reference page or section, or when the set of
-`--flag` names on its page (or in the served reference) differs from the set in
-`acme <path> --help` (ignoring `--help` and `--version`). A generation marker is present when the
+compared command disagrees when it has no reference page, section or (summaries-only) summary,
+or, unless the reference is summaries-only, when the set of `--flag` names on its page (or in
+the served reference) differs from the set in `acme <path> --help` (ignoring `--help` and
+`--version`). A generation marker is present when the
 first 10 lines of any compared page say it is generated or "do not edit", or the README, docs or
 package scripts name a command that produces the reference, or the reference is served by a
 command of the tool (the command itself is the marker) or by a documented generation step.
 
 - **0:** The repo and docs are readable, hold no reference docs (no pages, no site, no served
-  reference), or at least 25% of the compared commands disagree.
+  reference), or at least 25% of the compared commands disagree (for a summaries-only served
+  reference: at least 25% have no summary).
 - **About half (2):** Under 25% disagree and either at least one does or no generation marker is
-  present.
-- **Maximum (3):** No compared command disagrees and a generation marker is present.
+  present; or the reference is a summaries-only served one with under 25% of the compared
+  commands missing.
+- **Maximum (3):** The reference is not summaries-only (summary and flags for every compared
+  command), no compared command disagrees and a generation marker is present.
 - **Not applicable when:** the repo and docs are not readable (a closed or vendor CLI) and no
   command of the tool serves a reference (a served reference is scored on a binary-only run); or
   the only reference is a published site that cannot be reached.
 - **Evidence:** list the reference folder (or run the serving command, which is a read), read each
   compared page, and compare its flags with
-  `timeout 10 acme <path> --help` (stdin from `/dev/null`). Capture the page header and the
+  `timeout 10 acme <path> --help` (stdin from `/dev/null`); for a summaries-only served
+  reference, only check that each compared command has a summary. Capture the page header and the
   documented generation command. Run that command only when it can write to a sandbox directory
   (a documented output option); otherwise do not run it, and the documented name alone counts
   as the marker.

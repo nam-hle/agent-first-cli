@@ -105,6 +105,11 @@ Each provocation below is one counted run, with its expected exit status:
   [id probe rules](../../benchmark/README.md#id-probe) say what takes an id and how a denied
   answer is handled).
 
+The expected status is the documented code for the class; the numbers above are the guide's
+table, the reference. A tool that documents a different number for the same class (for example
+a different code for cancelled) is acceptable if the mapping is in its own help or docs and is
+used consistently.
+
 A counted run violates when its exit status differs from the expected one (including 0, even
 with an error body or empty output, and a timeout).
 

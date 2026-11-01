@@ -88,11 +88,11 @@ Maximum: 3 points. `next` saves a lookup after most results, but an agent can st
 follow-up by itself, so the weight is modest; a wrong `next` costs more than none.
 
 Examined commands: among the sample (first 30 leaf commands by sorted path), the commands whose
-result has a natural follow-up (it creates something, or lists or shows something with an id the
-caller can act on), that run with no required input and print JSON (an object or an array) under
-`--json`; other commands are not counted; writes only through
-`--dry-run` and `--json` when `--dry-run` is listed in their help, otherwise excluded. A command
-violates when any of these holds:
+result has a natural follow-up (a command whose result carries an identifier or key the caller
+can pass to another command, or whose result is a list), that run with no required input and
+print JSON (an object or an array) under `--json`; other commands are not counted; writes only
+through `--dry-run` and `--json` when `--dry-run` is listed in their help, otherwise excluded.
+A command violates when any of these holds:
 
 - **Too long:** `next` holds more than 3 entries.
 - **Placeholder:** an entry contains `<` and `>` around a word, or the literal `...`.

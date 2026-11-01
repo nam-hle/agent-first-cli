@@ -105,7 +105,8 @@ example `pr merge`) as the query and has two hops: hop 1 runs the search command
 hop 2 runs the explore command or `acme <path> --help` for the name hop 1 returned. A command is
 found when its path appears in the first page of hits (up to 10). The command probe violates when
 hop 1 exits non-zero, the command is not found in those hits, or hop 2 exits non-zero or prints no
-line starting with `acme <path>`. The extra probes: a search for `zzz-no-such` violates when its
+line starting with `acme <path>` (leading whitespace is trimmed from a line before this test).
+The extra probes: a search for `zzz-no-such` violates when its
 output names neither an explore command nor a topic list; the explore command with no topic
 violates when it exits non-zero, lists no topic, or no explore command exists.
 

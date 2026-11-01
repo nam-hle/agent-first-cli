@@ -103,6 +103,10 @@ exists only when the tool's documented output differs between a terminal and cap
 it exists and needs a pseudo-terminal that is not available, it is "not run". Stderr and streamed
 output are checked on whichever path emits them.
 
+Judge the decoded value an agent reads (after JSON decoding) and the bytes a terminal receives: a
+JSON escape sequence that decodes to a control or bidirectional character is raw. The sanitised
+form is a visible escape (for example the text `\u{202E}`) in the decoded value.
+
 - **0:** The default path, run with hostile bytes, carries a raw ESC sequence or U+202E from the
   service text or from echoed caller input.
 - **About half (4):** The default path is clean or was not run, and either a path that was run
@@ -119,9 +123,11 @@ output are checked on whichever path emits them.
 - **Evidence:** Only inside the entry page's "Probes and safety" sandbox, plant a title with
   `\u001b[2J` and U+202E in the sandbox's own data, then run `acme ticket view <key>` (captured
   stdout), the same with `--json` when that differs, and a failing command that echoes it. Check
-  each output for raw bytes with `cat -v`; also pass the hostile bytes as an argument where the
-  tool echoes argv. The unverified cap applies only when no output path was run with hostile
-  bytes (no sandbox, or no way to plant the text): the score is then capped at a quarter of the
-  maximum and marked "unverified" (see the entry page's Evidence rules). Any path run is scored.
+  each output for raw bytes with `cat -v` (for JSON, on the decoded value, for example after
+  `jq -r`, since an escape such as `\u001b` decodes to raw ESC); also pass
+  the hostile bytes as an argument where the tool echoes argv. The unverified cap applies only
+  when no output path was run with hostile bytes (no sandbox, or no way to plant the text): the
+  score is then capped at a quarter of the maximum and marked "unverified" (see the entry
+  page's Evidence rules). Any path run is scored.
   Default path clean with the JSON and error paths not run scores half, marked "unverified".
 - **Gate:** failing caps Safe writes at 60
