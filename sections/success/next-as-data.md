@@ -113,6 +113,11 @@ A command violates when any of these holds:
 The [small-samples rule](../../benchmark/README.md#small-samples) applies to the examined
 commands.
 
+A command that fails because the sandbox has no project or remote context (it needs a project or
+a PR id and fails with a missing-context error) is "not exercised" for the examined set, not
+probed with a guessed context. The scorer may name a context the tool itself lists as available
+only if its own list command prints it, and says so in the report.
+
 When the tool documents an envelope, `next` may sit beside the result object or inside it, as the
 entry page's envelope rule says.
 

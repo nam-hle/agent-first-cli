@@ -109,8 +109,8 @@ exits 0, longest tried first) exists and each `--flag` in it appears in that hel
 - **Dry run:** no `next` (or printed line) holds the same command with the same arguments minus
   `--dry-run`.
 - **Empty list:** the output is blank, or says nothing matched but offers no resolving command.
-- **Cut list:** it gives no count of omitted rows (`total`, "N more", "1 of N") or no resolving
-  command that returns more.
+- **Cut list:** it violates when either is missing: no count of omitted rows (`total`, "N more",
+  "1 of N"), or no resolving command that returns more.
 
 - **0:** At least 25% of the exercised dead ends violate.
 - **About half (1):** Under 25% violate and at least one does (for example a dry run and a cut

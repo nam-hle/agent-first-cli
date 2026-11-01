@@ -1,5 +1,39 @@
 # Rubric changelog
 
+## 1.7.0
+
+Ambiguities closed and one safety hole fixed, so scores may differ from 1.6.0. No practice
+maximum, front matter id or category possible total changed, so no category share changed.
+
+- Z1 (safety): a scorer ran a bare destructive write while sampling for 2.4. `no-tty-decoration`
+  now compares only the first 5 sampled read leaves and writes only in dry-run form; the entry page
+  requires classifying every sampled leaf as read or write from its help before running it, runs a
+  non-read leaf only in dry-run or parse form (else "not run"), and every fixed probe list runs
+  only classified reads or dry-run or parse forms.
+- Z2: 6.4 states one rule: a destructive write is gated only if its confirm is required and
+  refused without it in a non-terminal run; a local destructive write that runs without it is
+  ungated (0 anchor, cap) unless its help documents it as reversible, then it is out of scope.
+- Z3: 6.2 is not measurable when no sandbox lets the prompt path run, whatever 6.4 scored; the
+  "scores 0 when 6.4 fails" rule is removed.
+- Z4: the sample is the first 30 leaves by sorted path, plus every write not already inside them
+  up to 30 more in sorted path order, plus every slow command; "help order" is gone.
+- Z5: a command that fails for missing sandbox context is "not exercised" in `next-as-data` and
+  `missing-input-fails`, not probed with a guessed context; a context may be named only if the
+  tool's own list command prints it, and the report says so.
+- Z6: in `work-where-agents-run`, a remote identity with no identity lookup fails probe 1; probe 1
+  is "not run" only when not signed in.
+- Z7: in `json-everywhere`, a numeric epoch timestamp beside an ISO timestamp is a violation.
+- Z8: in `dead-ends-point-forward`, a cut list violates when either the omitted count or the
+  resolving command is missing.
+- Z9: `rename-leaves-a-hint` probes the newest 10 entries that are reads or have a dry-run or parse
+  form, skips writes without one, and is not measurable with fewer than 3 probeable entries.
+- Z10: in `snapshot-the-surface`, a snapshot lists a write when its command path appears in the
+  snapshot file; a write with no dry-run form still counts; the V boundary of 25% belongs to 0.
+- Z11: in `error-envelope` and `context-names-input`, a typed value split across two context keys
+  names the input if the keys together reproduce the typed value.
+- Z12: in `failed-write-changed`, when the network-failure half cannot run, the validation half
+  alone is scored and capped at half; the quarter cap applies only when neither half ran.
+
 ## 1.6.0
 
 Anchors and reporting changed, so scores may differ from 1.5.0. No practice maximum, front matter

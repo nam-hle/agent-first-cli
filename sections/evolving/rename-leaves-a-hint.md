@@ -88,8 +88,10 @@ table and a changelog exist, the table is the source of removed names and the ch
 supplements it. The 10 entries are the table's entries first, in file order, then changelog
 entries newest first up to 10 in total (not per source); an undated entry sorts last. An
 entry is probeable only when its command (the current path for a flag, the new path for a renamed
-command) is a read command; entries on a write command are not exercised (the old name could
-run the write) and renamed enum values are not exercised.
+command) is a read command or a write with a dry-run or parse-only form; probe that form. Entries
+on a write with neither are skipped (the old name could run the write) and renamed enum values
+are not exercised. Probe the newest 10 entries that are probeable. If fewer than 3 are
+probeable, the practice is not measurable.
 A probed entry violates when the old name is still accepted (it appears in the live
 `acme <path> --help`, or the probe exits 0: an alias exists), or when the refusal text (stderr, or
 the JSON `message` and `hint`) does not contain the new name, or, for a removal with no

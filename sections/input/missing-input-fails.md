@@ -108,6 +108,12 @@ producing output is a slow read: not counted, neither a hang nor a weak failure.
 **Fixed probe list.** The probe set is the sample of the entry page (first 30 leaf commands by
 sorted path plus every write up to 30), never a set the scorer picks. Run exactly:
 
+0. Classify each sampled leaf as read or write from its help first
+   ([classification rule](../../benchmark/README.md#classify)); only a classified read runs bare.
+   A command that fails because the sandbox has no project or remote context (it needs a project
+   or a PR id and fails with a missing-context error) is "not exercised", not probed with a
+   guessed context. The scorer may name a context the tool itself lists as available only if its
+   own list command prints it, and says so in the report.
 1. Each sampled read: `<tool> <read-command> --no-input < /dev/null` under `timeout 5`, in the
    empty temporary working directory.
 2. Each sampled write: `<tool> <write-command> --dry-run --no-input < /dev/null` with the required

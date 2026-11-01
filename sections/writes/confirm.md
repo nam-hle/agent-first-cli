@@ -89,9 +89,11 @@ Maximum: 3 points. A prompt that hangs an unattended caller costs time, not safe
 
 A confirm flag that only skips the CLI's own prompt is the flag this practice expects; it is not
 a skip over a gate. Only a flag that bypasses the [approval](../../benchmark/README.md#approval)
-makes `no-yes-or-force` fail.
+makes `no-yes-or-force` fail. This practice does not depend on 6.4's score: 6.4 is judged only
+from its own anchors. When no sandbox lets the prompt path run, 6.2 is not measurable, whatever
+6.4 scored; judge it from help and docs when the prompt cannot run.
 
-- **0:** `no-yes-or-force` fails, or at least 25% of the sampled writes are violations (a write
+- **0:** At least 25% of the sampled writes are violations (a write
   that lacks `--confirm`, or waits on a prompt such as "Merge? [y/N]" without a terminal or under
   `--no-input`; the [small-samples rule](../../benchmark/README.md#small-samples) applies).
   "Write command" is as defined in the [entry page](../../benchmark/README.md#write-command); a

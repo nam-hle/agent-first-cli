@@ -123,6 +123,8 @@ when a sampled error shows such a key. A missing-input error needs the name only
 A key named after the input (for example `package`) whose value is the observed input counts as
 naming the input; the key need not be documented when help or docs state that `context` holds the
 failed input.
+A typed value split across two context keys (for example `repo` and `path` holding halves of
+one typed id) counts as naming the input if the keys together reproduce the typed value.
 For an error with no failing input value (missing command, missing argument), listing the
 available commands or the missing argument under any documented key names the input.
 

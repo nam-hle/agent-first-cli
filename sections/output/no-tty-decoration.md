@@ -88,9 +88,9 @@ done
 
 Maximum: 3 points. Stray escape bytes cost tokens and a pager is a hang, but both are easy to spot.
 
-Sample the first 30 leaf commands by sorted path plus every write command (writes only against a
-sandbox service). Run each, and its `--help`, with stdout and stderr sent to one capture (a pipe or
-a redirect to a file) and stdin closed, under a 5 second timeout (`timeout` or `gtimeout`,
+Sample the first 30 leaf commands by sorted path plus every write command. Run each read leaf, each
+write in its dry-run or invalid-flag form only, and each `--help`, with stdout and stderr sent to one capture
+(a pipe or a redirect to a file) and stdin closed, under a 5 second timeout (`timeout` or `gtimeout`,
 whichever exists). A command violates
 when any of these holds:
 
@@ -107,9 +107,11 @@ when any of these holds:
   run captured; the documentation does not excuse it. Where a pseudo-terminal exists, an ESC byte
   under `NO_COLOR=1` also counts.
 
-The terminal-versus-captured comparison covers at least 5 leaf commands (all if fewer than 5),
-the first leaves by sorted path, plus two writes in dry-run form (when fewer than two writes
-exist or none has a dry-run form, compare the leaf commands only). Recipe: from the shell tool,
+The terminal-versus-captured comparison covers the first 5 sampled read leaves by sorted path (all
+if fewer than 5), plus two writes in dry-run form only (when fewer than two writes exist or none
+has a dry-run form, compare the read leaves only). Never run a bare write, and never run a leaf
+whose help is not read-only, for this comparison; classify each leaf as read or write from its help
+first (see "Probes and safety" on the entry page). Recipe: from the shell tool,
 run the command under `script -q /dev/null <cmd>` and compare its stdout with the captured run.
 When that cannot be done, the comparison is "not run": mark the practice "unverified" and the
 score cannot exceed half.

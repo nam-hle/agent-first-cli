@@ -4,7 +4,7 @@ Scores how agent-first a command line tool is, one practice at a time, using the
 practices. Design:
 [the benchmark design](../docs/superpowers/specs/2026-11-01-cli-benchmark-design.md).
 
-Rubric version: 1.6.0 ([changelog](CHANGELOG.md))
+Rubric version: 1.7.0 ([changelog](CHANGELOG.md))
 
 An agent applies this rubric by hand: no scripts, no runner. Each practice page has a "How to
 score" section with its maximum (front matter `max`) and its anchors. Fill in
@@ -35,12 +35,13 @@ score" section with its maximum (front matter `max`) and its anchors. Fill in
 ## Sampling
 
 The sample is the first 30 leaf commands (commands that have no subcommands) by sorted path from
-walking `--help`, plus every write command and every slow command, so writes and slow jobs are
-never left with nothing to score. For a practice about group names, the denominator is the groups
-that appear as ancestors of the sampled leaves.
+walking `--help`, plus every write not already inside them, up to 30 more in sorted path order,
+plus every slow command. So the sample holds at most 60 leaves plus the slow commands, and writes
+and slow jobs are never left with nothing to score. Help order is not used anywhere. For a
+practice about group names, the denominator is the groups that appear as ancestors of the sampled
+leaves.
 
-"Every write command" means every write up to 30; with more than 30, the first 30 in help order.
-Local access and configuration writes are included in that count.
+Local access and configuration writes are included in the write count.
 
 "First N" for commands always counts leaf commands by sorted path, taken from the sample above (for
 example, the first 10 read commands). A built-in per-group `help` pseudo-command is not a leaf.
@@ -138,8 +139,9 @@ Three failures cap Safe writes, whatever easy points were earned:
   score = min(score, cap). With several gates failed, the lowest cap applies. The displayed
   `earned/possible` stays the raw sum.
 - A gate fails when the practice earns at most a quarter of its maximum.
-- [`confirm`](../sections/writes/confirm.md) (6.2) is N/A when 6.4 is N/A, and scores 0 when 6.4
-  fails.
+- [`confirm`](../sections/writes/confirm.md) (6.2) is N/A when 6.4 is N/A. 6.4 is judged only from
+  its own anchors; 6.2 is not measurable when no sandbox lets the prompt path run, whatever 6.4
+  scored.
 - Show a gate as a badge in the report, for example "Safe writes capped at 40: 6.4".
 
 ## Not applicable
@@ -161,8 +163,9 @@ so the gap is visible even though it is not scored.
 <a id="not-measurable"></a>A practice that cannot run in a blind round with no fixture is "not
 measurable", reported as such and distinct from "N/A by nature" (the tool has nothing to exercise).
 Typical cases: 4.1 `name-what-happened`, 6.3 `repeat-is-unchanged`, 6.5 `parallel-writes`,
-`rename-leaves-a-hint`, 6.2 `confirm` (needs a real write), and 8.4 `audit-naming` when the
-investigation notes are unreadable. Its maximum is its "not-measurable points". A probe that cannot
+`rename-leaves-a-hint` (fewer than 3 probeable entries), 6.2 `confirm` (needs a real write; not
+measurable when no sandbox lets the prompt path run, whatever 6.4 scored), and 8.4
+`audit-naming` when the investigation notes are unreadable. Its maximum is its "not-measurable points". A probe that cannot
 run inside a probe list counts the same way for that probe: not pass, not fail.
 
 Both sums (`earned` and `possible`) leave the not-measurable points, and N/A by nature points leave
@@ -226,8 +229,13 @@ The [scorecard template](scorecard-template.md) holds the table to copy.
 - Context-dependent commands (they need a project, branch or repository) are probed with the
   context the tool's own read-only status or setup output reports; when the machine lacks such a
   context the command is "not exercised".
-- The terminal-versus-captured comparison of 2.4 `no-tty-decoration` covers at least 5 leaf
-  commands plus two writes in dry-run form; see that page.
+- The terminal-versus-captured comparison of 2.4 `no-tty-decoration` covers the first 5 sampled
+  read leaves plus two writes in dry-run form; see that page.
+- <a id="classify"></a>Before running ANY sampled leaf, classify it as read or write from its help
+  text. A leaf whose help is not read-only is run only with its dry-run form or an invalid-flag
+  parse probe. A leaf with no dry-run form that is not provably read-only is "not run". Never run
+  a command with no arguments unless it is classified read. Every fixed probe list on a practice
+  page runs only classified reads or dry-run or parse forms.
 - When a page's probe appends `--no-input` (or any optional flag), use it only if the command's
   help lists it; otherwise close stdin (`< /dev/null`) and use `timeout` or `gtimeout`.
 - Capturing output may use a pipe or a redirect to a file; the agent is not bound by the "no
@@ -277,4 +285,4 @@ a blind round must not read them. 8.4 `audit-naming` is then N/A (not checked), 
   differ from the previous version; see the [changelog](CHANGELOG.md).
 - A change that moves a category's share of total points by more than 5 percentage points gets a
   changelog line.
-- The version is the `Rubric version: 1.6.0` line near the top of this page.
+- The version is the `Rubric version: 1.7.0` line near the top of this page.

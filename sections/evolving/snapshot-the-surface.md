@@ -95,8 +95,11 @@ keys per command, (3) the list of write commands, (4) error codes with exit clas
 from `git ls-files` (under `tests/`, `snapshots/`, `docs/` or similar; any name).
 
 Sampled live entries: the first 30 leaf commands by sorted path of the sample, plus every write
-command. Part 1: every flag in their help. Part 2: the key set of the `--json` output of each
-sampled read command. Part 3: each sampled write command, listed as a write. Part 4: each error
+not already in them (up to 30 more, as on the entry page). Part 1: every flag in their help.
+Part 2: the key set of the `--json` output of each sampled read command. Part 3: each sampled
+write command, listed as a write; a snapshot "lists a write" when the
+write's command path appears in the snapshot file, and a write with no dry-run form still counts
+as a write. Part 4: each error
 code the live CLI lists (`acme explore` or the error output), first 10 by sorted code. Part 5:
 each environment variable named in live help, first 10 by sorted name. Part 6: each sampled
 command. A tool with no write command has part 3 not exercised. A part with no sampled live
@@ -108,7 +111,8 @@ stale when its committed entry differs from the live output (flag set or help li
 listed as a write, code, class or hint, description, or the text of `acme <path> --help` after
 whitespace normalisation: runs of whitespace and line breaks collapse to one space, so a
 difference in words, flags or ordering is stale and a difference only in wrapping is not). V is
-the share of the V sample that is missing or stale. The V sample is drawn across the exercised
+the share of the V sample that is missing or stale; the 25% boundary belongs to 0, as everywhere.
+The V sample is drawn across the exercised
 parts: take the first ceil(20/E) entries of each exercised part in sorted order; a part's
 unused share is not redistributed, and a part with fewer entries gives all of them. When the
 total exceeds 20, drop entries from the last exercised parts first (in the order the parts are

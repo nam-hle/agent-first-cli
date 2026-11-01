@@ -106,5 +106,7 @@ Maximum: 5 points. A wrong retry duplicates work; it applies to every failing wr
 - **Evidence:** Only inside the entry page's "Probes and safety" sandbox, force a validation
   failure (a write with a required field omitted) and a network failure (the service setting
   pointed at a local port with no listener) with `--json`, and read `context.changed` in each
-  envelope. With no run (no sandbox, or no way to inject the failures) the score is capped at a
-  quarter of the maximum and marked "unverified" (see the entry page's Evidence rules).
+  envelope. When the network-failure half cannot be run, the validation half alone is scored and
+  the score is capped at half (3) and marked "unverified". With neither half run (no sandbox, or
+  no way to inject the failures) the score is capped at a quarter of the maximum, marked
+  "unverified" (see the entry page's Evidence rules).

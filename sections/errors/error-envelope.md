@@ -135,7 +135,9 @@ A counted error violates when any of these holds:
   such a key). An error with no value (missing command, missing argument) needs the input name
   only; listing the available commands or the missing argument under any documented key names
   it. A key named after the input (for example `package`) whose value is the observed input
-  counts, as in [3.3](context-names-input.md). Only the context keys are relaxed; the other four
+  counts, as in [3.3](context-names-input.md). A typed value split across two context keys (for
+  example `repo` and `path` holding halves of one typed id) counts if the keys together
+  reproduce the typed value. Only the context keys are relaxed; the other four
   keep their names.
 - **Open code:** `code` does not match `^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$`.
 - **Leak:** stderr carries any stack trace or panic output.

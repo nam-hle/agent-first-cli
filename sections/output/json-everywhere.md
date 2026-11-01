@@ -107,7 +107,8 @@ any of these holds:
   nests objects more than one level, so `author.name` is fine and `author.org.name` is not. The
   envelope's own data member does not count as a level.
 - **Inconsistent:** a key is not camelCase (keys inside a service-defined map or dictionary,
-  which is user data, are exempt), a timestamp-looking value is not ISO 8601, or a key
+  which is user data, are exempt), a timestamp-looking value is not ISO 8601
+  (a numeric epoch timestamp beside an ISO timestamp counts as a violation), or a key
   that most other sampled commands type one way (`id` as a number) is typed another way here.
 
 Shape checks run only on commands that can be run safely (writes only against a sandbox service);

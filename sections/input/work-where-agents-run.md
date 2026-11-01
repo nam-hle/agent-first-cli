@@ -130,8 +130,10 @@ only if it lies under the allowed roots.
    option and `<scratch>` under an allowed root.
 3. Refused path (same condition): the same command with `--output /nonexistent/dir/out.json`.
 
-A probe that cannot run (not signed in, no sandbox, no command takes the option) is "not run". A
-not-run probe is not measurable: neither pass nor fail, and it leaves the judged count N. If N is
+A tool with a remote identity but no identity lookup at all fails probe 1 (0 for the practice),
+it is not "not run". Probe 1 is "not run" only when the tool is not signed in. A probe that cannot
+run (not signed in, no sandbox, no command takes the option) is "not run". A not-run probe is not measurable: neither pass nor fail, and it leaves the
+judged count N. If N is
 0 the practice is not measurable.
 
 **Pass rule, stated as counts.** Let N be the judged probes (1 to 3) and F the failing ones. A
