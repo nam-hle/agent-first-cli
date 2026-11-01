@@ -96,11 +96,13 @@ singular, for example `status`, `access`, `process`, `class`, `address`, `alias`
 
 The sample is the one on the entry page's Sampling (the first 30 leaf commands by sorted path,
 plus every write and slow command). The groups counted are those that appear as ancestors of the
-sampled leaves; that is the denominator.
+sampled leaves; that is the denominator. Each distinct group name counts once, in the denominator
+and in the violation share, however many parents it appears under; a name violates when any of
+its occurrences violates.
 
-- **0:** At least 25% of the groups in the sample are violations.
-- **About half (1):** At least one violation, but below 25% of the groups in the sample.
-- **Maximum (2):** No group in the sample is a violation.
+- **0:** At least 25% of the distinct group names in the sample are violations.
+- **About half (1):** At least one violation, but below 25% of the distinct group names.
+- **Maximum (2):** No group name in the sample is a violation.
 - **Not applicable when:** the CLI has no group that contains subcommands, or it has groups but
   no sampled leaf has an ancestor group (the denominator is zero).
 - **Evidence:** Walk `acme --help` and each group's help for the first 30 leaf commands by sorted

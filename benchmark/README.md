@@ -4,7 +4,7 @@ Scores how agent-first a command line tool is, one practice at a time, using the
 practices. Design:
 [the benchmark design](../docs/superpowers/specs/2026-11-01-cli-benchmark-design.md).
 
-Rubric version: 1.2.0 ([changelog](CHANGELOG.md))
+Rubric version: 1.3.0 ([changelog](CHANGELOG.md))
 
 An agent applies this rubric by hand: no scripts, no runner. Each practice page has a "How to
 score" section with its maximum (front matter `max`) and its anchors. Fill in
@@ -26,8 +26,10 @@ score" section with its maximum (front matter `max`) and its anchors. Fill in
 1. List the commands. Walk `--help` from the root down and record every command path.
 2. Build the sample (see Sampling) and write down which commands it holds.
 3. Run the probes each practice page names, on the sample only.
-4. Score each practice twice. The second pass does not see the first. Keep the lower score.
-5. Apply N/A and the gates (see below), then compute each category score.
+4. Score each practice in two independent scorer sessions (see
+   [reliability](#reliability)). Report both sessions' points per practice.
+5. In each session, apply N/A and the gates (see below), then compute that session's category
+   scores; the lower of the two sessions' category scores is the one reported.
 6. Write the report from the template, with evidence for every score.
 
 ## Sampling
@@ -84,12 +86,25 @@ real run. Say in the report that these five used the narrower sample.
   names an existing resource. A not-found probe (`nonexistent-0`) against a service that answers
   with the denied class instead of the not-found class (both are exit classes, defined on the
   [exit-code classes page](../sections/errors/exit-code-classes.md)) is "not exercised" for that
-  probe, not a
-  violation. A read-only access-check query about an unknown subject is a valid query: it is not
+  probe, not a violation. The probe value must match the shape of the placeholder: a well-formed
+  id that does not exist. A malformed value rejected at parse time with a usage error is not the
+  not-found probe; commands with format-validated inputs are excluded from the not-found probe
+  count. A read-only access-check query about an unknown subject is a valid query: it is not
   provoked and not counted.
-- Scored twice: the same agent scores each practice twice, the second pass blind to the first. The
-  lower score stands until a person settles a gap above a quarter of the maximum. The report flags
-  every such gap.
+- <a id="reliability"></a>Reliability: score by two independent scorer sessions, each in a fresh
+  context; neither sees the other's scores or evidence until both are written. A session may also
+  double-check its own pass. The per-practice table shows both sessions' points (two columns).
+  Each session computes its own category scores from its own points, N/A decisions and gates: N/A
+  and gates are applied per session before that session's category score. A gate that trips in
+  only one session caps only that session's category score. The category score reported is the
+  lower of the two sessions' category scores, shown with the earned/possible of the session whose
+  score is reported. The spread of a category is the difference between the two sessions'
+  category scores; a spread above 15 points marks the category "unstable" in the report. The
+  report lists every practice whose two points differ by more than a quarter of its maximum, and
+  every practice that is N/A in only one session, under "Practices that differ", for a person to
+  settle; until then each session keeps its own treatment. "n/a (low coverage)" is reported only
+  when it holds in both sessions; if it holds in only one, report the numeric session's score,
+  mark the category "unstable" and give no spread.
 
 ## Gates
 
@@ -161,16 +176,19 @@ are scored. The report prints two figures, with one definition each:
 "not checked" is the share of points of practices that are N/A or capped because they were not
 exercised or because the repo or docs were not readable (these five, and the
 [not exercised](#not-exercised) practices). A capped practice contributes the points the cap
-removes (its maximum minus the capped score ceiling), counted once. "N/A in total" is the share
-of all N/A points, including those not applicable by nature. Categories that lose too much follow
-the [low-coverage rule](#scoring).
+removes (its maximum minus the capped score ceiling), counted once; 2.4 contributes the points
+above half when its pseudo-terminal comparison was not run. "N/A in total" is the share
+of all N/A points, including those not applicable by nature. Both figures are computed per
+session and printed for the session whose category score stands (the lower one). Categories that
+lose too much follow the [low-coverage rule](#scoring).
 
 ## Evidence
 
 - Every score cites one quoted command and its output, or one file and line.
 - A command path "resolves" only when `acme <path> --help` exits 0 AND its text contains the full
   requested path (not only a group prefix). A CLI that prints its root help for any path resolves
-  only the root.
+  only the root. Before resolving, skip the tool's documented leading global flags and their
+  values (for example a working-directory flag).
 - Practices that need failure injection
   ([3.5](../sections/errors/failed-write-changed.md)) or a hostile fixture (2.6) are scored from a
   run. With no run, the score is capped at a quarter of the maximum and marked "unverified";
@@ -191,4 +209,4 @@ the [low-coverage rule](#scoring).
   differ from the previous version; see the [changelog](CHANGELOG.md).
 - A change that moves a category's share of total points by more than 5 percentage points gets a
   changelog line.
-- The version is the `Rubric version: 1.2.0` line near the top of this page.
+- The version is the `Rubric version: 1.3.0` line near the top of this page.

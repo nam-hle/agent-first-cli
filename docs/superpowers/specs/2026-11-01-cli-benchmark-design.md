@@ -123,22 +123,26 @@ agent sandbox; 2.3 and 7.5 when there is no `--json`.
   never inferred from reading code alone.
 - Evidence that lives outside the CLI (4.4, 8.1, 8.3, 8.4: docs, hooks, snapshots, history): the
   rubric names the files to inspect. If the repo and docs are readable and the evidence is absent,
-  the score is 0. If they are not readable (a closed or vendor CLI), the practice is N/A.
+  the score is 0. If they are not readable (a closed or vendor CLI), or the evidence itself is not
+  readable, the practice is N/A.
 - Binary-only run (my call): practices that can only be judged from a repo are N/A, and the report
   prints the share of points that could not be checked. A category below half checked reports
   "n/a (low coverage)".
-- Scored twice (my call): the same agent scores each practice twice, the second pass without seeing
-  the first. The lower score is kept until a person settles a difference of more than a quarter of
-  the maximum, which the report flags.
+- Two independent scorer sessions (my call): each in a fresh context, neither sees the other's
+  scores or evidence until both are written. Each session computes its own category scores (its
+  own points, N/A and gates); the category score reported is the lower of the two; a spread above
+  15 points marks the category "unstable"; practices differing by more than a quarter of the
+  maximum, or N/A in one session only, are listed for a person to settle. The "not checked" and
+  "N/A in total" figures are printed for the session whose score stands.
 - Sampling (my call): the first 30 commands by sorted path, plus every write command and every slow
   command, so practices about writes and slow jobs are never left with nothing to score.
 
 ## Report
 
 One page, in this order: rubric version and date, the CLI and commit judged, then for each
-category its score, `earned/possible` and any gate badge, then a per-practice table (id, points
-earned of maximum, one-line reason, evidence, N/A), then the flagged disagreements, then the five highest
-point gains available. No total.
+category its score, `earned/possible`, any gate badge, both sessions' scores and the spread, then
+a per-practice table (id, both sessions' points of maximum, one-line reason, evidence, N/A), then
+the practices that differ, then the five highest point gains available. No total.
 
 ## Evolving the rubric
 

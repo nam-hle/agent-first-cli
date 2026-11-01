@@ -95,7 +95,10 @@ Adding a verb means editing `VERBS`, which makes the change visible in review.
 Maximum: 5 points. A guessed verb that fails costs a turn on every noun; it touches every command.
 
 A single-word domain verb (`merge`, `approve`) is allowed when it names a distinct action that
-no core verb fits. The prefix rule covers only compound (hyphenated) domain verbs.
+no core verb fits. The prefix rule covers only compound (hyphenated) domain verbs. A single-word
+leaf that is a noun view (a log or diff view) is an allowed domain leaf, not a synonym of a core
+verb; a compound state name used as a verb (`needs-work`) violates unless it starts with a core
+verb.
 
 A violation is a sampled leaf that ends in a banned synonym of a core verb (`show`, `get`, `ls`,
 `rm`, `remove`, `fetch`, `describe`), an abbreviation, or a verb-noun shape such as

@@ -1,5 +1,27 @@
 # Rubric changelog
 
+## 1.3.0
+
+Anchors and definitions changed, so scores may differ from 1.2.0. No practice maximum changed, so
+no category share changed.
+
+- T1: scorer variance was seen in practice, so each practice is now scored by two independent
+  scorer sessions; the lower category score stands, a spread above 15 points marks a category
+  "unstable", and practices that differ by more than a quarter of the maximum are listed.
+- T2: a `next` entry that offers a larger limit or the next page counts as a cut signal.
+- T3: "resolves" skips the tool's documented leading global flags and their values.
+- T4: each distinct group name counts once in the group-name denominator and violation share.
+- T5: the declared JSON fields must cover the actual result, including the dry-run result.
+- T6: a single-word noun-view leaf is an allowed domain leaf; a compound state name used as a
+  verb violates unless it starts with a core verb.
+- T7: a default output format that differs between a terminal and captured stdout violates; with
+  no pseudo-terminal the comparison is not run and the score cannot exceed half.
+- T8: the not-found probe value must be a well-formed id that does not exist; format-validated
+  inputs are excluded.
+- T9: "newest 10" is defined by date and file name order; a removed-names table is the primary
+  source and the changelog supplements it.
+- T10: audit evidence that is not readable makes the audit practice not applicable.
+
 ## 1.2.0
 
 Anchors and definitions changed, so scores may differ from 1.1.0. No practice maximum changed, so

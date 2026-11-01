@@ -101,7 +101,9 @@ any of these holds:
   `--json=nosuchfield` exits 0 instead of a usage error that lists the valid fields. The
   `nosuchfield` probe runs on read commands only, never on a write.
 - **Drift:** a key in the plain `--json` result is not in the declared list, or a declared field
-  is absent from every row of a result that has rows.
+  is absent from every row of a result that has rows. The declared list must cover the result the
+  command actually returns in JSON mode, including its dry-run result when it has one; a dry-run
+  result whose keys differ from the declared list is a violation.
 
 - **0:** At least 25% of the counted commands violate.
 - **About half (2):** Under 25% violate and at least one does (for example help lists the fields
@@ -111,4 +113,5 @@ any of these holds:
 - **Evidence:** Read `acme <command> --help`, and the tool's reference page for the command, for
   the field list. Run `acme <command> --json=<field>
   2>/dev/null`, then `acme <command> --json=nosuchfield` and read the exit code and stderr. Compare
-  the keys of a plain `acme <command> --json 2>/dev/null` with the declared list.
+  the keys of a plain `acme <command> --json 2>/dev/null` with the declared list, and, for a
+  command with a dry-run form, the keys of its dry-run `--json` result with the declared list.

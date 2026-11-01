@@ -82,9 +82,14 @@ it, so the hint decides whether the break costs one retry or weeks.
 
 Entries: the removed or renamed flags and commands listed in a removed-names table (a file such as
 `src/removed-names.*`) or in `CHANGELOG.md` and `docs/`, newest 10, each as an old name and its new
-name (or "removed" with no replacement). An entry is probeable only when its command (the current
-path for a flag, the new path for a renamed command) is a read command; entries on a write command
-are not exercised (the old name could run the write) and renamed enum values are not exercised.
+name (or "removed" with no replacement). "Newest 10" means by date inside the changelog, newest
+first, and across several changelog files by file name descending. When both a removed-names
+table and a changelog exist, the table is the source of removed names and the changelog
+supplements it. The 10 entries are the table's entries first, in file order, then changelog
+entries newest first up to 10 in total (not per source); an undated entry sorts last. An
+entry is probeable only when its command (the current path for a flag, the new path for a renamed
+command) is a read command; entries on a write command are not exercised (the old name could
+run the write) and renamed enum values are not exercised.
 A probed entry violates when the old name is still accepted (it appears in the live
 `acme <path> --help`, or the probe exits 0: an alias exists), or when the refusal text (stderr, or
 the JSON `message` and `hint`) does not contain the new name, or, for a removal with no

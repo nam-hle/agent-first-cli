@@ -84,9 +84,14 @@ Maximum: 3 points. Stale callers fail every session that loads them, but the cou
 the few renames a tool makes, so the weight is moderate.
 
 Old forms: the removed or renamed flags and commands from the removed-names table, `CHANGELOG.md` or
-`docs/`, newest 10. Instruction locations: `hooks/`, `skills/`, `.claude/`, `docs/`, `scripts/`,
-`AGENTS.md`, `CLAUDE.md` and `.github/` or `.bitbucket/` templates in the repo, plus any location
-the repo's own list names. A stale hit is an old form found, as a whole token, inside a line that
+`docs/`, newest 10. "Newest 10" means by date inside the changelog, newest first, and across
+several changelog files by file name descending. When both a removed-names table and a changelog
+exist, the table is the source of removed names and the changelog supplements it. The 10 are the
+table's entries first, in file order, then changelog entries newest first up to 10 in total (not
+per source); an undated entry sorts last. Instruction
+locations: `hooks/`, `skills/`, `.claude/`, `docs/`, `scripts/`, `AGENTS.md`, `CLAUDE.md` and
+`.github/` or `.bitbucket/` templates in the repo, plus any location the repo's own list names. A
+stale hit is an old form found, as a whole token, inside a line that
 invokes the tool under test (a line containing `acme` followed by the old form), in an instruction
 location outside the changelog, the removed-names table and text marked as history. Matches in
 lines for other tools are ignored. Process

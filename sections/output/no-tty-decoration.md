@@ -98,15 +98,25 @@ when any of these holds:
 - **Pager:** there is evidence of one: a `less` or `more` process started by the CLI, or output
   that stops at a pager prompt such as `(END)` or `:`. A timeout alone is not a pager violation.
 - **Format changes with the terminal:** the data fields differ between the piped run and a run
-  with `NO_COLOR=1 TERM=dumb` (relative timestamps such as "2 minutes ago" are not compared).
-  Where a pseudo-terminal exists, an ESC byte under `NO_COLOR=1` also counts.
+  with `NO_COLOR=1 TERM=dumb` (relative timestamps such as "2 minutes ago" are not compared), or
+  the default output format differs between the captured run and a run through a pseudo-terminal
+  (for example text on a terminal, JSON when piped). A format difference is a different output
+  structure (text versus JSON), never a colour or width difference. Where a pseudo-terminal
+  exists, an ESC byte under `NO_COLOR=1` also counts.
+
+When no pseudo-terminal can be allocated, the terminal-versus-captured comparison is "not run":
+mark the practice "unverified" and the score cannot exceed half.
 
 - **0:** At least 25% of the sampled commands violate.
 - **About half (2):** Under 25% violate and at least one does (for example `acme --help` is plain
-  but `acme pr list` prints `\x1b[32m` colour codes into a pipe).
-- **Maximum (3):** No sampled command violates.
+  but `acme pr list` prints `\x1b[32m` colour codes into a pipe); or no command violates but the
+  pseudo-terminal comparison was not run (unverified).
+- **Maximum (3):** No sampled command violates and the pseudo-terminal comparison was run.
 - **Not applicable when:** never.
 - **Evidence:** `timeout 5 acme <command> 2>&1 < /dev/null | cat`, then search the capture for the
   byte 0x1b (for example `grep -c "$(printf '\033')"`) and for `\r`; compare data fields with
-  `NO_COLOR=1 TERM=dumb acme <command> 2>&1 < /dev/null | cat`. On a timeout, look for a `less` or
+  `NO_COLOR=1 TERM=dumb acme <command> 2>&1 < /dev/null | cat`. Compare the default output format
+  of the piped run with the one through a pseudo-terminal allocator available on the host (its
+  syntax differs between operating systems); if none can be used the comparison is not run. On a
+  timeout, look for a `less` or
   `more` process (`ps`) or a trailing `(END)` before calling it a pager.

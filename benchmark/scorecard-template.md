@@ -5,6 +5,7 @@ Rubric version: <x.y.z>. Date: <YYYY-MM-DD>.
 CLI judged: <name> at commit <sha or release version>. Run type: <repo and binary | binary only>.
 Not checked (N/A or capped because not exercised or repo or docs unreadable): <n>% of points.
 N/A in total (all N/A points, including N/A by nature): <n>% of points.
+Both figures are for the session whose category score stands (the lower one).
 Sample: <the commands used, one per line or comma separated>.
 
 ## Categories
@@ -20,19 +21,27 @@ No total score.
 | Safe writes | <score> | <earned>/<possible> | <Safe writes capped at N: id> |
 | Discoverable and maintainable | <score> | <earned>/<possible> | |
 
+Score is the lower of the two sessions' category scores; earned/possible is that session's.
+Each session applies its own N/A and gates before its category score.
+
+| Category | Session 1 | Session 2 | Spread | Unstable |
+|---|---|---|---|---|
+| <category> | <score> | <score> | <difference, none if low coverage in one> | <yes or blank> |
+
 ## Practices
 
-| id | Points | Reason | Evidence | N/A |
-|---|---|---|---|---|
-| <slug> | <earned> of <max> | <one line> | <command and output, or file:line> | <reason or blank> |
+| id | Session 1 points | Session 2 points | Reason | Evidence | N/A |
+|---|---|---|---|---|---|
+| <slug> | <earned> of <max> | <earned> of <max> | <one line> | <evidence> | <N/A reason> |
 
-## Flagged disagreements
+## Practices that differ
 
-Gap between the two passes above a quarter of the maximum. A person settles each one.
+Practices whose two sessions differ by more than a quarter of the maximum, or that are N/A in
+only one session. A person settles each; until then each session keeps its own treatment.
 
-| id | Pass 1 | Pass 2 | Kept (lower) |
-|---|---|---|---|
-| <slug> | <points> | <points> | <points> |
+| id | Session 1 | Session 2 |
+|---|---|---|
+| <slug> | <points or N/A> | <points or N/A> |
 
 ## Ungated destructive writes
 
@@ -61,11 +70,11 @@ Made-up tool `acme`, category Command surface (rubric <x.y.z>). Not a real resul
 |---|---|---|---|
 | Command surface | 72 | 13/18 | |
 
-| id | Points | Reason | Evidence | N/A |
-|---|---|---|---|---|
-| `closed-verb-set` | 3 of 5 | mixes `remove` and `delete` | `acme --help`: both listed | |
-| `group-names-plural` | 2 of 2 | all groups are plural | `acme --help`: `users`, `jobs` | |
-| `two-positionals` | 2 of 2 | no command takes more than two | `acme jobs run --help` | |
-| `one-flag-one-purpose` | 3 of 5 | `-f` is `--file` and `--force` | `acme --help` | |
-| `long-positive-flags` | 3 of 3 | all flags long and positive | `acme jobs run --help` | |
-| `typed-placeholders` | 0 of 1 | bare `<value>` in most help | `acme jobs run --help` | |
+| id | Session 1 | Session 2 | Reason | Evidence | N/A |
+|---|---|---|---|---|---|
+| `closed-verb-set` | 3 of 5 | 3 of 5 | mixes `remove`, `delete` | `acme --help` | |
+| `group-names-plural` | 2 of 2 | 2 of 2 | all groups plural | `acme --help` | |
+| `two-positionals` | 2 of 2 | 2 of 2 | none takes over two | `acme jobs run --help` | |
+| `one-flag-one-purpose` | 3 of 5 | 3 of 5 | `-f` is two flags | `acme --help` | |
+| `long-positive-flags` | 3 of 3 | 3 of 3 | all long, positive | `acme jobs run --help` | |
+| `typed-placeholders` | 0 of 1 | 0 of 1 | bare `<value>` | `acme jobs run --help` | |

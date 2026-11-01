@@ -109,8 +109,9 @@ by nature and is not counted. A counted command violates when any of these holds
 
 - **Unbounded:** `--help` lists no `--limit` (or equivalent) and no default page size.
 - **Silent cut:** with `--limit 1` over data of at least two rows, it returns one row and no
-  `total`, `hasMore`, `nextCursor` or sentence saying more exist. Not tested when the sandbox data
-  has fewer than two rows.
+  `total`, `hasMore`, `nextCursor`, sentence saying more exist, or `next` entry that offers a
+  larger limit or the next page. Any one of these is the "cut" signal. Not tested when the sandbox
+  data has fewer than two rows.
 - **Unstable order:** help states no order, or two identical runs return different row orders.
   Help "states an order" when it names a sort key or default order or offers a sort flag. A command
   with no stated order violates only if it returns more than one row.
