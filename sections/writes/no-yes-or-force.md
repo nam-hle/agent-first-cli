@@ -106,7 +106,9 @@ tool documents in its help that the write is reversible (restorable from a print
 kept copy), in which case it is out of scope for the gate. A remote or shared destructive write
 with no gate beyond the CLI's own scores 0. Judge the practice on the gated destructive writes
 only (those with a prompt, a confirm flag or an approval); a non-destructive write is never a 0
-case here.
+case here. Clearing or deleting the tool's own configuration, telemetry or cache is a local write:
+it is gated if refused without a required confirm flag in a non-terminal run, otherwise ungated
+(cap), unless documented reversible.
 
 - **0:** Any gated destructive write has a flag or variable that bypasses the approval (`--yes`,
   `--force`, `--no-verify`, `ACME_ASSUME_YES=1`), or the only gate on a destructive write is the

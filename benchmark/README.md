@@ -4,7 +4,7 @@ Scores how agent-first a command line tool is, one practice at a time, using the
 practices. Design:
 [the benchmark design](../docs/superpowers/specs/2026-11-01-cli-benchmark-design.md).
 
-Rubric version: 1.7.0 ([changelog](CHANGELOG.md))
+Rubric version: 1.8.0 ([changelog](CHANGELOG.md))
 
 An agent applies this rubric by hand: no scripts, no runner. Each practice page has a "How to
 score" section with its maximum (front matter `max`) and its anchors. Fill in
@@ -164,7 +164,8 @@ so the gap is visible even though it is not scored.
 measurable", reported as such and distinct from "N/A by nature" (the tool has nothing to exercise).
 Typical cases: 4.1 `name-what-happened`, 6.3 `repeat-is-unchanged`, 6.5 `parallel-writes`,
 `rename-leaves-a-hint` (fewer than 3 probeable entries), 6.2 `confirm` (needs a real write; not
-measurable when no sandbox lets the prompt path run, whatever 6.4 scored), and 8.4
+measurable when no sandbox lets the prompt path run, whatever 6.4 scored, and never judged from
+help), and 8.4
 `audit-naming` when the investigation notes are unreadable. Its maximum is its "not-measurable points". A probe that cannot
 run inside a probe list counts the same way for that probe: not pass, not fail.
 
@@ -285,4 +286,4 @@ a blind round must not read them. 8.4 `audit-naming` is then N/A (not checked), 
   differ from the previous version; see the [changelog](CHANGELOG.md).
 - A change that moves a category's share of total points by more than 5 percentage points gets a
   changelog line.
-- The version is the `Rubric version: 1.7.0` line near the top of this page.
+- The version is the `Rubric version: 1.8.0` line near the top of this page.

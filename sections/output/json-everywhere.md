@@ -113,7 +113,9 @@ any of these holds:
 
 Shape checks run only on commands that can be run safely (writes only against a sandbox service);
 the JSON switch is judged on all, from each command's own help or the global flag's
-documented scope.
+documented scope. For a command that cannot be run safely, help text is evidence only for the
+epoch-timestamp check (a documented numeric timestamp field beside an ISO one counts); every other
+shape check stays on commands actually run.
 
 - **0:** At least 25% of the sampled commands violate.
 - **About half (3):** Under 25% violate and at least one does (for example every read returns an

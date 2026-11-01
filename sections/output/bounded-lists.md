@@ -115,7 +115,8 @@ counted. A counted command violates when any of these holds:
   larger limit or the next page. Any one of these is the "cut" signal. Not tested when the sandbox
   data has fewer than two rows.
 - **Unstable order:** help states no order, or two identical runs return different row orders.
-  Help "states an order" when it names a sort key or default order or offers a sort flag. A command
+  Help "states an order" when it names a sort key, a default order, or offers a sort flag; a
+  statement that the order is the server's or unspecified is not stating an order. A command
   with no stated order violates only if it returns more than one row. For the order sub-check, a
   command that states no order counts as unbounded.
 

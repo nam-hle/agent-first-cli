@@ -91,7 +91,11 @@ Sample of strings: every command line that starts with `acme`, taken in this ord
 `--no-such-flag` on each of the first 10 sampled commands); the help examples of those 10 commands;
 then the code spans and fenced lines of `README.md` and `docs/**/*.md`, by sorted path. Strings
 holding a `<...>` placeholder, and strings inside a block marked as a deliberate counter-example
-(a "Don't" block), are not counted. A counted string resolves when its command path (the longest
+(a "Don't" block), are not counted. Text marked as history (dated plans, specs, changelogs,
+investigation notes, anything under a docs folder of plans, specs or history) is not a source of
+strings. A shorthand of alternates (`acme a b|c|d`) is checked per alternate, and a prefix match
+on the group word alone does not resolve an alternate that does not exist. A counted string
+resolves when its command path (the longest
 leading run of non-flag words for which `acme <path> --help` exits 0) exists and every `--flag` in
 it appears in that help text. A path exits 0 for this only if its help text names the path, as in
 the entry page's "resolves" rule. A counted string violates when it does not resolve.

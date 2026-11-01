@@ -94,7 +94,10 @@ it.each([["--json"], []])("hostile title is neutralised %s", (...flags) => {
 Maximum: 8 points. Service text reaches the model as instructions and the screen as escapes.
 
 Scope: service text, and also caller input the tool echoes (for example argv echoed into `next`
-or an error), because an agent can relay hostile text. A run that feeds hostile bytes through any
+or an error), because an agent can relay hostile text. A command that echoes a caller-supplied
+subject or id into `data` or `next` counts as echoing; plant the hostile bytes in that argument.
+Sanitising must hold on the default, JSON and terminal paths. A run that feeds hostile
+bytes through any
 output path counts as a run; score from the paths run.
 
 Output paths, per mode: (1) the default path, the output when stdout is captured; (2) the JSON

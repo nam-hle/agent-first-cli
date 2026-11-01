@@ -101,7 +101,8 @@ write command, listed as a write; a snapshot "lists a write" when the
 write's command path appears in the snapshot file, and a write with no dry-run form still counts
 as a write. Part 4: each error
 code the live CLI lists (`acme explore` or the error output), first 10 by sorted code. Part 5:
-each environment variable named in live help, first 10 by sorted name. Part 6: each sampled
+each environment variable named in live help, first 10 by sorted name; a name that a committed
+help snapshot contains counts as present in the snapshot set. Part 6: each sampled
 command. A tool with no write command has part 3 not exercised. A part with no sampled live
 entry, or none the sandbox can exercise (for example JSON keys behind credentials it lacks), is
 not exercised: leave it out of the parts below and out of the share.

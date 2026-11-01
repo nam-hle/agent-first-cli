@@ -92,6 +92,8 @@ command) is a read command or a write with a dry-run or parse-only form; probe t
 on a write with neither are skipped (the old name could run the write) and renamed enum values
 are not exercised. Probe the newest 10 entries that are probeable. If fewer than 3 are
 probeable, the practice is not measurable.
+A rename that moves a flag, verb or group is probed with the old form as typed. A new name that
+appears in the snapshot counts as updated ([8.1](snapshot-the-surface.md)).
 A probed entry violates when the old name is still accepted (it appears in the live
 `acme <path> --help`, or the probe exits 0: an alias exists), or when the refusal text (stderr, or
 the JSON `message` and `hint`) does not contain the new name, or, for a removal with no

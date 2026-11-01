@@ -106,7 +106,9 @@ closed set of values (listed in help as choices) or a number. Pass each one a ju
 
 - **Silent accept:** exit 0, an empty result, or a coerced value (`--limit abc` becomes 0).
 - **Weak refusal:** non-zero, but not exit 2, or no envelope naming the flag, or for a choice flag
-  no `allowed` list, or for a numeric flag no accepted range in `context`.
+  no `allowed` list, or for a numeric flag no accepted range in `context`. The allowed list or
+  range counts if it is in `context` or named in the error `message`, as long as an agent can read
+  it from the error alone. For non-numeric junk on a numeric flag the same range rule applies.
 
 **Fixed probe list.** The probed flags are every choice or numeric flag of the sample of the entry
 page (first 30 leaf commands by sorted path plus every write up to 30), in sorted command path

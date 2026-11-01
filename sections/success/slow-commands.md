@@ -90,7 +90,10 @@ Maximum: 5 points. A blocked call is killed and repeated, which duplicates the j
 
 A slow command is a starter: one that starts or waits on work that can outlive the call (job
 starters, triggers, deploys, long-running operations) or whose docs describe an asynchronous
-result. A read that is merely slow while it returns its result is not a starter and never has
+result. A command is a starter only if its help says it starts or queues work that outlives the
+call; a flag that merely asks the server to merge or act later (an auto flag) is not a starter
+unless help says it returns before completion. A read that is merely slow while it returns its
+result is not a starter and never has
 violation A (bounded output is [2.5](../output/bounded-lists.md)). Without a fixture, judge a
 documented starter from its help and a dry-run result: a handle (id, state) is promised or it is
 not. Pairing: the waiter of a starter is the command that views or waits on

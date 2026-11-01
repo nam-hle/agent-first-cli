@@ -94,8 +94,10 @@ locations: `hooks/`, `skills/`, `.claude/`, `docs/`, `scripts/`, `AGENTS.md`, `C
 stale hit is an old form found, as a whole token, inside a line that
 invokes the tool under test (a line containing `acme` followed by the old form; an old name
 matches only inside a line that invokes the same command path as the old form), in an instruction
-location outside the changelog, the removed-names table and text marked as history. Matches in
-lines for other tools are ignored. Process
+location outside the changelog, the removed-names table and text marked as history. Text marked as
+history is dated plans, specs, changelogs, investigation notes and anything under a docs folder of
+plans, specs or history; it is not an instruction location. Matches in lines for other tools are
+ignored. Process
 evidence is present when a committed script, checklist or PR template names the locations to search
 for an old form. An old form is stale when it has at least one stale hit.
 

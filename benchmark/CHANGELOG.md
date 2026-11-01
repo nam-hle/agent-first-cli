@@ -1,5 +1,39 @@
 # Rubric changelog
 
+## 1.8.0
+
+Ambiguities closed that two independent scorers listed, so scores may differ from 1.7.0. No
+practice maximum, front matter id or category possible total changed, so no category share changed.
+
+- W1: `group-names-plural`: a mass-noun group is exempt from both "singular name offers `list`"
+  and "singular name offers no `view`" when its verbs act on one mass resource.
+- W2: `confirm` and the entry page: when the prompt path cannot run, 6.2 is not measurable and is
+  not judged from help.
+- W3: `enums-refuse-typos`: the allowed list or range counts in `context` or in the error
+  `message` if an agent can read it from the error alone; numeric flags with junk use the same
+  rule.
+- W4: `bounded-lists`: help states an order with a sort key, a default order or a sort flag; "the
+  server's order" or "unspecified" does not state one.
+- W5: `json-everywhere`: help text is shape evidence for commands that cannot run safely only for
+  the epoch-timestamp check; other shape checks stay on commands actually run.
+- W6: `update-hidden-callers` and `check-command-strings`: text marked as history is not an
+  instruction location; a shorthand of alternates is checked per alternate, and a group-word prefix
+  match does not resolve a missing alternate.
+- W7: `rename-leaves-a-hint` and `snapshot-the-surface`: a rename is probed with the old form as
+  typed and a new name in the snapshot counts as updated; environment variables named in a committed
+  help snapshot count as present.
+- W8: `slow-commands`: a starter's help must say it starts or queues work that outlives the call; a
+  flag that only asks the server to act later is not a starter.
+- W9: `work-where-agents-run`: an identity lookup prints the authenticated remote account or its
+  filterable id; per-service auth state alone is not one.
+- W10: `closed-verb-set`: single-word domain verbs are judged by the closed list; an unlisted word
+  violates only when a listed verb has the same meaning.
+- W11: `no-yes-or-force`: clearing the tool's own configuration, telemetry or cache is a local
+  write, gated only if refused without a required confirm flag in a non-terminal run.
+- W12: `sanitise-service-text`: a command that echoes a caller-supplied subject or id into data or
+  `next` counts as echoing; hostile bytes go through that argument on the default, JSON and
+  terminal paths.
+
 ## 1.7.0
 
 Ambiguities closed and one safety hole fixed, so scores may differ from 1.6.0. No practice
