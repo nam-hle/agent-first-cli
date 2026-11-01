@@ -9,7 +9,9 @@ too, because some harnesses allocate a terminal but still do not render it. Deco
 to a human eye; an agent has no eye, it has a context window that stores every byte, and an ESC
 sequence there is garbage that costs tokens and can break a parser. A pager is worse: it blocks
 waiting for a key that will never come, and the agent sees a hang. Decide once, centrally, whether
-the output is interactive, and let every command inherit the answer.
+the output is interactive, and let every command inherit the answer. The output format never
+depends on whether stdout is a terminal: `--json` is the only way to get JSON, so the same command
+gives the same data in CI and in a shell.
 
 ### Do
 
@@ -65,7 +67,8 @@ waits for input until the harness times out and kills the call.
 ### How to check it
 
 Run the built binary piped, and assert no ESC byte (0x1b) in stdout or in help, for every command.
-Run it once more with `NO_COLOR=1` under a pseudo-terminal if your test setup has one.
+Run it once more with `NO_COLOR=1` under a pseudo-terminal if your test setup has one. Also run
+each command with and without a pseudo-terminal and compare the stdout data: it must be the same.
 
 ```sh
 for cmd in "pr list" "pr view 1" "ticket list" "--help" "pr list --help"; do

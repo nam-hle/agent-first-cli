@@ -8,7 +8,10 @@ Commands are `acme <noun> <verb>`. The last segment is always a verb from a shor
 `view`, `create`, `edit`, `delete`, `search`, plus domain verbs such as `merge`), and a verb means
 the same on every noun. No synonyms, no aliases, no abbreviations. A person learns a vocabulary by
 reading help once; an agent learns it from the few commands it has seen and extrapolates. A closed
-set makes the extrapolation right: once `view` works on one noun, it works on all of them.
+set makes the extrapolation right: once `view` works on one noun, it works on all of them. A domain
+verb is allowed only when it composes several primitives or a core verb would mislead, and it still
+starts with a core verb: `add-column`, not `insert-column`. `create` makes a new top-level thing;
+`add` attaches something under an existing one.
 
 ### Do
 
@@ -37,7 +40,10 @@ either breaks callers nobody can find.
 ### Edge cases and trade-offs
 
 - "A domain verb is clearer than `edit`." Allowed: `merge`, `approve`, `transition`. Add it to the
-  list in one reviewed edit, and keep it single-meaning on every noun that has it.
+  list in one reviewed edit, and keep it single-meaning on every noun that has it. It must
+  compose several primitives or replace a core verb that would mislead, and it must start with a
+  core verb (`add-column`, not `insert-column`). `create` is a new top-level thing (`acme table
+  create`); `add` attaches under an existing one (`acme table add-column`).
 - "Aliases are harmless." They are not: they double the surface that help, snapshots and docs must
   cover, and they hide a typo that should fail. See [1.4](one-flag-one-purpose.md) for the same
   rule on flags and [evolving/rename-leaves-a-hint](../evolving/rename-leaves-a-hint.md) for how a
@@ -51,7 +57,7 @@ either breaks callers nobody can find.
 ### How to check it
 
 Walk the command tree in a test. Every leaf name must be in the verb list, none may be a banned
-synonym, and no command may register an alias.
+synonym, no command may register an alias, and every domain verb starts with a core verb.
 
 ```ts
 import { expect, it } from "vitest";

@@ -37,6 +37,9 @@ agent never learned the two meanings because nothing in the tool ever said they 
 
 - "Two commands really do mean different things." Then they need different names (`--max-rows`,
   `--max-bytes`), not one name with two meanings. The table forces that decision at review.
+- Two things of the same kind get flags named for their role, not the same flag twice. Do
+  `acme pr move --source 12 --target 15`; don't `acme pr move --pr 12 --pr 15`, where order
+  carries the meaning.
 - "Renaming breaks callers." Rename once, in the open, leave a hint, and update known callers; see
   [evolving/rename-leaves-a-hint](../evolving/rename-leaves-a-hint.md) and
   [evolving/update-hidden-callers](../evolving/update-hidden-callers.md). The cost grows with
@@ -51,7 +54,8 @@ agent never learned the two meanings because nothing in the tool ever said they 
 ### How to check it
 
 Dump every flag with its help text and its purpose into a committed file and review the diff. Ban
-the synonyms in a test.
+the synonyms in a test. The table lists the role names (`--source`, `--target`) as flags of their
+own.
 
 ```ts
 import { expect, it } from "vitest";
