@@ -1,6 +1,6 @@
 ---
 id: help-leads-with-example
-category: Discoverable and evolving
+category: Discoverability
 max: 3
 ---
 # Help leads with an example

@@ -1,6 +1,6 @@
 ---
 id: rename-leaves-a-hint
-category: Discoverable and evolving
+category: Maintainability
 max: 5
 ---
 # A rename leaves a hint behind

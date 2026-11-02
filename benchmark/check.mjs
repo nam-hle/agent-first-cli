@@ -6,9 +6,10 @@ export const CATEGORIES = [
   'Command surface',
   'Input',
   'Output',
-  'Errors and guidance',
-  'Writes',
-  'Discoverable and evolving'
+  'Errors',
+  'Effects',
+  'Discoverability',
+  'Maintainability'
 ];
 const ALLOWED_MAX = [1, 2, 3, 5, 8];
 const GATE_IDS = ['no-yes-or-force', 'no-secrets-in-flags', 'sanitise-service-text'];

@@ -1,6 +1,6 @@
 ---
 id: slow-commands
-category: Writes
+category: Effects
 max: 5
 ---
 # A slow command returns an id and a state

@@ -1,5 +1,19 @@
 # Rubric changelog
 
+## 2.2.0
+
+Breaking: replaces the unreleased 2.0.0 and 2.1.0 groupings with seven mutually exclusive
+categories, each defined by one question: Command surface, Input, Output, Errors, Effects,
+Discoverability, Maintainability. The former guidance practices are dissolved into Output
+(`next-as-data`) and Errors (`dead-ends-point-forward`). Category scores from 1.x, 2.0.0 and 2.1.0
+are not comparable with 2.2.0 scores. Practice-level points are unchanged: no practice maximum, id
+or anchor changed.
+
+- Each gate caps its own category: 6.4 caps Effects at 40, 5.2 caps Input at 40 and 2.6 caps
+  Output at 60.
+- Category totals: 18, 27, 35, 29, 30, 17, 18 (sum 174).
+- The summary table has seven rows in a fixed order.
+
 ## 2.1.0
 
 Breaking: replaces the unreleased 2.0.0 eight-category grouping with six mutually exclusive

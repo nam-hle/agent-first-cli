@@ -1,6 +1,6 @@
 ---
 id: audit-naming
-category: Discoverable and evolving
+category: Maintainability
 max: 2
 ---
 # Audit naming and record the decisions

@@ -1,6 +1,6 @@
 ---
 id: page-slug            # the page file name without .md
-category: Category name  # one of the six names listed in benchmark/README.md
+category: Category name  # one of the seven names listed in benchmark/README.md
 max: 3                   # one of 1, 2, 3, 5, 8 by severity and breadth
 ---
 # <Practice title>

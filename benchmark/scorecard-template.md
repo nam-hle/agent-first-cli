@@ -24,9 +24,10 @@ worked example are on the entry page.
 | Command surface | <0-100, n/a> | e/p | n | n | n | n | n | none |
 | Input | <score> | e/p | n | n | n | n | n | capped at N: id |
 | Output | <score> | e/p | n | n | n | n | n | capped at N: id |
-| Errors and guidance | <score> | e/p | n | n | n | n | n | none |
-| Writes | <score> | e/p | n | n | n | n | n | capped at N: id |
-| Discoverable and evolving | <score> | e/p | n | n | n | n | n | none |
+| Errors | <score> | e/p | n | n | n | n | n | none |
+| Effects | <score> | e/p | n | n | n | n | n | capped at N: id |
+| Discoverability | <score> | e/p | n | n | n | n | n | none |
+| Maintainability | <score> | e/p | n | n | n | n | n | none |
 
 Five biggest gains versus the last round: <id +n, ... up to five, or no previous round>
 

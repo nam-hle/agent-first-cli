@@ -4,7 +4,7 @@ Scores how agent-first a command line tool is, one practice at a time, using the
 practices. Design:
 [the benchmark design](../docs/superpowers/specs/2026-11-01-cli-benchmark-design.md).
 
-Rubric version: 2.1.0 ([changelog](CHANGELOG.md))
+Rubric version: 2.2.0 ([changelog](CHANGELOG.md))
 
 An agent applies this rubric by hand: no scripts, no runner. Each practice page has a "How to
 score" section with its maximum (front matter `max`) and its anchors. Fill in
@@ -16,10 +16,11 @@ score" section with its maximum (front matter `max`) and its anchors. Fill in
 |---|---|---|---|
 | Command surface | What must an agent guess to name a command or flag? | 1.1 to 1.6 | 18 |
 | Input | What goes in, and how does the tool take it, secrets included? | 5.1 to 5.5, 7.3 | 27 |
-| Output | What does a successful read return, and is it safe to read? | 2.1 to 2.6 | 32 |
-| Errors and guidance | What does a failure or a next step tell the agent? | 3.1 to 3.6, 4.2, 4.3 | 32 |
-| Writes | How does a change behave before it runs, while it runs and after it ran, including long jobs? | 4.1, 4.5, 6.1 to 6.5 | 30 |
-| Discoverable and evolving | How does an agent find what exists, and how does it stay findable over time? | 4.4, 7.1, 7.2, 7.4, 7.5, 8.1 to 8.4 | 35 |
+| Output | What does a successful result carry, its shape and its next step, and is it safe to read? | 2.1 to 2.6, 4.2 | 35 |
+| Errors | What does a failure carry, its shape, context and hint? | 3.1 to 3.6, 4.3 | 29 |
+| Effects | What does a command change, and how does it behave while it does, including long jobs? | 4.1, 4.5, 6.1 to 6.5 | 30 |
+| Discoverability | How does an agent find what exists and how to use it? | 4.4, 7.1, 7.2, 7.4, 7.5 | 17 |
+| Maintainability | How does the surface change without breaking agents? | 8.1 to 8.4 | 18 |
 
 Mutual exclusion: each practice belongs to exactly one category, decided by which question it
 answers first, in the order listed above.
@@ -132,7 +133,7 @@ real run. Say in the report that these five used the narrower sample.
 Three failures each cap the category their page belongs to, whatever easy points were earned:
 
 - [6.4 `no-yes-or-force`](../sections/writes/no-yes-or-force.md): a skip flag over a real
-  approval. Caps Writes at 40.
+  approval. Caps Effects at 40.
 - [5.2 `no-secrets-in-flags`](../sections/input/no-secrets-in-flags.md): a secret in a flag or
   variable. Caps Input at 40.
 - [2.6 `sanitise-service-text`](../sections/output/sanitise-service-text.md): unsanitised
@@ -145,7 +146,7 @@ Three failures each cap the category their page belongs to, whatever easy points
 - [`confirm`](../sections/writes/confirm.md) (6.2) is N/A when 6.4 is N/A. 6.4 is judged only from
   its own anchors; 6.2 is not measurable when no sandbox lets the prompt path run, whatever 6.4
   scored.
-- Show a gate as a badge in the report, for example "Writes capped at 40: 6.4".
+- Show a gate as a badge in the report, for example "Effects capped at 40: 6.4".
 
 ## Not applicable
 
@@ -191,8 +192,9 @@ category keeps its number.
 
 ## Summary table
 
-The report opens its categories with one fixed table, one row per category in the fixed order
-below, so two rounds diff cleanly. Columns, in order: category, score (0-100 or "n/a (low
+The report opens its categories with one fixed table, one row per category (seven rows) in this
+fixed order: Command surface, Input, Output, Errors, Effects, Discoverability, Maintainability. Two
+rounds then diff cleanly. Columns, in order: category, score (0-100 or "n/a (low
 coverage)"), earned/possible, not-measurable points (NM), N/A points, floor, ceiling, spread (the
 two sessions' difference), gate status (a badge or "none"). Figures are the standing session's.
 Under the table, two fixed lines:
@@ -289,4 +291,4 @@ a blind round must not read them. 8.4 `audit-naming` is then N/A (not checked), 
   differ from the previous version; see the [changelog](CHANGELOG.md).
 - A change that moves a category's share of total points by more than 5 percentage points gets a
   changelog line.
-- The version is the `Rubric version: 2.1.0` line near the top of this page.
+- The version is the `Rubric version: 2.2.0` line near the top of this page.

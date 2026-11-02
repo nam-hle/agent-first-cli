@@ -1,6 +1,6 @@
 ---
 id: next-as-data
-category: Errors and guidance
+category: Output
 max: 3
 ---
 # Offer the next step as data

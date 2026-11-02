@@ -65,7 +65,7 @@ test('checkPage rejects a max outside 1, 2, 3, 5, 8', () => {
 
 test('gate practices must carry a Gate line', () => {
   const gates = {
-    'no-yes-or-force': 'Writes',
+    'no-yes-or-force': 'Effects',
     'no-secrets-in-flags': 'Input',
     'sanitise-service-text': 'Output'
   };
@@ -118,14 +118,15 @@ test('--category rejects an unknown or missing value', () => {
 const EXPECTED_TOTALS = {
   'Command surface': 18,
   Input: 27,
-  Output: 32,
-  'Errors and guidance': 32,
-  Writes: 30,
-  'Discoverable and evolving': 35
+  Output: 35,
+  Errors: 29,
+  Effects: 30,
+  Discoverability: 17,
+  Maintainability: 18
 };
 
-test('there are six categories with the expected totals across the real pages', () => {
-  assert.equal(CATEGORIES.length, 6);
+test('there are seven categories with the expected totals across the real pages', () => {
+  assert.equal(CATEGORIES.length, 7);
   assert.deepEqual([...CATEGORIES].sort(), Object.keys(EXPECTED_TOTALS).sort());
   const pages = [];
   for (const dir of readdirSync(join(ROOT, 'sections'), { withFileTypes: true })) {
@@ -144,7 +145,7 @@ test('there are six categories with the expected totals across the real pages', 
   assert.deepEqual(totals, EXPECTED_TOTALS);
 });
 
-test('--category accepts each of the six valid names', () => {
+test('--category accepts each of the seven valid names', () => {
   for (const name of CATEGORIES) {
     const result = runCheck('--category', name);
     assert.equal(result.status, 0, `${name}: ${result.stdout}`);

@@ -1,6 +1,6 @@
 ---
 id: failed-write-changed
-category: Errors and guidance
+category: Errors
 max: 5
 ---
 # A failed write says whether anything changed

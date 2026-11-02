@@ -1,6 +1,6 @@
 ---
 id: runnable-hints
-category: Errors and guidance
+category: Errors
 max: 5
 ---
 # The hint is a command that runs

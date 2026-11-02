@@ -1,6 +1,6 @@
 ---
 id: dry-run
-category: Writes
+category: Effects
 max: 5
 ---
 # Every write has `--dry-run`

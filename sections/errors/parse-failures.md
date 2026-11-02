@@ -1,6 +1,6 @@
 ---
 id: parse-failures
-category: Errors and guidance
+category: Errors
 max: 3
 ---
 # Parse failures look the same at any depth

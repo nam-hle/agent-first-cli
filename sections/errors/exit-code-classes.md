@@ -1,6 +1,6 @@
 ---
 id: exit-code-classes
-category: Errors and guidance
+category: Errors
 max: 3
 ---
 # The exit code is the class of failure

@@ -1,6 +1,6 @@
 ---
 id: error-envelope
-category: Errors and guidance
+category: Errors
 max: 8
 ---
 # One envelope for every failure

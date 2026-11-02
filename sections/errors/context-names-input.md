@@ -1,6 +1,6 @@
 ---
 id: context-names-input
-category: Errors and guidance
+category: Errors
 max: 3
 ---
 # `context` names the failing input

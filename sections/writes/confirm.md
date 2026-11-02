@@ -1,6 +1,6 @@
 ---
 id: confirm
-category: Writes
+category: Effects
 max: 3
 ---
 # Every write has `--confirm`, and an agent never needs it

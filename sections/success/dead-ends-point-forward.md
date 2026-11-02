@@ -1,6 +1,6 @@
 ---
 id: dead-ends-point-forward
-category: Errors and guidance
+category: Errors
 max: 2
 ---
 # Dry runs, empty results and cut-offs all point forward

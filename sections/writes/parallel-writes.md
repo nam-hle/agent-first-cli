@@ -1,6 +1,6 @@
 ---
 id: parallel-writes
-category: Writes
+category: Effects
 max: 2
 ---
 # Plan for parallel writes
