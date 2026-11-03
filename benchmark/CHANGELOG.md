@@ -1,5 +1,22 @@
 # Rubric changelog
 
+## 2.3.0
+
+Five practices added, and the probe of one changed, so scores may differ from 2.2.0. Existing
+practice maximums, ids and categories are unchanged. Category totals change, so 2.2.0 category
+scores are not comparable with 2.3.0 scores; compare on the practices both versions share.
+
+- New `declare-read-or-write` (6.6, Effects, 3), `reads-change-nothing` (6.7, Effects, 3) and
+  `interrupt-is-recoverable` (6.8, Effects, 2).
+- New `empty-result-succeeds` (4.6, Output, 2). It scores the exit code and shape of an empty result
+  from the same probe as `dead-ends-point-forward`, which keeps the way forward.
+- New `setting-sources` (5.6, Input, 3).
+- `missing-input-fails` (5.1): the rule now covers every path that can wait for input (login,
+  pager, confirmation), and each sampled read is probed a second time with stdin closed and without
+  `--no-input`. A command counts once in F, whichever probe it fails. Maximum unchanged.
+- Category totals: 18, 30, 37, 29, 38, 17, 18 (sum 187). No category share moves by 5 percentage
+  points or more.
+
 ## 2.2.0
 
 Breaking: replaces the unreleased 2.0.0 and 2.1.0 groupings with seven mutually exclusive

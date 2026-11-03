@@ -26,9 +26,9 @@ maximum. An agent can follow the benchmark to score any CLI against the guide.
 1. [Names](#1-names) (6)
 2. [Output](#2-output) (6)
 3. [Errors](#3-errors) (6)
-4. [Success and next steps](#4-success-and-next-steps) (5)
-5. [Input](#5-input) (5)
-6. [Writes](#6-writes) (5)
+4. [Success and next steps](#4-success-and-next-steps) (6)
+5. [Input](#5-input) (6)
+6. [Writes](#6-writes) (8)
 7. [Help and discovery](#7-help-and-discovery) (5)
 8. [Evolving the surface](#8-evolving-the-surface) (4)
 
@@ -639,12 +639,38 @@ a second `--wait` on the same id reaches a final state.
 
 [Read more](sections/success/slow-commands.md) | [Return to top](#table-of-contents)
 
+### 4.6 An empty result is a success
+
+**TL;DR:** A read that matches nothing exits 0 with the same result object as a full answer and an
+empty list in it (`"items": []`), not a not-found error and not `null`. A named thing that does not
+exist is still not found (3.4); a query that matches no record is not.
+
+**Otherwise:** An error for an empty search sends the agent to fix a command that was fine.
+
+**Do**
+
+```sh
+acme build jobs list --state failed --json    # exit 0, { "items": [], "total": 0 }
+```
+
+**Don't**
+
+```sh
+acme build jobs list --state failed --json    # exit 3, NOT_FOUND
+```
+
+**Check:** run every list and search command with a filter that matches nothing; assert exit 0 and an
+empty list in the result object. The way forward from it is 4.3.
+
+[Read more](sections/success/empty-result-succeeds.md) | [Return to top](#table-of-contents)
+
 # 5. Input
 
 ### 5.1 A missing input fails naming the flag; nothing prompts without a terminal #strategic
 
 **TL;DR:** A required input that is missing fails with "Pass --title" and a non-zero exit. No prompt
-without a TTY or under `--no-input`. A prompt is for people and never the only path.
+without a TTY or under `--no-input`, on any path: a login, a pager or a confirmation as much as a
+form. A prompt is for people and never the only path.
 
 **Otherwise:** An unattended run waits forever on a prompt nobody sees.
 
@@ -662,7 +688,8 @@ $ acme ticket create
 Title: _                                            (waits with no TTY)
 ```
 
-**Check:** run every command with no input and no TTY; assert it exits and names a flag.
+**Check:** run every command with no input and no TTY, with and without `--no-input`; assert it
+exits and names a flag.
 
 [Read more](sections/input/missing-input-fails.md) | [Return to top](#table-of-contents)
 
@@ -768,6 +795,32 @@ Error: output path not allowed          <- and no word on which paths are
 an allowed location.
 
 [Read more](sections/input/work-where-agents-run.md) | [Return to top](#table-of-contents)
+
+### 5.6 Document where a setting comes from, and which wins
+
+**TL;DR:** For a setting that can come from a flag, an environment variable or a config file, help
+states the sources and the order (flag, then environment, then file, then default), and one command
+prints each resolved value with its source. Never print a secret's value.
+
+**Otherwise:** The agent edits the config file, an environment variable still wins, and it cannot
+see why nothing changed.
+
+**Do**
+
+```sh
+acme config view --json    # { "settings": [ { "name": "project", "value": "ACME", "source": "environment ACME_PROJECT" } ] }
+```
+
+**Don't**
+
+```text
+project = ACME             <- from which source?
+```
+
+**Check:** set one setting in all three places with different values and assert the resolved view
+names the winner each time.
+
+[Read more](sections/input/setting-sources.md) | [Return to top](#table-of-contents)
 
 # 6. Writes
 
@@ -897,6 +950,83 @@ requests. Declining all but one is a defect they will hit.
 **Check:** an integration test issues N writes concurrently and asserts each gets a distinct outcome.
 
 [Read more](sections/writes/parallel-writes.md) | [Return to top](#table-of-contents)
+
+### 6.6 Declare whether a command reads or writes
+
+**TL;DR:** Every command's help states whether it changes state, in one fixed place: `Changes:
+nothing`, `Changes: local settings` or `Changes: remote state`. A caller classifies a command from
+help alone, before running it.
+
+**Otherwise:** An agent guesses from the name, and a command that looked like a read revokes a real
+grant.
+
+**Do**
+
+```text
+$ acme access revoke --help
+Changes: remote state (destructive)
+```
+
+**Don't**
+
+```text
+Removes a subject's grant.     <- the effect in prose, if at all
+```
+
+**Check:** walk the command tree and require the line on every leaf, with a value from a closed list.
+
+[Read more](sections/writes/declare-read-or-write.md) | [Return to top](#table-of-contents)
+
+### 6.7 Reads change nothing
+
+**TL;DR:** A command declared as a read leaves no durable state: no counter, lock, last-seen marker
+or prompt. Running it twice, or in parallel, is safe and gives the same answer for the same data.
+The tool's own cache and logs are not state, provided they never change a later result.
+
+**Otherwise:** A read that marks items as seen makes the agent's retry return nothing, and the real
+items are never handled.
+
+**Do**
+
+```sh
+acme notifications list    # twice: same files, same output
+```
+
+**Don't**
+
+```sh
+acme notifications list    # writes a last-seen marker; the next run is empty
+```
+
+**Check:** run each read twice in a fixture, snapshot the working tree and state directories before
+and after, and compare both outputs.
+
+[Read more](sections/writes/reads-change-nothing.md) | [Return to top](#table-of-contents)
+
+### 6.8 An interrupted write leaves recoverable state
+
+**TL;DR:** When a write is killed (interrupt, timeout, lost connection), a re-run or a named status
+command recovers it, and help says which. An all-or-nothing write says so. 3.5 covers a failure the
+tool reports; this covers a process that never got to.
+
+**Otherwise:** The agent retries blind and duplicates a half-finished write, or abandons it.
+
+**Do**
+
+```text
+If interrupted, the batches already done stay. See what happened: acme import view <id>.
+```
+
+**Don't**
+
+```text
+Imports the file.          <- nothing about an interrupt
+```
+
+**Check:** in a fixture, kill the write halfway, run the documented recovery command and assert it
+reaches a final state.
+
+[Read more](sections/writes/interrupt-is-recoverable.md) | [Return to top](#table-of-contents)
 
 # 7. Help and discovery
 

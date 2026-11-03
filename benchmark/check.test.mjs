@@ -117,10 +117,10 @@ test('--category rejects an unknown or missing value', () => {
 
 const EXPECTED_TOTALS = {
   'Command surface': 18,
-  Input: 27,
-  Output: 35,
+  Input: 30,
+  Output: 37,
   Errors: 29,
-  Effects: 30,
+  Effects: 38,
   Discoverability: 17,
   Maintainability: 18
 };
@@ -136,7 +136,7 @@ test('there are seven categories with the expected totals across the real pages'
       pages.push(parsePage(path, readFileSync(path, 'utf8')));
     }
   }
-  assert.equal(pages.length, 42);
+  assert.equal(pages.length, 47);
   const totals = Object.fromEntries(CATEGORIES.map((name) => [name, 0]));
   for (const p of pages) {
     assert.ok(CATEGORIES.includes(p.category), `${p.id}: ${p.category}`);

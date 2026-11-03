@@ -1,10 +1,10 @@
 # Benchmark
 
-Scores how agent-first a command line tool is, one practice at a time, using the guide's 42
+Scores how agent-first a command line tool is, one practice at a time, using the guide's 47
 practices. Design:
 [the benchmark design](../docs/superpowers/specs/2026-11-01-cli-benchmark-design.md).
 
-Rubric version: 2.2.0 ([changelog](CHANGELOG.md))
+Rubric version: 2.3.0 ([changelog](CHANGELOG.md))
 
 An agent applies this rubric by hand: no scripts, no runner. Each practice page has a "How to
 score" section with its maximum (front matter `max`) and its anchors. Fill in
@@ -15,10 +15,10 @@ score" section with its maximum (front matter `max`) and its anchors. Fill in
 | Category | Question | Practices | Possible |
 |---|---|---|---|
 | Command surface | What must an agent guess to name a command or flag? | 1.1 to 1.6 | 18 |
-| Input | What goes in, and how does the tool take it, secrets included? | 5.1 to 5.5, 7.3 | 27 |
-| Output | What does a successful result carry, its shape and its next step, and is it safe to read? | 2.1 to 2.6, 4.2 | 35 |
+| Input | What goes in, and how does the tool take it, secrets included? | 5.1 to 5.6, 7.3 | 30 |
+| Output | What does a successful result carry, its shape and its next step, and is it safe to read? | 2.1 to 2.6, 4.2, 4.6 | 37 |
 | Errors | What does a failure carry, its shape, context and hint? | 3.1 to 3.6, 4.3 | 29 |
-| Effects | What does a command change, and how does it behave while it does, including long jobs? | 4.1, 4.5, 6.1 to 6.5 | 30 |
+| Effects | What does a command change, and how does it behave while it does, including long jobs? | 4.1, 4.5, 6.1 to 6.8 | 38 |
 | Discoverability | How does an agent find what exists and how to use it? | 4.4, 7.1, 7.2, 7.4, 7.5 | 17 |
 | Maintainability | How does the surface change without breaking agents? | 8.1 to 8.4 | 18 |
 
@@ -291,4 +291,4 @@ a blind round must not read them. 8.4 `audit-naming` is then N/A (not checked), 
   differ from the previous version; see the [changelog](CHANGELOG.md).
 - A change that moves a category's share of total points by more than 5 percentage points gets a
   changelog line.
-- The version is the `Rubric version: 2.2.0` line near the top of this page.
+- The version is the `Rubric version: 2.3.0` line near the top of this page.

@@ -9,10 +9,13 @@ Practice 5.1 in the [guide](../../README.md).
 
 ### One paragraph explainer
 
-A required input that is missing fails with "Pass --title" and a non-zero exit. Without a TTY, or
-under `--no-input`, nothing prompts. A prompt is a convenience for a person at a terminal and is
-never the only path to a value. An agent caller has no one to type an answer: a prompt that waits is
-a hang, and the run it belongs to stalls with no output to explain why. The failure is a usage error
+A required input that is missing fails with "Pass --title" and a non-zero exit. When stdin is not a
+terminal, or under `--no-input` (or the tool's documented equivalent), nothing waits for input: the
+command has what it needs, or fails fast naming what is missing. This holds on every path that could
+wait: a form, an interactive login, a pager and a confirmation. A prompt is a convenience for a
+person at a terminal and is never the only path to a value. An agent caller has no one to type an
+answer: a prompt that waits is a hang, and the run it belongs to stalls with no output to explain
+why. The failure is a usage error
 in the [3.1](../errors/error-envelope.md) envelope, exit class 2
 ([3.4](../errors/exit-code-classes.md)), and `context` names the flag
 ([3.3](../errors/context-names-input.md)).
@@ -56,6 +59,9 @@ and burns the same timeout again. A usage error naming `--title` would have cost
 - **Detecting a TTY is not enough.** Some agent harnesses allocate a pseudo-terminal, so the tool
   sees a TTY and prompts. Honour `--no-input` and document it in help as the way to be sure. Where
   the tool can, also treat a closed or empty stdin as "no input".
+- **Other prompt paths.** An interactive login, a pager and a "press any key" each block as hard as
+  "Title:". Offer a non-interactive form (a token read from a store, `--no-pager`, no pause) and fail
+  fast naming the missing input when that form is not available.
 - **Several inputs missing.** Name the first, or list them all in `context.missing`. Listing all
   saves round trips and costs nothing; do not make the agent fix them one at a time.
 - **An input with a sensible default.** Then it is not required. State the default in help
@@ -66,8 +72,9 @@ and burns the same timeout again. A usage error naming `--title` would have cost
 
 ### How to check it
 
-Walk the command tree, run every command with no arguments, a closed stdin and `--no-input`, and
-assert it exits within a timeout with an envelope that names a flag or a positional.
+Walk the command tree, run every command with no arguments and a closed stdin, once with and once
+without `--no-input`, and assert it exits within a timeout with an envelope that names a flag or a
+positional.
 
 ```ts
 import { spawnSync } from "node:child_process";
@@ -77,18 +84,23 @@ const leaves: string[][] = JSON.parse(
   spawnSync("acme", ["schema", "--json"], { encoding: "utf8" }).stdout,
 ).commands.map((c: { path: string[] }) => c.path);
 
-test.each(leaves)("%j fails fast without input", (...path) => {
-  const run = spawnSync("acme", [...path, "--no-input"], {
-    encoding: "utf8",
-    input: "",
-    timeout: 5000,
-  });
-  expect(run.error).toBeUndefined();           // no timeout, so no prompt
-  if (run.status === 0) return;                // a command with no required input
-  expect(run.status).toBe(2);
-  const envelope = JSON.parse(run.stderr);
-  expect(envelope.context.field ?? envelope.context.missing).toBeDefined();
-});
+const forms = [["--no-input"], []];            // the flag, and no terminal alone
+
+test.each(leaves.flatMap((path) => forms.map((form) => [path, form] as const)))(
+  "%j %j fails fast without input",
+  (path, form) => {
+    const run = spawnSync("acme", [...path, ...form], {
+      encoding: "utf8",
+      input: "",
+      timeout: 5000,
+    });
+    expect(run.error).toBeUndefined();         // no timeout, so no prompt
+    if (run.status === 0) return;              // a command with no required input
+    expect(run.status).toBe(2);
+    const envelope = JSON.parse(run.stderr);
+    expect(envelope.context.field ?? envelope.context.missing).toBeDefined();
+  },
+);
 ```
 
 ### How to score
@@ -118,6 +130,8 @@ sorted path plus every write up to 30), never a set the scorer picks. Run exactl
    empty temporary working directory.
 2. Each sampled write: `<tool> <write-command> --dry-run --no-input < /dev/null` with the required
    input omitted, under `timeout 5`. A write with no dry-run form is "not run".
+3. Each probe of 1 and 2 again without `--no-input`, stdin still closed: no terminal alone must not
+   wait. A command counts once in N and at most once in F, whichever probe it fails.
 
 A probe that cannot run (no sandbox, or it would need a real write) is listed as "not run". Not-run
 commands are not measurable: they count neither as pass nor as fail, and they leave the probed
@@ -149,7 +163,7 @@ list under any key that the tool's own docs or help state (for example `field`, 
 - **Not applicable when:** no sampled command needs input (none is counted).
 - **Evidence:** In the empty temporary working directory of the entry page's "Probes and safety"
   section, with a dedicated or copied data file for the CLI, run `acme <command> --no-input
-  < /dev/null` under `timeout 5` for each sampled read (writes: the dry-run form with the input
-  omitted). Exit 124 on a read is a hang only if it waited for input, a slow read (not
+  < /dev/null` and `acme <command> < /dev/null` under `timeout 5` for each sampled read (writes:
+  the dry-run form with the input omitted). Exit 124 on a read is a hang only if it waited for input, a slow read (not
   counted) if it was still producing output; otherwise read the exit code and the stderr
   envelope. Where a real service is the only target, the probe is "not exercised".
