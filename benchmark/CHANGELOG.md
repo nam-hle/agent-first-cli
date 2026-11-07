@@ -1,5 +1,16 @@
 # Rubric changelog
 
+## 2.4.0
+
+One practice added. Existing practice maximums, ids and categories are unchanged. The
+Discoverability total changes, so 2.3.0 Discoverability scores are not comparable with 2.4.0
+scores; compare on the practices both versions share.
+
+- New `guides-in-the-cli` (7.6, Discoverability, 3): setup and convention guides are served by a
+  command of the tool, listable, readable by section and as `--json`, without network.
+- Category totals: 18, 30, 37, 29, 38, 20, 18 (sum 190). No category share moves by 5 percentage
+  points or more.
+
 ## 2.3.0
 
 Five practices added, and the probe of one changed, so scores may differ from 2.2.0. Existing

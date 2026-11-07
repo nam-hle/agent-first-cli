@@ -121,7 +121,7 @@ const EXPECTED_TOTALS = {
   Output: 37,
   Errors: 29,
   Effects: 38,
-  Discoverability: 17,
+  Discoverability: 20,
   Maintainability: 18
 };
 
@@ -136,7 +136,7 @@ test('there are seven categories with the expected totals across the real pages'
       pages.push(parsePage(path, readFileSync(path, 'utf8')));
     }
   }
-  assert.equal(pages.length, 47);
+  assert.equal(pages.length, 48);
   const totals = Object.fromEntries(CATEGORIES.map((name) => [name, 0]));
   for (const p of pages) {
     assert.ok(CATEGORIES.includes(p.category), `${p.id}: ${p.category}`);

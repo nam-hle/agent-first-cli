@@ -29,7 +29,7 @@ maximum. An agent can follow the benchmark to score any CLI against the guide.
 4. [Success and next steps](#4-success-and-next-steps) (6)
 5. [Input](#5-input) (6)
 6. [Writes](#6-writes) (8)
-7. [Help and discovery](#7-help-and-discovery) (5)
+7. [Help and discovery](#7-help-and-discovery) (6)
 8. [Evolving the surface](#8-evolving-the-surface) (4)
 
 Tags: `#strategic` shapes the design, `#advanced` needs infrastructure, `#security` concerns an
@@ -1156,6 +1156,32 @@ acme schema pr-list --json     # { "schemaVersion": "v1", "schema": { ... } }
 snapshot (8.1) pins `schemaVersion`.
 
 [Read more](sections/help/self-describing-schema.md) | [Return to top](#table-of-contents)
+
+### 7.6 Ship the guides in the CLI
+
+**TL;DR:** Setup, auth, configuration and convention pages ship inside the tool and are read
+through it: `acme docs list`, `acme docs view <page> --section <heading>`, with `--json`. They
+match the running version and need no network. 7.4 generates the reference; this serves the guides.
+
+**Otherwise:** The agent is sent to a website it cannot reach or to source code of another
+version, and acts on a stale setup step.
+
+**Do**
+
+```sh
+acme docs view setup/auth --section token-scopes --json
+```
+
+**Don't**
+
+```text
+For setup see https://acme.example/docs/setup
+```
+
+**Check:** list every page, view each one with `--json`, and fail on a `docs view` link that does
+not resolve.
+
+[Read more](sections/help/guides-in-the-cli.md) | [Return to top](#table-of-contents)
 
 # 8. Evolving the surface
 
